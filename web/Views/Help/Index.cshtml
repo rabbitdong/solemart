@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "帮助 —— 叟玛特";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section header_style{
+    <link rel="stylesheet" href="/Content/u_account.css" />
+}
+
+@section header_script{
+    <script src="/Scripts/pages/advise.js"></script>
+}
+
+<div class="cont" id="help-pane">
+    <h2 class="subTitle">购物流程</h2>
+    <p>
+        1. 如果是第一次购物，先注册您的账号，帐号用于查看购物记录、退货等。<br />
+        2. 先选择您需要的商品，然后放入您的购物车。当您选择完成后，就下单。我们会在半个工作日内送货上门，并进行货到付款。
+    </p>
+    <p id="img-area">
+        <img src="/Images/help/step01.jpg" />
+        <img class="arrow" src="/images/help/arrow.png" />
+        <img src="/Images/help/step02.jpg" />
+        <img class="arrow" src="/images/help/arrow.png" />
+        <img src="/Images/help/step03.jpg" />
+        <img class="arrow" src="/images/help/arrow.png" />
+        <img src="/Images/help/step04.jpg" />
+    </p>
+</div>
+<div class="cont" id="adviser-pane">
+    <h2 class="subTitle">诉求和建议</h2>
+    <div class="contentArea">
+        <ul>
+            <li>
+                <textarea id="adviser" placeholder="请填写您的诉求或对我们的服务提供宝贵的建议"></textarea>
+                <p class="err_tip">建议应该在8～200个字</p>
+            </li>
+            <li>
+                <a href="javascript:void(0);" onclick="javascript:commit_advise();" class="comm_btn">提交</a>
+            </li>
+        </ul>
+    </div>
+</div>

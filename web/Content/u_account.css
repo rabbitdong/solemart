@@ -1,0 +1,61 @@
+/* 登录页面样式 */
+div#login_pane, dev#reg_pane { width: 30%; } 
+div.cont {text-align:left; margin:2em; border: 1px solid #bfbfbf; border-radius: 0.3em; background-color: #fff; padding: 0.5em; min-height: 13em; min-width:17em; display:inline-block; }
+    div.cont .subTitle { color: #fff; line-height: 1.8em; margin:0.8em auto 0em -0.4em; padding:0.2em 1em 0.2em 0.2em; display:inline-block; font-size: 1.3em; font-style: italic; background-color: rgb(44, 89, 135);  }
+    div.cont .contentArea { float:left; width:100%; padding-left: 1em; margin-top: 1em; }
+    div.cont .contentArea li { text-align: left; margin: 5px 0px 5px 0px; }
+    div.cont .contentArea li input[type=checkbox] { display: inline-block; }
+    div.cont .contentArea label { display: block; }
+
+div#adviser-pane { width: 90%; }
+textarea#adviser { width: 90%; height: 5em; margin: 0.3em 1em 0.3em 1.5em; padding: 0.4em; border: solid 1px #ccc; border-radius: 4px; }
+span.past_price { text-decoration: line-through; color: #808080; font-weight: normal; }
+a.pwTip { background-color: rgb(221, 221, 221); border-radius: 7px; display: inline-block; width: 16px; text-align: center; font-weight: bold; cursor: pointer; }
+
+span#qqLoginBtn img{ margin-top:0.3em; vertical-align:top;}
+
+/* 用户注册页面样式 */
+div.register { text-align: left; }
+    div.register fieldset { background-color: #fff; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
+    div.register h3 { margin: 15px 0px 0px 0px; padding: 12px 10px; clear: both; background-color: rgb(85, 138, 190); border-top-left-radius: 5px; border-top-right-radius: 5px; }
+    div.register li { margin: 30px 0px 0px 0px; list-style: none; }
+    div.register label { padding: 4px 10px 2px 0px; float: left; clear: left; width: 200px; text-align: right; }
+    div.register input { margin: 0px 5px 0px 0px; width: 240px; height: 20px; }
+    div.register span.fOption label { float: none; }
+    div.register span.fOption input { width: auto; display: inline; margin: 1px 0px 0px 0px; }
+    div.register p.fNote { margin-left: 210px; color: gray; }
+
+/* 用户帐户页面样式 */
+div.account { text-align: left; margin: 0px; padding: 5px 0px 5px 15px; border: 1px solid #eee; border-radius: 4px; background-color: #fff; }
+
+    div.account h3 { font-size: 1.5em; color: #808080; margin: 15px 5px 10px 5px; padding: 25px 10px 5px 10px; clear: both; border-bottom: 2px solid #eee; }
+
+    div.account span.ur_title { font-weight: bold; width: 160px; text-align: right; display: inline-block; }
+
+    div.account span.ur_value { font-style: italic; }
+
+    div.account li { margin: 30px 0px 0px 0px; list-style: none; line-height: 20px; font-size: 16px; }
+
+        div.account li img { cursor: pointer; }
+
+        div.account li input { border: 1px solid #808080; margin: 0px 5px 0px 0px; height: 21px; width: 240px; }
+
+        div.account li label { display: inline; width: auto; float: none; margin-right: 10px; }
+
+        div.account li input[type=radio] { width: auto; }
+
+        div.account li p.err_tip { display: inline; }
+
+    div.account label { padding: 4px 10px 2px 0px; float: left; clear: left; width: 200px; text-align: right; }
+
+    div.account a.pwTip { background-color: rgb(221, 221, 221); border-radius: 7px; display: inline-block; width: 16px; text-align: center; font-weight: bold; }
+
+    div.account span.fOption label { float: none; }
+
+    div.account span.fOption input { width: auto; display: inline; margin: 1px 0px 0px 0px; }
+
+    div.account p.fNote { margin-left: 210px; color: gray; }
+
+div.save_div { margin: 25px 10px 15px 10px; }
+
+input.text { margin-bottom: 12px; width: 95%; padding: .4em; }

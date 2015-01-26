@@ -1,0 +1,41 @@
+﻿@using Xxx.EntityLib;
+@model List<VendorInfo>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Manager/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<h1>查看供应商列表:</h1>
+
+<p class="search_area">
+    <input type="text" id="prodct_name" />
+    <input type="button" class="comm_btn" id="dosearch" value="搜索" />
+</p>
+<div class="pager">
+    @Html.Partial("_Pager")
+</div>
+<table class="m">
+    <thead>
+        <tr>
+            <th>供应商ID</th>
+            <th>供应商名称</th>
+            <th>联系人姓名</th>
+            <th>联系人电话</th>
+            <th>供应商网站地址</th>
+            <th>评价</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(VendorInfo vendor in Model){
+        <tr>
+            <td>@vendor.VendorID</td>
+            <td>@vendor.VendorName</td>
+            <td>@vendor.ContactName</td>
+            <td>@vendor.Phone1</td>
+            <td>@vendor.Url</td>
+            <td>@vendor.Evaluation</td>
+        </tr>
+        }
+    </tbody>
+</table>

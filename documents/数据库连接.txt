@@ -1,0 +1,3 @@
+使用新的connector，出现“Authentication with old password no longer supported, use 4.1 style 
+SET SESSION old_passwords=0;
+SET PASSWORD FOR you_user=PASSWORD('your_pwd');

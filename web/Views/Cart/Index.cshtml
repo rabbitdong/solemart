@@ -1,0 +1,83 @@
+﻿@using Xxx.EntityLib;
+@using Xxx.BusinessLib;
+@model Cart
+
+@{
+    ViewBag.Title = "购物车 —— 叟玛特";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section header_style{
+    <link rel="stylesheet" href="/Content/cart.css" />
+}
+
+@section header_script{
+    <script type="text/javascript" src="/Scripts/pages/um/cart.js"></script>
+}
+<div class="cart_content">
+    <div class="cart_head">
+        <h3>您的购物车中有 @Model.Products.Count 件物品:</h3>
+        @if(Model.Products.Count>0){
+            <div class="comm_btn r"><a href="javascript:void(0);" onclick="javascript:checkout(this);">下单</a></div>
+        }
+    </div>
+
+    <table class="cart">
+        <caption class="cart_caption">当前购物车中的货品:</caption>
+        <thead>
+            <tr>
+                <th>货品</th>
+                <th>单价(￥)</th>
+                <th>数量</th>
+                <th>总价(￥)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Products.Count > 0) {                
+                foreach (ProductItem pi in Model.Products) {
+                <tr>
+                    <td>
+                        <a class="l" href="/Product/Detail/@pi.Product.ProductID" title="查看该产品的详细信息">
+                            @if (pi.Product.Images != null && pi.Product.Images.Length > 1) {
+                            <img class="prodimg" src="/images/product/thumb/@pi.Product.Images[0].Url" />
+                            }
+                            else {
+                            <img class="prodimg" src="/images/product/no-img.png" />
+                            }
+                        </a>
+                        <h3>@pi.Product.Name</h3>
+                    </td>
+                    <td>@((pi.Product.SalePrice*pi.Product.Discount/100).ToString("C2"))</td>
+                    <td>
+                        <input type="text" class="prodamount" value="@pi.Amount" />
+                        <input type="hidden" value="@pi.Product.ProductID" />
+                    </td>
+                    <td>@((pi.Product.SalePrice*pi.Product.Discount/100*pi.Amount).ToString("C2"))</td>
+                </tr>
+                }
+            } else {
+                <tr>
+                    <td colspan="4">没有商品</td>
+                </tr>
+            }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td colspan="3">货品总价</td>
+                <td>@Model.TotalPrice.ToString("C2")</td>
+            </tr>
+            <tr>
+                <td colspan="3">运输费用</td>
+                <td>￥0.00</td>
+            </tr>
+            <tr>
+                <td colspan="3">总计:</td>
+                <td>@Model.TotalPrice.ToString("C2")</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="cart_foot">
+    </div>
+</div>

@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "New";
+    Layout = "~/Areas/Manager/Views/Shared/_ManagerLayout.cshtml";
+}
+
+@section header_script_manager{
+    <script type="text/javascript">
+        function postback() {
+            $.post("/Manager/Vendor/NewVendor",
+                {
+                    fact_name: $("#fact_name").val(),
+                    fact_addr: $("#fact_addr").val(),
+                    phone1: $("#phone1").val(),
+                    charge_name: $("#charge_name").val(),
+                    url:$("#url").val()
+                },
+                function (data) {
+                    alert(data);
+                });
+        }
+    </script>
+}
+
+<div class="normal">
+    <h1>添加供应商:</h1>
+    <fieldset>
+        <ol>
+            <li>
+                <label for="fact_name">供应商名称:</label>
+                <input name="fact_name" tabindex="1" id="fact_name" type="text" value="" />
+                <p class="fNote">.</p>
+            </li>
+            <li>
+                <label for="fact_addr">供应商地址:</label>
+                <input name="fact_addr" tabindex="2" id="fact_addr" type="text" value="" />
+            </li>
+            <li>
+                <label for="phone1">联系电话:</label>
+                <input name="phone1" tabindex="3" id="phone1" type="text" value="" />
+            </li>
+            <li>
+                <label for="charge_name">联系人:</label>
+                <input name="charge_name" tabindex="4" id="charge_name" type="text" value="" />
+            </li>
+            <li>
+                <label for="url">供应商网站地址:</label>
+                <input name="url" tabindex="5" id="url" type="text" value="" />
+            </li>
+            <li>
+                <label onclick="postback();"><a class="comm_btn" href="#">创建</a></label>
+            </li>
+        </ol>
+    </fieldset>
+</div>

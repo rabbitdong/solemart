@@ -1,0 +1,161 @@
+﻿@using Xxx.EntityLib
+@using Xxx.BusinessLib;
+
+@model Product
+
+@{
+    ViewBag.Title = Model.Name + " - 叟玛特";    
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int CommentCount = 0;
+    int AverageLevel = 5;
+    CommentCount = ProductManager.Instance.GetProductCommentCount(Model, out AverageLevel);
+    IList<ProductComment> Comments = ProductManager.Instance.GetProductComment(Model, 0, 10);
+    BrandInfo  ProductBrand = BrandManager.Instance.GetBrandByID(Model.BrandID);
+}
+
+@section header_style{
+    <link rel="stylesheet" href="/Content/prod_list.css" />
+}
+
+@section header_script{
+    <script type="text/javascript">
+        var star_level = 5; //默认的评价级别
+        var cur_pid = @Model.ProductID ;
+    </script>
+    <script type="text/javascript" src="/Scripts/pages/pd.js"></script>
+}
+
+<div class="product_detail">
+
+    <div class="center_stage l">
+        <h2>@Model.Name </h2>
+
+        <div class="vote_area">
+            <span class="comment_star" title="@AverageLevel 星">
+                <a href="javascript:;" class="star_@AverageLevel"></a>
+                <a href="javascript:;" class="no_star"></a>
+            </span>
+            <a href="#">@CommentCount 个评论</a>
+        </div>
+
+        <div class="thumb_area r">
+            @if(Model.Images !=null){ 
+            for(int i=0; i< Model.Images.Length; ++i){ 
+            <a href="javascript:void(0);" @((i==0)?"class='active'":"")  onclick="javascript:show_image('@Model.Images[i].Url ', this);" style="background-image: url(/images/product/thumb/@Model.Images[i].Url )"></a>
+            } 
+            } 
+        </div>
+
+        <div class="center_image">
+            @if(Model.Images!=null && Model.Images.Length > 0){ 
+            <img id="main_img" src="/images/product/normal/@Model.Images[0].Url " />
+            }else{ 
+            <img id="main_img" src="/images/product/no-img.png" />
+            } 
+        </div>
+
+        <div class="product_info">
+            @Model.Desc 
+        </div>
+    </div>
+
+    <div class="brand_logo r">
+        @if(ProductBrand.Image != null && ProductBrand.Image != ""){  
+        <img src="/images/logo/@ProductBrand.Image " title="@ProductBrand.Name " />           
+        }else{ 
+        <h3>@BrandManager.Instance.GetBrandByID(Model.BrandID).Name </h3>
+        } 
+    </div>
+
+    <div class="shopcart_area r">
+        <h2>
+            @if(Model.Discount!=100){ 
+            <span  class="past_price">@Model.SalePrice.ToString("C2") </span>
+            <span>@((Model.SalePrice*Model.Discount/100).ToString("C2")) </span>
+            }else{ 
+            <span>@Model.SalePrice.ToString("C2") </span>
+            } 
+        </h2>
+        <p>
+            <span>剩余数量:</span>
+            <span>@(Model.StockCount-Model.ReserceCount) </span>
+        </p>
+        @if(Model.Spec != null && Model.Spec == "size"){ 
+        <div class="show_size">
+            <h3>尺码:</h3>
+            <ul>
+                <li>
+                    <a href="#">36</a>
+                </li>
+                <li>
+                    <a href="#">37</a>
+                </li>
+                <li>
+                    <a href="#">38</a>
+                </li>
+            </ul>
+
+        </div>
+        <div class="show_color">
+            <h3>颜色:</h3>
+            <ul>
+                <li class="show_color_red">
+                    <a href="#">&nbsp;</a>
+                </li>
+                <li class="show_color_green">
+                    <a href="#">&nbsp;</a>
+                </li>
+                <li class="show_color_blue">
+                    <a href="#">&nbsp;</a>
+                </li>
+            </ul>
+        </div>
+        } 
+
+        <div class="add_to_cart">
+            <a href="/Cart/Add/@Model.ProductID" title="把一件本商品放入购物车">放入购物车</a>
+        </div>
+
+        <div class="add_to_cart">
+            <a href="javascript:;" onclick="addtofavorite(@Model.ProductID)">收藏</a>
+        </div>
+    </div>
+
+    <div class="customer_comment" id="customer_comments">
+        <h2 class="subTitle">客户评价：</h2>
+        <div class="review_head r">
+            <div class="comm_btn" onclick="javascript:write_comment_fun(this);">
+                <a href="javascript:void(0);">写评论...</a>
+            </div>
+        </div>
+        <div id="write_comment">
+            星级:
+            <span class="comment_star">
+                <a href="javascript:;" class="star_1" title="1星"></a>
+                <a href="javascript:;" class="star_2" title="2星"></a>
+                <a href="javascript:;" class="star_3" title="3星"></a>
+                <a href="javascript:;" class="star_4" title="4星"></a>
+                <a href="javascript:;" class="star_5" title="5星"></a>
+            </span>
+            <textarea placeholder="这里写上您的评论"></textarea>
+        </div>
+        <div id="comments-list">
+            @foreach(ProductComment pc in Comments){ 
+            <div class="review_item">
+                <h3>
+                    <em>@(pc.User==null?"匿名用户":pc.User.Name) </em><span>先生:</span>
+                    <span class="comment_star" title="@((int)(pc.Grade))  星">
+                        <a href="javascript:;" class="star_@((int)(pc.Grade)) "></a>
+                        <a href="javascript:;" class="no_star"></a>
+                    </span>
+                </h3>
+                <p class="r">@pc.CommentTime.ToShortDateString()  @pc.CommentTime.ToShortTimeString() </p>
+                <p class="content">@pc.Content </p>
+            </div>
+            } 
+        </div>
+    </div>
+
+    <div style="clear:both;"></div>
+    
+</div>
