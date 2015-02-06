@@ -1,0 +1,108 @@
+﻿@using Solemart.EntityLib;
+@using Solemart.BusinessLib;
+@model List<Solemart.EntityLib.User>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Manager/Views/Shared/_ManagerLayout.cshtml";
+    Solemart.EntityLib.Role[] AllRoles=UserManager.Instance.AllRoles;
+}
+
+@section header_style_manager{
+    <link rel="stylesheet" href="/Content/cart.css" />
+}
+
+@section header_script_manager{
+    <script type="text/javascript">
+        var orig_text = "";
+
+        function create_role_list() {
+            var role_list_drop = "<select id='role_list'>";
+            @for(int i=0; i<AllRoles.Length; ++i){
+                <text>
+                role_list_drop += "<option value='@AllRoles[i].RoleID'>@AllRoles[i].ToString()</option>";
+                </text>
+            }
+            role_list_drop += "</select>";
+
+            return role_list_drop;
+        }
+
+        function create_cancel_btn() {
+            return "<a href='javascript:void(0);' onclick='javascript:cancel(this)'>取消</a>";
+        }
+
+        function cancel(btn) {
+            var tbltd = $(btn).parent();
+            tbltd.prev().html(orig_text);
+            tbltd.children().last().remove();
+            tbltd.children().html("修改角色");
+        }
+
+        function show_role_list(btn) {
+            if ($(btn).html() == "修改角色") {
+                var tbltd = $(btn).parent();
+                var tblroletd = tbltd.prev();
+                orig_text = tblroletd.html();
+                $(btn).html("确定");
+
+                tblroletd.html(create_role_list());
+                tbltd.append(create_cancel_btn());
+                $("#role_list option").each(function (i) {
+                    if ($(this).text() == orig_text)
+                        $(this).attr("selected", "selected");
+                });
+            }
+            else {
+                var tbl = $(btn).parent().parent();
+                var newroleid = $("#role_list option:selected").val();
+                if ($("#role_list option:selected").text() == orig_text)
+                    return;
+
+                var uid = tbl.children().first().html();
+                $.post("/Manager/Users/ModifyRole/" + uid,
+                    {
+                        newrole: newroleid
+                    },
+                    function (result) {
+                        alert(result);
+                    });
+
+                $(btn).html("修改角色");
+                var tbltd = $(btn).parent();
+                tbltd.prev().html($("#role_list option:selected").text());
+                tbltd.children().last().remove();
+            }
+        }
+    </script>
+}
+
+    <h1>查看用户列表:</h1>
+
+    <p class="search_area">
+        <input type="text" id="prodct_name" />
+        <input type="button" class="comm_btn" id="dosearch" value="搜索用户" />
+    </p>
+    @Html.Partial("_Pager")
+    <table class="cart">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>用户名</th>
+            <th>Email</th>
+            <th>角色</th>
+            <th>编辑</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(Solemart.EntityLib.User user in Model){
+        <tr>
+            <td>@user.UserID</td>
+            <td>@user.Name</td>
+            <td>@user.Email</td>
+            <td>@UserManager.Instance.GetRolesString(user.Roles)</td>
+            <td><a href="javascript:void(0);" onclick="javascript:show_role_list(this);">修改角色</a></td>
+        </tr>
+        }
+    </tbody>
+</table>

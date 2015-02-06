@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = ViewBag.Title == null ? "管理 —— 叟玛特" : ViewBag.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int NewOrderCount = Solemart.BusinessLib.OrderManager.Instance.GetNewOrderCount();
+}
+
+@section header_style{
+    <link rel="stylesheet" href="/Content/m.css" />
+    @RenderSection("header_style_manager", false)
+}
+
+@section header_script{
+    @RenderSection("header_script_manager", false)
+}
+
+<div id="cate">
+    <h2>货品管理</h2>
+    <div class="subcls">
+        <ul>
+            <li><a href="/Manager/Product/InStock">新商品进货</a></li>
+            <li><a href="/Manager/Product">库存商品浏览</a></li>
+        </ul>
+    </div>
+    <h2>订单管理</h2>
+    <div class="subcls">
+        <ul>
+            <li><a href="/Manager/Orders/New">查看新订单<span id="m_neworder" class="m_notify">@NewOrderCount</span></a></li>
+            <li><a href="/Manager/Orders/Sending">查看在发送中订单</a></li>
+            <li><a href="/Manager/Orders/Received">查看已收货的订单</a></li>
+        </ul>
+    </div>
+    <h2>用户管理</h2>
+    <div class="subcls">
+        <ul>
+            <li><a href="/Manager/Users">用户查看</a></li>
+            <li><a href="/Manager/Advise">评论管理</a></li>
+        </ul>
+    </div>
+    <h2>类别管理</h2>
+    <div class="subcls">
+        <ul>
+            <li><a href="/Manager/Category/New">添加类别</a></li>
+            <li><a href="/Manager/Category/Modify">修改类别</a></li>
+        </ul>
+    </div>
+
+    <h2>供应商管理</h2>
+    <div class="subcls">
+        <ul>
+            <li><a href="/Manager/Vendor">查看供应商</a></li>
+            <li><a href="/Manager/Vendor/New">新供应商</a></li>
+        </ul>
+    </div>
+
+    <h2>品牌管理</h2>
+    <div class="subcls">
+        <ul>
+            <li><a href="/Manager/Brand">品牌列表</a></li>
+        </ul>
+    </div>
+
+    <h2>资料管理</h2>
+    <div class="subcls">
+        <ul>
+            <li><a href="/Manager/Acknowledge/EBooks">电子书管理</a></li>
+        </ul>
+    </div>
+
+    <h2>公告管理</h2>
+    <div class="subcls">
+        <ul>
+            <li><a href="/Manager/BillBoard">公告列表</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="edit_area">
+    @RenderBody()
+</div>

@@ -1,0 +1,88 @@
+﻿@using Solemart.EntityLib;
+@model OrderItem
+
+@{
+    ViewBag.Title = "结账完成 —— 叟玛特";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section header_style{
+    <link rel="stylesheet" href="/Content/cart.css" />
+}
+
+@section header_script{
+    <script type="text/javascript">
+        function cancel_order(oid, btn) {
+            if (!window.confirm("确定取消订单? \r\n取消后，该订单不再生效，我们不会派送您订购的商品")) {
+                return false;
+            }
+
+            $.post("/Account/CancelOrder/"+oid,
+                { },
+                function (result) {
+                    if (result == "ok") {
+                        $("#order_title").html("订单已取消");                        
+                        $(btn).remove();
+                    }
+                    else
+                        alert(result);
+                });
+        }
+    </script>
+}
+
+<a class="comm_btn r" href="/Account/Order">查看历史订单列表</a>
+<h2 id="order_title">您好，下订单成功!</h2>
+<div class="section">
+    <h2>送货信息</h2>
+    <div class="p-section">
+        我们会在半天内送货到您家，请保持联系.
+        <span class="r"><a href="javascript:void;" class="comm_btn" onclick="cancel_order(<%=CurrentOrderItem.OrderID %>, this);">取消本订单</a></span>
+    </div>
+</div>
+<div class="section">
+    <h2>订单信息</h2>
+    <div class="p-section">
+        <p>
+            <span class="order_subhead">送货信息：</span>
+            @Model.AddressInfo.Receiver
+            @Model.AddressInfo.Address
+            @Model.AddressInfo.Phone1
+            @Model.AddressInfo.Post
+        </p>
+        <p>
+            <span class="order_subhead">送货方式:</span>
+            @Model.AddressInfo.Channel.GetEnumDisplay()
+        </p>
+                       
+        <table class="cart">
+            <thead>
+                <tr>
+                    <th>商品</th>
+                    <th>单价(￥)</th>
+                    <th>数量</th>
+                    <th>总价(￥)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ProductItem pi in Model.Products) {
+                <tr>
+                    <td>
+                        <h3>@pi.Product.Name</h3>
+                    </td>
+                    <td>@((pi.Product.SalePrice*pi.Product.Discount/100).ToString("C2"))</td>
+                    <td>@pi.Amount</td>
+                    <td>@((pi.Product.SalePrice*pi.Product.Discount/100*pi.Amount).ToString("C2"))</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="section">
+    <h2>付款信息</h2>
+    <div class="p-section">
+        <p><span class="order_subhead">付款方式:</span>@Model.AddressInfo.Pay.GetEnumDisplay()</p>            
+        <p><span class="order_subhead">付款状态:</span>@(Model.IsPay?"已付款":"未付款")</p>            
+    </div>
+</div>

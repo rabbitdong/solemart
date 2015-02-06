@@ -1,0 +1,78 @@
+﻿@using Solemart.EntityLib;
+@model List<OrderItem>
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Areas/Manager/Views/Shared/_ManagerLayout.cshtml";
+}
+
+@section header_style_manager{
+    <link rel="stylesheet" href="/Content/cart.css" />
+}
+
+<h1>查看新订单列表:</h1>
+<p class="search_area">
+    <input type="text" id="order_user_name" />
+    <input type="button" class="comm_btn" id="dosearch" value="搜索" />
+</p>
+@Html.Partial("_Pager")
+
+<div id="orderlist">
+    <div>
+        <ul>
+            @foreach (OrderItem oi in Model) {
+            <li>
+                <div class="orderinfo_head">
+                    <span class="order_subhead">订单号:</span><span>@oi.OrderID.ToString("000000")</span>
+                    <span class="order_subhead">下单时间:</span> <span>@oi.OrderTime</span>
+                </div>
+                <div class="orderinfo_conent">
+                    @if(oi.Status == OrderStatus.Ordered){
+                    <p class="r">
+                        <a href="/Manager/Orders/SendOrder/@oi.OrderID" target="_blank" class="comm_btn">发货</a>
+                    </p>
+                    }
+                    <p>
+                        <span class="order_subhead">总价:</span>
+                        <span>@oi.TotalPrice.ToString("C2")</span>
+                    </p>
+                    <p>
+                        <span class="order_subhead">订单状态:</span>
+                        <span>@oi.Status.GetEnumDisplay()</span>
+                    </p>
+                    <p>
+                        <span class="order_subhead">送货信息:</span>
+                        <span>@oi.AddressInfo.Receiver &nbsp; @oi.AddressInfo.Address &nbsp; @oi.AddressInfo.Post &nbsp; @oi.AddressInfo.Phone1</span>
+                    </p>
+                    <p>
+                        <span class="order_subhead">商品备注:</span>
+                        <span>@oi.Remark</span>
+                    </p>
+                    <p>
+                        <span class="order_subhead">商品列表:</span>
+                    </p>
+                    <table class='m'>
+                        <thead>
+                            <tr>
+                                <td>商品名称</td>
+                                <td>单价(￥)</td>
+                                <td>数量</td>
+                                <td>总价</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(ProductItem pi in oi.Products){
+                            <tr>
+                                <td>@pi.Product.Name</td>
+                                <td>@pi.Product.SalePrice.ToString("C2")</td>
+                                <td>@pi.Amount @pi.Product.Unit</td>
+                                <td>@((pi.Product.SalePrice*pi.Amount).ToString("C2"))</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+            }
+        </ul>
+    </div>
+</div>

@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Xxx.BusinessLib;
 
-namespace encryptor {
+namespace Tool.Encryptor {
     class Program {
         static void Main(string[] args) {
             if (args.Length < 1){
@@ -33,12 +32,12 @@ namespace encryptor {
 
             if (args[0] == "-d") {
                 string text = args[1];
-                Console.WriteLine("{0}", SystemManager.Instance.DecryptString(text));
+                Console.WriteLine("{0}", EncryptUtil.DecryptString(text));
                 return;
             }
             else if (args[0] == "-e") {
                 string text = args[1];
-                Console.WriteLine("{0}", SystemManager.Instance.EncryptString(text));
+                Console.WriteLine("{0}", EncryptUtil.EncryptString(text));
                 return;
             }
         }

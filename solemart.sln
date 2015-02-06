@@ -3,17 +3,49 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web", "web\web.csproj", "{2C7B0ED1-CADA-437A-95A3-D092BB96A67A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{A825943F-3CBA-4896-909D-6B39AABA1B79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUtil", "WebUtil\WebUtil.csproj", "{8A4E0F91-43FA-48F9-A3E6-BFB771530C4B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "encryptor", "tools\encryptor\encryptor.csproj", "{07E995E1-F9F9-47CB-8B07-1813983E1F18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{E1617E05-61F5-4B3A-86F9-2B100BBE37F7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{28CE8189-229C-4728-AA92-F271B594C809}"
+	ProjectSection(SolutionItems) = preProject
+		doc\WEB服务端返回的错误格式，及常用编码.txt = doc\WEB服务端返回的错误格式，及常用编码.txt
+		doc\产品图片的规格.txt = doc\产品图片的规格.txt
+		doc\产品搜索设计.txt = doc\产品搜索设计.txt
+		doc\商品管理类设计.txt = doc\商品管理类设计.txt
+		doc\数据库连接.txt = doc\数据库连接.txt
+		doc\编码约定.txt = doc\编码约定.txt
+		doc\货品管理流程.txt = doc\货品管理流程.txt
+		doc\货品类别.txt = doc\货品类别.txt
+		doc\需求.docx = doc\需求.docx
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemUtil", "SystemUtil\SystemUtil.csproj", "{AD5E4432-2D4C-4519-B834-2B917686F98C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{E3BF6CBE-2B6D-4200-9F9E-4D19F8C3CE91}"
+	ProjectSection(SolutionItems) = preProject
+		lib\MySql.Data.dll = lib\MySql.Data.dll
+		lib\MySql.Data.Entity.dll = lib\MySql.Data.Entity.dll
+		lib\MySql.Web.dll = lib\MySql.Web.dll
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataProvider", "DataProvider\DataProvider.csproj", "{F908EC89-0480-43C3-9830-0323158D8D20}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EC7617FD-C0F4-428E-9635-C4D8553DE6C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLib", "BusinessLib\BusinessLib.csproj", "{9E9280A4-7B28-4130-B712-5030E54B5311}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{0F9E82DE-9DBB-433B-945C-539088DF318E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data model", "data model", "{66B664AD-51B2-400D-9AEC-57D0743E8C01}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources", "resources", "{43768EFA-F3DD-4DD8-9B17-16D0EE4C1209}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web", "src\web\web.csproj", "{2C7B0ED1-CADA-437A-95A3-D092BB96A67A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUtil", "src\WebUtil\WebUtil.csproj", "{8A4E0F91-43FA-48F9-A3E6-BFB771530C4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "src\UnitTest\UnitTest.csproj", "{E1617E05-61F5-4B3A-86F9-2B100BBE37F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemUtil", "src\SystemUtil\SystemUtil.csproj", "{AD5E4432-2D4C-4519-B834-2B917686F98C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataProvider", "src\DataProvider\DataProvider.csproj", "{F908EC89-0480-43C3-9830-0323158D8D20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLib", "src\BusinessLib\BusinessLib.csproj", "{9E9280A4-7B28-4130-B712-5030E54B5311}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +53,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07E995E1-F9F9-47CB-8B07-1813983E1F18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07E995E1-F9F9-47CB-8B07-1813983E1F18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07E995E1-F9F9-47CB-8B07-1813983E1F18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07E995E1-F9F9-47CB-8B07-1813983E1F18}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2C7B0ED1-CADA-437A-95A3-D092BB96A67A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2C7B0ED1-CADA-437A-95A3-D092BB96A67A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C7B0ED1-CADA-437A-95A3-D092BB96A67A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,5 +84,16 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{07E995E1-F9F9-47CB-8B07-1813983E1F18} = {A825943F-3CBA-4896-909D-6B39AABA1B79}
+		{66B664AD-51B2-400D-9AEC-57D0743E8C01} = {28CE8189-229C-4728-AA92-F271B594C809}
+		{43768EFA-F3DD-4DD8-9B17-16D0EE4C1209} = {28CE8189-229C-4728-AA92-F271B594C809}
+		{2C7B0ED1-CADA-437A-95A3-D092BB96A67A} = {EC7617FD-C0F4-428E-9635-C4D8553DE6C3}
+		{8A4E0F91-43FA-48F9-A3E6-BFB771530C4B} = {EC7617FD-C0F4-428E-9635-C4D8553DE6C3}
+		{E1617E05-61F5-4B3A-86F9-2B100BBE37F7} = {EC7617FD-C0F4-428E-9635-C4D8553DE6C3}
+		{AD5E4432-2D4C-4519-B834-2B917686F98C} = {EC7617FD-C0F4-428E-9635-C4D8553DE6C3}
+		{F908EC89-0480-43C3-9830-0323158D8D20} = {EC7617FD-C0F4-428E-9635-C4D8553DE6C3}
+		{9E9280A4-7B28-4130-B712-5030E54B5311} = {EC7617FD-C0F4-428E-9635-C4D8553DE6C3}
 	EndGlobalSection
 EndGlobal

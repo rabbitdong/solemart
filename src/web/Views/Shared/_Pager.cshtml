@@ -1,0 +1,16 @@
+﻿@{
+int PageCount=(int)ViewData["PageCount"];
+int CurrentPageIndex = ViewData["CurrentPageIndex"] == null?1:(int)ViewData["CurrentPageIndex"];
+if (PageCount > 0) {
+<div class="pager">
+    <a href="?p=1">第一页</a>
+    @for (int i = 1; i <= PageCount; ++i) {
+        <a href="?p=@i" @((i == CurrentPageIndex) ? "class=cursel" : "") title='显示第@i页'>@i</a>
+    }
+    @if (PageCount > 1) {
+        <a href="?p=@((CurrentPageIndex == PageCount) ? (CurrentPageIndex - 1) : (CurrentPageIndex + 1))">@((CurrentPageIndex == PageCount) ? "上一页" : "下一页")</a>
+    }
+</div>
+}
+}
+

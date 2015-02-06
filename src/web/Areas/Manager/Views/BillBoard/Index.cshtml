@@ -1,0 +1,123 @@
+﻿@using Solemart.EntityLib;
+@model List<BillBoard>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Manager/Views/Shared/_ManagerLayout.cshtml";
+}
+
+@section header_style_manager{
+    <link rel="stylesheet" href="/Content/jquery-ui-1.10.3.custom.min.css" />
+}
+
+@section header_script_manager{
+    <script type="text/javascript" src="/Scripts/jquery-ui-1.10.3.custom.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#bb_publishtime").datepicker({
+                dateFormat: 'yy年m月d日',
+                monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                dayNamesMin: ['天', '一', '二', '三', '四', '五', '六']
+            });
+
+            $("#bb_endtime").datepicker({
+                dateFormat: 'yy年m月d日',
+                monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                dayNamesMin: ['天', '一', '二', '三', '四', '五', '六']
+            });            
+
+            $("#bb_new_dialog").dialog({
+                autoOpen: false,
+                height: 400,
+                width: 600,
+                modal: true,
+
+                create: function (event, ui) {
+                    var widget = $(this).dialog("widget");
+                    $(".ui-dialog-titlebar-close span", widget)
+                        .removeClass("ui-icon-closethick")
+                        .addClass("myclosethick");
+                },
+
+                buttons: {
+                    '确定': function () {
+                        var isvalid = true;
+                        if ($.trim($("#bbcontent").val()) == "")
+                            isvalid = false;
+
+                        if (isvalid) {
+                            $.post("/Manager/BillBoard/Create",
+                                {
+                                    content: $("#bbcontent").val(),
+                                    publishtime: $("#bb_publishtime").val(),
+                                    endtime: $('#bb_endtime').val()
+                                },
+                                function (result) {
+                                    if (result.indexOf("ok") != -1) {
+                                        $("#bb_new_dialog").dialog("close");
+                                        window.location.reload();
+                                    }
+                                    else {
+                                        $("#bb_new_dialog p.validateTips").css("display", "block");
+                                    }
+                                });
+                        }
+
+                        $("#bb_new_dialog area").val("");
+                    },
+
+                    '取消': function () {
+                        $("#bb_new_dialog").dialog("close");
+                    }
+                }
+            });
+        });
+
+        function new_bb() {
+            $("#bb_new_dialog").dialog("open");
+        }
+
+    </script>
+}
+
+<h1>查看公告列表:</h1>
+<div>
+    <button class="comm_btn" onclick="javascript:new_bb()" >新建</button>
+</div>
+<div class="pager"></div>
+<table class="m">
+    <thead>
+        <tr>
+            <th style="width:300px">公告内容</th>
+            <th style="width:100px">发布时间</th>
+            <th style="width:200px;">失效时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (BillBoard bb in Model) {
+        <tr>
+            <td>@bb.Content</td>
+            <td>@bb.PublishTime</td>
+            <td>@bb.AbortTime</td>
+            <td>
+                <a href="#">修改</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+<div id="bb_new_dialog" class="ui-widget dlg_comm" title="新建公告">
+    <p class="validateTips">公告内容不能为空</p>
+    <fieldset>
+        <label for="bbcontent">公告内容</label>
+        <textarea id="bbcontent" cols="40" rows="5"></textarea>
+        <span class="err_tip" id="err_for_bbcontent">公告内容不能为空</span>
+        <label for="bb_publishtime">公告发布时间</label>
+        <input type='text' value='<%=DateTime.Now.ToString("yyyy年MM月dd日") %>' id='bb_publishtime' readonly='readonly' />
+        <span class="err_tip" id="err_for_bb_publishtime"></span>
+        <label for="bb_endtime">公告结束时间</label>
+        <input type='text' value='<%=DateTime.Now.ToString("yyyy年MM月dd日") %>' id='bb_endtime' readonly='readonly' />
+        <span class="err_tip" id="err_for_bb_endtime"></span>
+    </fieldset>
+</div>

@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "产品 - 叟玛特";    
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Solemart.EntityLib;
+@model IList<Product>
+
+@section header_style{
+    <link rel="stylesheet" href="/Content/prod_list.css" />
+}
+
+@section header_script{}
+<div class="product_content">
+    @Html.Partial("_CateList")
+
+    <div id="product_list">
+        <ul class="l">
+            @for (int i = 0; i < Model.Count; ++i) {
+            <li class="product @((i+1)%3==0?"rightmost":"" )" id="product_<%=Model[i].ProductID %>">
+                <div class="product_list_shot">
+                    <p>
+                        <a href="/Product/Detail/@Model[i].ProductID">
+                            @if (Model[i].Images != null && Model[i].Images.Length > 0) {
+                            <img src="/images/product/normal/@Model[i].Images[0].Url" alt="" />
+                            }else{
+                            <img src="/images/product/no-img.png" alt="@Model[i].Name" />
+                            }
+                        </a>
+                        @if(Model[i].IsSpec || Model[i].Discount != 100){
+                        <img class="spec_price" src="/images/spec-price.png" />
+                        if(Model[i].IsSpec){
+                        <span class="spec_price attention">特价</span>
+                        }
+                        if(Model[i].Discount!= 100){
+                        <span class="spec_price attention">@(Model[i].Discount/10)折</span>
+                        }
+                        }
+                    </p>
+                </div>
+                <div class="product_list_info">
+                    <p class="product_name">
+                        <span>@Model[i].Name</span>
+                    </p>
+                    <span>
+                        @if (Model[i].Discount != 100) {
+                        <span  class="past_price">@Model[i].SalePrice.ToString("C2")</span>
+                        <span>@((Model[i].SalePrice*Model[i].Discount/100).ToString("C2"))</span>
+                        }else{
+                        <span>@Model[i].SalePrice.ToString("C2")</span>
+                        }
+                        /@Model[i].Unit
+                    </span>
+                    <p class="product_desc ellipsis" title="@Model[i].Desc">@Model[i].Desc</p>
+                    @if (Model[i].StockCount - Model[i].ReserceCount == 0) {
+                    <p class="no_available">缺货，只可预订</p>
+                    }
+                </div>
+            </li>
+            }
+        </ul>
+
+        @Html.Partial("_Pager")
+    </div>
+</div>
+
