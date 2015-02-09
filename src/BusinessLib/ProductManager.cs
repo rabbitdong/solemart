@@ -2,354 +2,114 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Solemart.EntityLib;
-using Solemart.DataAccessLib;
 using Solemart.SystemUtil;
+using Solemart.DataProvider;
+using Solemart.DataProvider.Entity;
 
 namespace Solemart.BusinessLib {
     /// <summary>货品管理类
     /// </summary>
     public class ProductManager {
-        /// <summary>默认的返回每一页的产品的数量
-        /// </summary>
-        private const int DEFAULT_EACH_PAGE_COUNT = 10;
-
-        /// <summary>默认的销售页面的每一页销售产品的数量
-        /// </summary>
-        private const int DEFAULT_SALE_EACH_PAGE_COUNT = 12;
-
         private static ProductManager instance = new ProductManager();
 
-        /// <summary>所有商品的缓存
+        /// <summary>
+        /// The private constructor
         /// </summary>
-        private List<Product> products_cache = null;
+        private ProductManager(){ }
 
-        /// <summary>最受欢迎的产品的缓存，用于首页显示
-        /// </summary>
-        private List<Product> most_popular_products_cache = new List<Product>();
-
-        /// <summary>销售的商品的缓存
-        /// </summary>
-        private List<Product> sale_product_cache = null;
-
-        private int each_page_count = DEFAULT_EACH_PAGE_COUNT;
-        private int each_sale_page_count = DEFAULT_SALE_EACH_PAGE_COUNT;
-
-        private ProductDA prod_da = ProductDA.Instance;
-
-        /// <summary>私有构造函数，单件
-        /// </summary>
-        private ProductManager(){
-            InitProductCache();
-            InitSaledProductCache();
-        }
-
-        /// <summary>初始化商品信息列表
-        /// </summary>
-        private void InitProductCache() {
-            products_cache = prod_da.GetAllProduct();
-            foreach (Product product in products_cache) {
-                product.OwnedCategory = CategoryManager.Instance.GetCateById(product.OwnedCategory.CateID);
-                product.Images = prod_da.GetProductImage(product.ProductID);
-            }
-        }
-
-        /// <summary>获取最流行的产品列表(近一个月销售的产品)
-        /// </summary>
-        /// <returns></returns>
-        public List<Product> GetMostPopularProducts() {
-            if (most_popular_products_cache.Count > 0)
-                return most_popular_products_cache;
-
-            OrderDA oda=OrderDA.Instance;
-            List<KeyValuePair<int, int>> sale_counts = oda.GetMostPopularProducts(DateTime.Now.AddMonths(-1));
-
-            most_popular_products_cache.Clear();
-            foreach (KeyValuePair<int, int> item in sale_counts) {
-                most_popular_products_cache.Add(AllProduct.Find(p => p.ProductID == item.Key));
-            }
-
-            foreach (Product prod in SaleProductCache) {
-                if (!most_popular_products_cache.Contains(prod))
-                    most_popular_products_cache.Add(prod);
-            }
-
-            return most_popular_products_cache;
-        }
-
-        /// <summary>刷新最流行商品的列表
-        /// </summary>
-        public void RefleshMostPopularProducts() {
-            most_popular_products_cache.Clear();
-        }
-
-        /// <summary>初始化在售的商品列表
-        /// </summary>
-        private void InitSaledProductCache() {
-            List<TempSaleProduct> tmp_saleproduct_list = prod_da.GetAllSaleProductList();
-            sale_product_cache = new List<Product>();
-
-            foreach (TempSaleProduct tsp in tmp_saleproduct_list) {
-                //先在缓存全部商品表中查找是否有该商品
-                Product product = AllProduct.Find(p => p.ProductID == tsp.ProductID);
-                if (product != null) {
-                    sale_product_cache.Add(product);
-                }
-                else {      //如果没有，访问数据库是否有
-                    product = prod_da.GetProductByID(tsp.ProductID);
-                    if (product != null) {
-                        AllProduct.Add(product);
-                    }
-                    else {
-                        LogManager.Instance.Error(String.Format("商品销售的[pid:{0}]和库存信息不一致，系统有问题！", tsp.ProductID));
-                    }
-                }
-
-                if (product != null) {
-                    product.IsSaling = true;
-                    product.SalePrice = tsp.Price;
-                    product.IsSpec = tsp.IsSpecFlag;
-                    product.Discount = tsp.Discount;
-                }
-            }
-        }
-
-        /// <summary>获取货品管理对象
+        /// <summary>
+        /// Get the product manager object
         /// </summary>
         public static ProductManager Instance {
             get { return instance; }
         }
 
-        /// <summary>在售商品列表，按照该商品的销售受欢迎程度排序
-        /// </summary>
-        private List<Product> SaleProductCache {
-            get {
-                if (sale_product_cache == null) {
-                    InitSaledProductCache();
-                }
-
-                return sale_product_cache;
-            }
-        }
-
-        /// <summary>获取所有的商品列表
-        /// </summary>
-        private List<Product> AllProduct {
-            get {
-                if (products_cache == null) {
-                    InitProductCache();
-                }
-
-                return products_cache;
-            }
-        }
-
-        /// <summary>获取所有的销售商品列表
-        /// </summary>
-        public List<Product> SaleProducts {
-            get { return sale_product_cache; }
-        }
-
-        /// <summary>获取目前中的货品样数
+        /// <summary>
+        /// Get the total amount of the saled products.
         /// </summary>
         public int TotalProductCount {
-            get {
-                return AllProduct.Count;
-            }
-        }
-
-        /// <summary>获取目前销售的商品的数量
-        /// </summary>
-        public int SaleProductCount {
-            get { return sale_product_cache.Count; }
-        }
-
-        /// <summary>获取或设置产品每一页的数量
-        /// </summary>
-        public int EachPageCount {
-            get { return each_page_count; }
-            set { each_page_count = value; }
-        }
-
-        /// <summary>获取或设置销售产品的每一页的数量
-        /// </summary>
-        public int EachSalePageCount{
-            get{ return each_sale_page_count;}
-            set{ each_sale_page_count = value;}
-        }
-
-        /// <summary>获取产品的分页页数(总产品的页数)
-        /// </summary>
-        public int ProductPagedCount {
-            get { return (TotalProductCount + EachPageCount - 1) / EachPageCount; }
-        }
-
-        /// <summary>获取销售产品的分页页数（已经上架的产品）
-        /// </summary>
-        public int SaleProductPagedCount {
-            get {
-                int sale_product_count = sale_product_cache.Count;
-                return (sale_product_count + EachSalePageCount - 1) / EachSalePageCount;
-            }
-        }
-
-        /// <summary>获取第几页的产品列表
-        /// </summary>
-        /// <param name="page_index">页索引，从0开始</param>
-        /// <returns>返回产品的列表</returns>
-        public List<Product> GetPagedProduct(int page_index) {
-            int begin_index = page_index * EachPageCount;
-            int count = EachPageCount;
-
-            if (begin_index > TotalProductCount) {
-                begin_index = 0;
-            }
-
-            if (begin_index + EachPageCount > TotalProductCount)
-                count = TotalProductCount - begin_index;
-
-            return AllProduct.GetRange(begin_index, count);
-        }
-
-        /// <summary>获取最新的产品列表
-        /// </summary>
-        /// <returns></returns>
-        public List<Product> GetNewestSaleProducts() {
-            return SaleProductCache.GetRange(0, SaleProductCache.Count > 9 ? 9 : SaleProductCache.Count);
-        }
-
-        /// <summary>获取分页的上架产品的列表
-        /// </summary>
-        /// <param name="page_index">要获取的产品的页索引，从0开始</param>
-        /// <returns>获取到的产品列表</returns>
-        public List<Product> GetSalePagedProducts(int page_index) {
-            if (page_index < 0)
-                page_index = 0;
-
-            int begin_index = page_index * EachSalePageCount;
-            int count = EachSalePageCount;
-
-            if (begin_index > SaleProductCount) {
-                begin_index = 0;
-            }
-
-            if (begin_index + EachSalePageCount > SaleProductCount)
-                count = SaleProductCount - begin_index;
-
-            return GetMostPopularProducts().GetRange(begin_index, count);
-        }
-
-        /// <summary>给定产品的ID列表，返回产品的对象列表
-        /// </summary>
-        /// <param name="ids">产品的ID列表</param>
-        /// <returns>获取到的产品的列表</returns>
-        internal List<Product> GetProductListByIds(int[] ids) {
-            List<Product> results = new List<Product>();
-            foreach(Product prod in sale_product_cache){
-                for (int i = 0; i < ids.Length; ++i) {
-                    if (prod.ProductID == ids[i])
-                        results.Add(prod);
+            get
+            {
+                using (SolemartDBContext context = new SolemartDBContext())
+                {
+                    return context.SaledProductItems.Count();
                 }
             }
-
-            return results;
-        }
-
-        /// <summary>根据PID获取某个商品的基本信息
-        /// </summary>
-        /// <param name="pid">要获取信息的产品PID</param>
-        /// <returns>商品对象, 如果该ID的对象不存在，返回null</returns>
-        public Product GetProductByID(int pid) {
-            Product prod = AllProduct.Find(p => p.ProductID == pid);
-            if (prod == null) {
-                //先查看销售表中是否有该商品存在
-                Product saled_prod = SaleProductCache.Find(p => p.ProductID == pid);
-                if (saled_prod != null)
-                    AllProduct.Add(saled_prod);
-                else {  //没有只能从数据库中获取
-                    prod = prod_da.GetProductByID(pid);
-                    prod.Images = prod_da.GetProductImage(prod.ProductID);
-                    if (prod == null)
-                        LogManager.Instance.Error(string.Format("[pid:{0}]的商品不存在", pid));
-                    else {
-                        AllProduct.Add(prod);
-                        prod.IsSaling = false;
-                    }
-                }
-            }
-
-            return prod;
         }
 
         #region 上架/下架处理
-        /// <summary>对商品进行上架操作
+        /// <summary>
+        /// Put on the product for saling.
         /// </summary>
-        /// <param name="prod_id">要上架的商品ID</param>
-        /// <param name="sale_price">销售价格</param>
-        /// <param name="discount">商品的折扣</param>
-        /// <param name="spec_price_flag">是否是特价的标志</param>
-        /// <returns>如果执行成功，返回true，否则返回false</returns>
-        public bool PutToSaling(int prod_id, decimal sale_price, int discount, bool spec_price_flag) {
-            Product tmp_prod = AllProduct.Find(p => p.ProductID == prod_id);
-            tmp_prod.SalePrice = sale_price;
-            tmp_prod.IsSpec = spec_price_flag;
-            tmp_prod.Discount = discount;
-            tmp_prod.IsSaling = true;
+        /// <param name="newSaledProductItem">The product put to saling.</param>
+        /// <returns>return true if success, or return false</returns>
+        public bool PutToSaling(SaledProductItem newSaledProductItem) {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                SaledProductItem oldSaledProductItem = context.SaledProductItems.First(spi => (spi.ProductID == newSaledProductItem.ProductID));
+                if (oldSaledProductItem != null)
+                {
+                    oldSaledProductItem.Price = newSaledProductItem.Price;
+                    oldSaledProductItem.Discount = newSaledProductItem.Discount;
+                    oldSaledProductItem.SpecialFlag = newSaledProductItem.SpecialFlag;
+                }
+                else
+                    context.SaledProductItems.Add(newSaledProductItem);
 
-            if (SaleProductCache.Contains(tmp_prod)) {
-                prod_da.UpdateSaling(prod_id, sale_price, discount, spec_price_flag);
+                return context.SaveChanges() > 0;
             }
-            else{
-                prod_da.PutToSaling(prod_id, sale_price, discount, spec_price_flag);
-                SaleProductCache.Add(tmp_prod);
-            }
-            //清空缓存
-            most_popular_products_cache.Clear();
-
-            return true;
         }
 
-        /// <summary>对商品prod_id进行下架处理
+        /// <summary>
+        /// Take off the product for saling
         /// </summary>
-        /// <param name="prod_id">要下架的商品的ID</param>
+        /// <param name="productID">要下架的商品的ID</param>
         /// <returns>是否下架成功</returns>
-        public bool GetBackSaling(int prod_id) {
-            if (prod_da.GetBackSaling(prod_id)) {
-                SaleProductCache.RemoveAll(p => p.ProductID == prod_id);
-                Product prod = AllProduct.First(p => p.ProductID == prod_id);
-                if (prod != null)
-                    prod.IsSaling = false;
+        public bool TakeOffSaling(int productID) {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                SaledProductItem saledProductItem = context.SaledProductItems.Find(productID);
+                if (saledProductItem != null)
+                {
+                    context.SaledProductItems.Remove(saledProductItem);
+                    return context.SaveChanges() > 0;
+                }
 
-                return true;
+                return false;
             }
-            //清空缓存
-            most_popular_products_cache.Clear();
-
-            return false;
         }
 
-        /// <summary>获取商品的最后的入库价格
+        /// <summary>
+        /// Get the last price of the product in stock
         /// </summary>
-        /// <param name="product_id">要获取的商品的ID</param>
+        /// <param name="productID">要获取的商品的ID</param>
         /// <returns>商品的最后的入库价格</returns>
-        public decimal GetLastStockPrice(int product_id) {
-            return prod_da.GetLastStockPrice(product_id);
+        public decimal GetLastStockPrice(int productID) {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                var query = from p in context.InStockItems
+                            where p.ProductID == productID
+                            orderby p.InStockTime descending
+                            select p;
+                return query.First().Price;
+            }
         }
 
         #endregion
 
         #region 商品的图片处理
-        /// <summary>添加一个图像到产品
+        /// <summary>
+        /// Add a new image for the product
         /// </summary>
-        /// <param name="pid">要添加的产品的PID</param>
+        /// <param name="productID">要添加的产品的PID</param>
         /// <param name="datas">图像数据</param>
         /// <returns>是否添加成功</returns>
-        public bool AddNewImageToProduct(int pid, string mimetype, string file_name) {
-            int iid = prod_da.AddNewProductImage(pid, mimetype, file_name);
+        public bool AddNewImageToProduct(int productID, string mimetype, string fileName) {
+            int iid = prod_da.AddNewProductImage(productID, mimetype, fileName);
             //添加成功后，刷新缓存
             if (iid > 0) {
-                Product product = AllProduct.Find(p => p.ProductID == pid);
-                product.Images = prod_da.GetProductImage(pid);
+                Product product = AllProduct.Find(p => p.ProductID == productID);
+                product.Images = prod_da.GetProductImage(productID);
             }
 
             return iid > 0;
@@ -455,7 +215,7 @@ namespace Solemart.BusinessLib {
                 Product product = new Product();
                 product.ProductID = new_product_id;
                 product.Name = prod_name;
-                product.OwnedCategory = CategoryManager.Instance.GetCateById(cate_id);
+                product.OwnedCategory = CategoryManager.Instance.GetCategoryById(cate_id);
                 product.VendorID = fact_id;
                 product.Spec = prod_spec;
                 product.BrandID = brand_id;

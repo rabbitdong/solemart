@@ -1,14 +1,5 @@
 *.suo
-src/UnitTest/bin
-src/UnitTest/obj
-src/DataProvider/bin
-src/DataProvider/obj
-src/Business/bin
-src/Business/obj
-src/SystemUtil/bin
-src/SystemUtil/obj
-src/Web/bin
-src/Web/obj
-src/WebUtil/bin
-src/WebUtil/obj
+src/*/bin
+src/*/obj
+tools/*/bin
 *.user

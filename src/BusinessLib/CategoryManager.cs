@@ -2,176 +2,185 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Solemart.EntityLib;
-using Solemart.DataAccessLib;
+using System.Data;
+using System.Data.Entity;
+using Solemart.DataProvider;
+using Solemart.DataProvider.Entity;
+using Solemart.SystemUtil;
 
 namespace Solemart.BusinessLib {
     /// <summary>类别管理类
     /// </summary>
     public class CategoryManager {
-        private ProductDA prod_da = ProductDA.Instance;
 
         private static CategoryManager instance = new CategoryManager();
 
-        /// <summary>作为缓存的业务对象，不去数据库进行及时查找
+        /// <summary>
+        /// 作为缓存的业务对象，不去数据库进行及时查找
         /// </summary>
-        private List<Category> categories = null;
+        private IList<CategoryItem> categoryList = null;
 
-        /// <summary>获取类别管理对象
+        /// <summary>
+        /// 获取类别管理对象
         /// </summary>
         public static CategoryManager Instance {
             get { return instance; }
         }
 
-        /// <summary>添加一个新类别
+        /// <summary>
+        /// Add new category
         /// </summary>
-        /// <param name="cate_name">新类别的名称</param>
-        /// <param name="cate_desc">新类别的说明</param>
-        /// <param name="sup_cate_id">新类别所属的父类别</param>
-        /// <returns>如果添加成功，返回true，否则返回false</returns>
-        public bool AddNewCategory(string cate_name, string cate_desc, int sup_cate_id) {
-            if (prod_da.GetCategoryList().Find(cate => cate.CateName == cate_name) != null)
-                return false;
+        /// <param name="newCategory">The category want to add</param>
+        /// <returns>Return true if success, or return false</returns>
+        public Result<string> AddNewCategory(CategoryItem newCategory) {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                if (context.CategoryItems.First(c => c.CategoryName == newCategory.CategoryName) != null)
+                    return Result<string>.DuplicatedField;
 
-            int new_cate_id = prod_da.AddNewCategory(cate_name, cate_desc, sup_cate_id);
+                context.CategoryItems.Add(newCategory);
+                if (context.SaveChanges() <= 0)
+                    return Result<string>.NormalErrorResult;
 
-            if (new_cate_id > 0) {
-                Category new_cate = new Category();
-                new_cate.CateID = new_cate_id;
-                new_cate.CateName = cate_name;
-                new_cate.Desc = cate_desc;
-                new_cate.SubCategories = null;
+                if (newCategory.ParentCategoryID != 0)
+                {
+                    CategoryItem parentCategory = GetCategoryInList(categoryList, newCategory.ParentCategoryID);
+                    if (parentCategory.SubCategories == null)
+                        parentCategory.SubCategories = new List<CategoryItem>();
 
-                if (sup_cate_id != 0) {
-                    Category sup_cate = GetCateInList(categories, sup_cate_id);
-                    if (sup_cate.SubCategories == null)
-                        sup_cate.SubCategories = new List<Category>();
-
-                    sup_cate.SubCategories.Add(new_cate);
+                    parentCategory.SubCategories.Add(newCategory);
                 }
                 else
-                    categories.Add(new_cate);
-                return true;
-            }
+                {
+                    categoryList.Add(newCategory);
+                }
 
-            return false;
+                return Result<string>.SuccessResult;
+            }
         }
 
-        /// <summary>列表中是否存在cat_id的类别
+        /// <summary>
+        /// Get the category in the list.
         /// </summary>
-        /// <param name="cates">要查找的列表(平面列表)</param>
-        /// <param name="cat_id">要查询的id</param>
-        /// <returns>如果找到，返回该类别对象</returns>
-        private Category GetCateInList(List<Category> cates, int cate_id) {
-            Category finded_cate = null;
-            foreach (Category cate in cates) {
-                if (cate.CateID == cate_id)
-                    return cate;
+        /// <param name="categoryList">The category list to search</param>
+        /// <param name="categoryID">The category id to search</param>
+        /// <returns>Return the category if get one, or return null</returns>
+        private CategoryItem GetCategoryInList(IList<CategoryItem> categoryList, int categoryID) {
+            CategoryItem findedCategory = null;
+            foreach (CategoryItem category in categoryList) {
+                if (category.CategoryID == categoryID)
+                    return category;
 
-                if (cate.SubCategories != null) {
-                    finded_cate = GetCateInList(cate.SubCategories, cate_id);
-                    if (finded_cate != null)
-                        return finded_cate;
+                if (category.SubCategories != null) {
+                    findedCategory = GetCategoryInList(category.SubCategories, categoryID);
+                    if (findedCategory != null)
+                        return findedCategory;
                 }
             }
 
             return null;
         }
 
-        /// <summary>根据cate_id获取其类别对象
+        /// <summary>
+        /// Get the category item by the category id.
         /// </summary>
-        /// <param name="cate_id">要获取的类别的ID</param>
+        /// <param name="categoryID">要获取的类别的ID</param>
         /// <returns>返回获取的类别，如果没有，返回null</returns>
-        public Category GetCateById(int cate_id) {
-            return GetCateInList(Categories, cate_id);
+        public CategoryItem GetCategoryById(int categoryID) {
+            return GetCategoryInList(categoryList, categoryID);
         }
 
-        /// <summary>刷新类别列表
+        /// <summary>
+        /// Load the category list.
         /// </summary>
-        private void FreshCategoryList() {
-            if (categories == null)
-                categories = new List<Category>();
+        private void LoadCategoryList() {
+            if (categoryList == null)
+                categoryList = new List<CategoryItem>();
 
-            //刷新的时候先清空下
-            categories.Clear();
+            //Clear the list first.
+            categoryList.Clear();
 
-            //保存从DataAccessLib类的平面的列表
-            List<Category> nostack_cate_list = prod_da.GetCategoryList();
-            IEnumerable<KeyValuePair<int, int>> cate_prod_count = GetCateCountList();
+            //Save the list get from the DataProvider
+            using(SolemartDBContext context=new SolemartDBContext())
+            {
+                List<CategoryItem> nostackCategoryList = context.CategoryItems.ToList();
+                IEnumerable<KeyValuePair<int, int>> categoryProductCount = GetCateCountList();
 
-            foreach (Category cate in nostack_cate_list) {
-                int cid = cate.CateID;
-                string cate_name = cate.CateName;
-                int sid = cate.SupCategory == null ? 0 : cate.SupCategory.CateID;
-                cate.ProductCount = cate_prod_count.FirstOrDefault(v => v.Key == cid).Value;
+                foreach (CategoryItem category in nostackCategoryList)
+                {
+                    string cate_name = category.CategoryName;
 
-                if (sid == 0) {
-                    categories.Add(cate);    //只添加顶级的类别到列表中
-                }
-                else {
-                    Category sup_cate = GetCateInList(nostack_cate_list, sid);
-                    if (sup_cate.SubCategories == null) {
-                        sup_cate.SubCategories = new List<Category>();
+                    if (category.ParentCategoryID == 0)
+                    {
+                        categoryList.Add(category);    //只添加顶级的类别到列表中
                     }
-                    sup_cate.SubCategories.Add(cate);
-                    sup_cate.ProductCount += cate.ProductCount;
+                    else
+                    {
+                        CategoryItem parentCategory = GetCategoryInList(nostackCategoryList, category.ParentCategoryID);
+                        if (parentCategory.SubCategories == null)
+                        {
+                            parentCategory.SubCategories = new List<CategoryItem>();
+                        }
+                        parentCategory.SubCategories.Add(category);
+                    }
                 }
             }
         }
 
-        /// <summary>获取非层次性的类别列表
+        /// <summary>
+        /// Get the category list(hierarchical structure).
         /// </summary>
-        public List<Category> Categories {
+        public IList<CategoryItem> Categories {
             get {
-                if (categories != null)
-                    return categories;
+                if (categoryList != null)
+                    return categoryList;
 
-                FreshCategoryList();
+                LoadCategoryList();
 
-                return categories;
+                return categoryList;
             }
         }
 
-        /// <summary>获取第一个显示的子类别（包含产品的类别）
+        /// <summary>
+        /// Get the first category of the child category.
         /// </summary>
         /// <returns></returns>
-        public Category GetFirstChildCate() {
-            Category cate = Categories[0];
-            while (cate.SubCategories != null && cate.SubCategories.Count > 0) {
-                cate = cate.SubCategories[0];
+        public CategoryItem GetFirstChildCate() {
+            CategoryItem category = Categories[0];
+            while (category.SubCategories != null && category.SubCategories.Count > 0) {
+                category = category.SubCategories[0];
             }
 
-            return cate;
+            return category;
         }
 
-        /// <summary>把cate_id的类别作为super_cate_id的子类别
+        /// <summary>
+        /// Change the category parent to another category.
         /// </summary>
-        /// <param name="cate_id">要移动的类别ID</param>
-        /// <param name="super_cate_id">作为新父类别的ID</param>
+        /// <param name="categoryID">要移动的类别ID</param>
+        /// <param name="parentCategoryID">作为新父类别的ID</param>
         /// <returns>执行成功返回true，否则返回false</returns>
-        public bool ChangeCateToOtherSuperCate(int cate_id, int super_cate_id) {
-            if (cate_id < 1 || super_cate_id < 1 || cate_id == super_cate_id)
+        public bool ChangeCateToOtherSuperCate(int categoryID, int parentCategoryID)
+        {
+            if (categoryID < 1 || parentCategoryID < 1 || categoryID == parentCategoryID)
                 return false;
 
-            Category cate = GetCateInList(categories, cate_id);
-            Category super_cate = GetCateInList(categories, super_cate_id);
-            Category src_super_cate = null;
+            CategoryItem cate = GetCategoryInList(categoryList, categoryID);
+            CategoryItem super_cate = GetCategoryInList(categoryList, parentCategoryID);
+            CategoryItem src_super_cate = null;
 
             //原来的类别ID
             int src_super_cate_id = 0;
-            if (cate.SupCategory != null) {
-                src_super_cate_id = cate.SupCategory.CateID;
-                src_super_cate = GetCateInList(categories, src_super_cate_id);
+            if (cate.ParentCategoryID != 0) {
+                src_super_cate = GetCategoryInList(categoryList, src_super_cate_id);
             }
 
             if (cate == null || super_cate == null || cate == super_cate)
                 return false;
 
-            if (!prod_da.ChangeCateToOtherSuperCate(cate_id, super_cate_id))
-                return false;
 
             if (super_cate.SubCategories == null) {
-                super_cate.SubCategories = new List<Category>();
+                super_cate.SubCategories = new List<CategoryItem>();
             }
             super_cate.SubCategories.Add(cate);
 
@@ -179,7 +188,7 @@ namespace Solemart.BusinessLib {
             if (src_super_cate != null)
                 src_super_cate.SubCategories.Remove(cate);
             else
-                categories.Remove(cate);
+                categoryList.Remove(cate);
 
             return true;
         }
@@ -188,11 +197,13 @@ namespace Solemart.BusinessLib {
         /// </summary>
         /// <param name="cate_list">要插入的列表</param>
         /// <param name="super_cate">要插入的子项的父项</param>
-        private void InsertSubCateToList(List<Category> cate_list, Category super_cate) {
+        private void InsertSubCateToList(List<CategoryItem> cate_list, CategoryItem super_cate)
+        {
             if (super_cate.SubCategories == null)
                 return;
 
-            foreach (Category cate in super_cate.SubCategories) {
+            foreach (CategoryItem cate in super_cate.SubCategories)
+            {
                 cate_list.Add(cate);
                 InsertSubCateToList(cate_list, cate);
             }
@@ -200,22 +211,18 @@ namespace Solemart.BusinessLib {
 
         /// <summary>获取所有项，是平面一级结构
         /// </summary>
-        public List<Category> AllCategories {
+        public List<CategoryItem> AllCategories
+        {
             get {
-                List<Category> all_cates = new List<Category>();
-                foreach (Category cate in Categories) {
+                List<CategoryItem> all_cates = new List<CategoryItem>();
+                foreach (CategoryItem cate in Categories)
+                {
                     all_cates.Add(cate);
                     InsertSubCateToList(all_cates, cate);
                 }
 
                 return all_cates;
             }
-        }
-
-        /// <summary>获取每类别下产品的数量
-        /// </summary>
-        internal IEnumerable<KeyValuePair<int, int>> GetCateCountList() {
-            return prod_da.GetProductCountEachCategory();
         }
     }
 }

@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\lib\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,6 +54,10 @@
     <Compile Include="VendorManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataProvider\DataProvider.csproj">
+      <Project>{f908ec89-0480-43c3-9830-0323158d8d20}</Project>
+      <Name>DataProvider</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SystemUtil\SystemUtil.csproj">
       <Project>{ad5e4432-2d4c-4519-b834-2b917686f98c}</Project>
       <Name>SystemUtil</Name>

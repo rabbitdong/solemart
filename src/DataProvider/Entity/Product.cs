@@ -67,6 +67,11 @@ namespace Solemart.DataProvider.Entity
         /// The parent category id of the category, if no parent, the value is 0.
         /// </summary>
         public int ParentCategoryID { get; set; }
+
+        /// <summary>
+        /// The child category list of the category.
+        /// </summary>
+        public IList<CategoryItem> SubCategories { get; set; }
     }
     #endregion
 
