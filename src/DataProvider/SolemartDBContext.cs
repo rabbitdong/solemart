@@ -44,5 +44,19 @@ namespace Solemart.DataProvider
             string sql = string.Format("truncate table {0}s", tableType.Name.ToLower());
             return this.Database.ExecuteSqlCommand(sql) > 0;
         }
+
+        /// <summary>
+        /// Validate the user's password
+        /// </summary>
+        /// <param name="username">The user name to validate</param>
+        /// <param name="password">The password to validate</param>
+        /// <returns></returns>
+        public bool ValidateUserPassword(string username, string password)
+        {
+            password = EncryptUtil.GetHashPwd(password);
+            var q = this.Database.SqlQuery<int>("select count(1) from useritems where username=@un and PASSWORD=@pwd",
+                new MySqlParameter("@un", username), new MySqlParameter("@pwd", password));
+            return q.FirstOrDefault() > 0;
+        }
     }
 }

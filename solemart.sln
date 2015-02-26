@@ -22,9 +22,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{28CE8189-229
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{E3BF6CBE-2B6D-4200-9F9E-4D19F8C3CE91}"
 	ProjectSection(SolutionItems) = preProject
+		lib\EntityFramework.dll = lib\EntityFramework.dll
+		lib\EntityFramework.SqlServer.dll = lib\EntityFramework.SqlServer.dll
 		lib\MySql.Data.dll = lib\MySql.Data.dll
 		lib\MySql.Data.Entity.dll = lib\MySql.Data.Entity.dll
 		lib\MySql.Web.dll = lib\MySql.Web.dll
+		lib\Newtonsoft.Json.dll = lib\Newtonsoft.Json.dll
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EC7617FD-C0F4-428E-9635-C4D8553DE6C3}"
@@ -32,8 +35,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{0F9E82DE-9DBB-433B-945C-539088DF318E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data model", "data model", "{66B664AD-51B2-400D-9AEC-57D0743E8C01}"
+	ProjectSection(SolutionItems) = preProject
+		doc\data model\db_mysql.sql = doc\data model\db_mysql.sql
+		doc\data model\db_sqlserver.sql = doc\data model\db_sqlserver.sql
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources", "resources", "{43768EFA-F3DD-4DD8-9B17-16D0EE4C1209}"
+	ProjectSection(SolutionItems) = preProject
+		doc\resources\产品说明.txt = doc\resources\产品说明.txt
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web", "src\web\web.csproj", "{2C7B0ED1-CADA-437A-95A3-D092BB96A67A}"
 EndProject

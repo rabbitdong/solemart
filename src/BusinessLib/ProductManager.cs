@@ -347,7 +347,7 @@ namespace Solemart.BusinessLib {
                             where p.CategoryID == categoryID
                             orderby p.ProductID descending
                             select p;
-                totalPageCount = (query.Count() + 1) / pageSize;
+                totalPageCount = (query.Count() - 1) / pageSize + 1;
                 return query.Skip(pageIndex * pageSize).Take(pageSize).ToList();
             }
         }
