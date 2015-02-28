@@ -15,7 +15,7 @@ namespace Solemart.SystemUtil
         private static byte[] key = { 0x10, 0x35, 0x28, 0x84, 0xc5, 0x02, 0x3a, 0x7f };
         private static byte[] IV = { 0x51, 0x73, 0xa1, 0x1a, 0x07, 0x42, 0x86, 0xce };
 
-        private static const int PWD_CHAR_LEN = 62; //数字+小写+大写 = 62个字符
+        private static int PWD_CHAR_LEN = 62; //数字+小写+大写 = 62个字符
         private static byte[] pwdchars = null;
         private static Random rand = new Random();
 

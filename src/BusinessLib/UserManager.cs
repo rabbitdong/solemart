@@ -6,12 +6,12 @@ using System.Security.Cryptography;
 using Solemart.DataProvider;
 using Solemart.DataProvider.Entity;
 
-namespace Solemart.BusinessLib {
+namespace Solemart.BusinessLib 
+{
     /// <summary>用户管理类对象，是singleton，通过Instance访问实例
     /// </summary>
-    public class UserManager {
-        private List<Role> roleList = null;
-
+    public class UserManager 
+    {
         /// <summary>
         /// Add a new user
         /// </summary>
@@ -139,211 +139,210 @@ namespace Solemart.BusinessLib {
         }
 
         /// <summary>
-        /// 通过用户名获取用户对象
+        /// Get the user by user name.
         /// </summary>
         /// <param name="userName">要获取的用户的用户名</param>
         /// <returns>获取到的用户对象，如果没有，返回null</returns>
         public UserItem GetUserByName(string userName) {
-            UserItem UserItem = uda.GetUserByName(userName);
-            if (UserItem != null) {
-                Role[] roles = GetRoleByUserId(UserItem.UserID);
-                if (roles != null && roles.Length > 0) {
-                    UserItem.Roles = roles;
-                }
-                else
-                    UserItem.Roles = new Role[] { Role.NormalRole };
-
-                return UserItem;
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserItem user = context.UserItems.FirstOrDefault(u => u.UserName == userName);
+                return user;
             }
-            return null;
         }
 
-        /// <summary>通过OpenId获取用户对象
+        /// <summary>
+        /// Get the user by the openid
         /// </summary>
-        /// <param name="openid">要获取的用户的OpenId</param>
+        /// <param name="openID">要获取的用户的OpenId</param>
         /// <returns></returns>
-        public UserItem GetUserByOpenId(string openid) {
-            UserItem UserItem = uda.GetUserByOpenId(openid);
-            if (UserItem != null && UserItem.Name.Trim() == "") {
-                UserItem.Name = uda.GetNickNameByUserID(UserItem.UserID);
-                Role[] roles = GetRoleByUserId(UserItem.UserID);
-                if (roles != null && roles.Length > 0) {
-                    UserItem.Roles = roles;
-                }
-                else
-                    UserItem.Roles = new Role[] { Role.NormalRole };
-
-                return UserItem;
+        public UserItem GetUserByOpenId(string openID) {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                return context.UserItems.FirstOrDefault(u => u.OpenID == openID);
             }
-
-            return null;
         }
 
-        /// <summary>通过用户ID获取用户对象
+        /// <summary>
+        /// Get the user by id
         /// </summary>
-        /// <param name="user_id">要获取的用户的ID</param>
+        /// <param name="userID">要获取的用户的ID</param>
         /// <returns>返回获取到的用户对象，如果没有该ID的用户，返回null</returns>
-        public UserItem GetUserByID(int user_id) {
-            UserItem UserItem = uda.GetUserByID(user_id);
-
-            return UserItem;
-        }
-
-        /// <summary>获取某个用户所代码的角色信息
-        /// </summary>
-        /// <param name="user_id">用户ID</param>
-        /// <returns>获取的用户角色信息</returns>
-        public Role[] GetRoleByUserId(int user_id) {
-            int[] role_ids = urda.GetRoleIdsByUserId(user_id);
-
-            int role_num = role_ids.Length;
-            Role[] roles = new Role[role_num];
-            for (int i = 0; i < role_num; ++i) {
-                roles[i] = role_list.Find(r => r.RoleID == role_ids[i]);
+        public UserItem GetUserByID(int userID) {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                return context.UserItems.Find(userID);
             }
-
-            return roles;
         }
 
         /// <summary>获取某个用户的送货地址信息
         /// </summary>
         /// <param name="user_id">要获取的用户的ID</param>
         /// <returns>如果获取到，返回该地址信息，否则返回null</returns>
-        public SendAddressInfo GetSendAddressInfo(int user_id) {
-            return urda.GetSendAddressInfo(user_id);
+        public SendAddressItem GetSendAddressInfo(int userID) {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                return context.SendAddressItems.Find(userID);
+            }
         }
 
         /// <summary>保存用户的送货地址信息
         /// </summary>
-        /// <param name="addr_info">保存的送货地址信息</param>
+        /// <param name="addressItem">保存的送货地址信息</param>
         /// <returns>保存成功返回true，否则返回false</returns>
-        public bool SaveSendAddressInfoForUser(SendAddressInfo addr_info) {
-            if (urda.HasSendAddressInfo(addr_info.UserID)) {
-                return urda.UpdateSendAddressInfo(addr_info);
+        public bool SaveSendAddressInfoForUser(SendAddressItem addressItem) {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                SendAddressItem address = context.SendAddressItems.Find(addressItem.UserID);
+                if (address != null)
+                {
+                    address.Phone = addressItem.Phone;
+                    address.PostCode = addressItem.PostCode;
+                    address.Receiver = addressItem.Receiver;
+                    address.PaymentType = addressItem.PaymentType;
+                    address.Address = addressItem.Address;
+                    address.DeliverWay = addressItem.DeliverWay;
+                }
+                else
+                {
+                    context.SendAddressItems.Add(addressItem);
+                }
+
+                return context.SaveChanges() > 0;
             }
-            else
-                return urda.AddNewSendAddressInfo(addr_info);
         }
 
-        /// <summary>获取当前注册的用户的列表
+        /// <summary>
+        /// Get the paged user list
         /// </summary>
-        /// <param name="page_index">要获取的页索引(从0开始)</param>
-        /// <param name="page_size">要获取的页大小</param>
+        /// <param name="pageIndex">要获取的页索引(从0开始)</param>
+        /// <param name="pageSize">要获取的页大小</param>
+        /// <param name="totalPageCount"></param>
         /// <returns>获取到的用户列表</returns>
-        public List<UserItem> GetUserList(int page_index, int page_size) {
-            List<UserItem> users = uda.GetUserList(page_index, page_size);
-            if (users != null) {
-                IEnumerable<KeyValuePair<int, int>> user_roles = urda.GetUsersRole(from UserItem in users select UserItem.UserID);
-                foreach (UserItem UserItem in users) {
-                    IEnumerable<int> roleids = from ur in user_roles 
-                                               where ur.Key == UserItem.UserID select ur.Value;
-                    UserItem.Roles = (from r in role_list where roleids.Contains(r.RoleID) 
-                                  select r).ToArray();
-                }
+        public List<UserItem> GetUserList(int pageIndex, int pageSize, out int totalPageCount) {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                var q = from u in context.UserItems
+                        orderby u.UserID
+                        select u;
+                totalPageCount = (q.Count() - 1) / pageSize + 1;
+                return q.Skip(pageIndex * pageSize).Take(pageSize).ToList();
             }
-
-            return users;
         }
 
-        /// <summary>获取角色的字符串表达式
+        /// <summary>
+        /// Modify the user's role
         /// </summary>
-        /// <param name="roles">角色的列表</param>
-        /// <returns>字符串表达式</returns>
-        public string GetRolesString(Role[] roles) {
-            StringBuilder sb = new StringBuilder();
-            int roles_count = roles.Length;
-
-            if (roles_count >= 1)
-                sb.Append(roles[0].ToString());
-
-            for (int i = 1; i < roles_count; ++i) {
-                sb.AppendFormat(",{0}", roles[i]);
-            }
-
-            return sb.ToString();
-        }
-
-        /// <summary>修改用户角色信息
-        /// </summary>
-        /// <param name="uid">要修改的用户ID</param>
-        /// <param name="new_role">修改后的新角色</param>
+        /// <param name="userID">要修改的用户ID</param>
+        /// <param name="roleIDS">修改后的新角色</param>
         /// <returns>是否成功修改，成功修改返回true，否则返回false</returns>
-        public bool ModifyUserRole(int uid, Role new_role) {
-            if (new_role == null)
-                return false;
-
-            return urda.ModifyUserRole(uid, new_role.RoleID);
+        public bool ModifyUserRole(int userID, string roleIDS) {
+            return true;
         }
 
-        /// <summary>获取用户的收藏夹列表
+        /// <summary>
+        /// Get the user favorite list
         /// </summary>
-        /// <param name="uid">要获取收藏夹的用户ID</param>
+        /// <param name="userID">要获取收藏夹的用户ID</param>
         /// <returns>用户的收藏夹列表信息，如果没有内容，返回null</returns>
-        public IList<FavoriteInfo> GetUserFavoriteList(int uid) {
-            IList<TmpFavoriteItem> fav_items = urda.GetUserFavoriteList(uid);
-
-            if (fav_items != null && fav_items.Count > 0) {
-                List<FavoriteInfo> favorites = new List<FavoriteInfo>();
-                foreach (TmpFavoriteItem fav in fav_items) {
-                    FavoriteInfo favorite = new FavoriteInfo();
-                    favorite.Product = ProductManager.Instance.GetProductByID(fav.ProductID);
-                    favorite.FavoriteTime = fav.FavoriteTime;
-                    favorites.Add(favorite);
-                }
-                return favorites;
+        public IList<FavoriteItem> GetPagedUserFavoriteList(int userID, int pageIndex, int pageSize, out int totalPageCount) {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                var q = from f in context.FavoriteItems.Include("Product")
+                        orderby f.FavoriteTime descending
+                        where f.UserID == userID
+                        select f;
+                totalPageCount = (q.Count() - 1) / pageSize + 1;
+                return q.Skip(pageIndex * pageSize).Take(pageSize).ToList();
             }
-
-            return null;
         }
 
-        /// <summary>用户uid新加一个收藏夹项
+        /// <summary>
+        /// Add a new favorite for user
         /// </summary>
-        /// <param name="uid">添加收藏夹项的用户</param>
-        /// <param name="product">添加的商品</param>
+        /// <param name="userID">添加收藏夹项的用户</param>
+        /// <param name="productID">添加的商品</param>
         /// <returns>成功收藏返回true，否则返回false</returns>
-        public bool AddNewFavorite(int uid, Product product) {
-            if (urda.HasFavoriteProduct(uid, product.ProductID)) {
-                return urda.UpdateFavorite(uid, product.ProductID);
-            }
-            else {
-                return urda.AddNewFavorite(uid, product.ProductID);
+        public bool AddNewFavorite(int userID, int productID) {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                FavoriteItem favorite = context.FavoriteItems.FirstOrDefault(f => (f.UserID == userID && f.ProductID == productID));
+                if (favorite != null)
+                {
+                    favorite.FavoriteTime = DateTime.Now;
+                }
+                else
+                {
+                    context.FavoriteItems.Add(favorite);
+                }
+
+                return context.SaveChanges() > 0;
             }
         }
 
-        /// <summary>获取用户的其它信息内容
+        /// <summary>
+        /// Get the user append info
         /// </summary>
-        /// <param name="uid">要获取的用户的ID</param>
+        /// <param name="userID">要获取的用户的ID</param>
         /// <returns>返回获取到的其它信息内容</returns>
-        public UserAppendInfo GetUserAppendInfo(int uid) {
-            return uda.GetUserAppendInfo(uid);
+        public UserAppendInfoItem GetUserAppendInfo(int userID) {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                return context.UserAppendInfoItems.Find(userID);
+            }
         }
 
-        /// <summary>更新用户信息
+        /// <summary>
+        /// Update user info
         /// </summary>
-        /// <param name="uid">要更新的用户的ID</param>
-        /// <param name="field">要更新的用户字段</param>
-        /// <param name="new_value">新的用户的值</param>
+        /// <param name="user">要更新的用户的ID</param>
         /// <returns>是否成功更新, true：更新成功, false:更新失败</returns>
-        public bool UpdateUserInfo(int uid, string field, string new_value) {
-            return uda.UpdateUserInfo(uid, field, new_value);
+        public bool UpdateUserInfo(UserItem user) {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserItem old = context.UserItems.Find(user.UserID);
+                if (old != null)
+                {
+                    old.UserName = user.UserName;
+                    old.Email = user.Email;
+                    return context.SaveChanges() > 0;
+                }
+
+                return false;
+            }
         }
 
-        /// <summary>更新用户的密码
+        /// <summary>
+        /// Update the user password
         /// </summary>
-        /// <param name="uid">要更新密码的用户ID</param>
-        /// <param name="new_pwd">更新的新密码</param>
+        /// <param name="userID">要更新密码的用户ID</param>
+        /// <param name="newPassword">更新的新密码</param>
         /// <returns>是否更新成功</returns>
-        public bool UpdateUserPwd(int uid, string new_pwd) {
-            return uda.UpdateUserPwd(uid, GetHashPwd(new_pwd));
+        public bool UpdateUserPwd(int userID, string newPassword) {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                return context.UpdateUserPassword(userID, newPassword);
+            }
         }
 
-        /// <summary>更新用户生日信息
+        /// <summary>
+        /// Update birthday of the user
         /// </summary>
-        /// <param name="uid">要更新的用户的ID</param>
-        /// <param name="new_value">新的用户的生日</param>
+        /// <param name="userID">要更新的用户的ID</param>
+        /// <param name="newBirthDay">新的用户的生日</param>
         /// <returns>是否成功更新, true：更新成功, false:更新失败</returns>
-        public bool UpdateUserBirthDay(int uid, DateTime new_value) {
-            return uda.UpdateUserBirthDay(uid, new_value);
+        public bool UpdateUserBirthDay(int userID, DateTime newBirthDay) {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserAppendInfoItem userAppendInfo = context.UserAppendInfoItems.Find(userID);
+                if (userAppendInfo != null)
+                {
+                    userAppendInfo.BirthDay = newBirthDay;
+                    return context.SaveChanges() > 0;
+                }
+
+                return false;
+            }
         }        
     }
 }

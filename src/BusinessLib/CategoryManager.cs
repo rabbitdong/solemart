@@ -104,7 +104,6 @@ namespace Solemart.BusinessLib {
             using(SolemartDBContext context=new SolemartDBContext())
             {
                 List<CategoryItem> nostackCategoryList = context.CategoryItems.ToList();
-                IEnumerable<KeyValuePair<int, int>> categoryProductCount = GetCateCountList();
 
                 foreach (CategoryItem category in nostackCategoryList)
                 {

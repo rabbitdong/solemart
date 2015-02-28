@@ -58,5 +58,28 @@ namespace Solemart.DataProvider
                 new MySqlParameter("@un", username), new MySqlParameter("@pwd", password));
             return q.FirstOrDefault() > 0;
         }
+
+        /// <summary>
+        /// Update the user password
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="newPassword"></param>
+        /// <returns></returns>
+        public bool UpdateUserPassword(int userID, string newPassword)
+        {
+            newPassword = EncryptUtil.GetHashPwd(newPassword);
+            return this.Database.ExecuteSqlCommand("update useritems set PASSWORD=@pwd where userid=@userid",
+                new MySqlParameter("@pwd", newPassword), new MySqlParameter("@userid", userID)) > 0;
+        }
+
+        /// <summary>
+        /// Clear the user's cart
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool ClearCartForUser(int userID)
+        {
+            return this.Database.ExecuteSqlCommand("delete cartitems where UserID=@userid", new MySqlParameter("@userid", userID)) > 0;
+        }
     }
 }

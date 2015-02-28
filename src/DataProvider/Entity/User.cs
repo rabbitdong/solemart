@@ -34,6 +34,8 @@ namespace Solemart.DataProvider.Entity
         /// </summary>
         public static Role Super = new Role { RoleID = 4, RoleName = "Super" };
 
+        private static List<Role> RoleList = new List<Role> { Anonymous, NormalUser, Operator, Super };
+
         public Role() { }
 
         /// <summary>
@@ -73,6 +75,35 @@ namespace Solemart.DataProvider.Entity
                 role_names[i] = roles[i].RoleName;
 
             return role_names;
+        }
+
+        /// <summary>
+        /// Get the role list for the role id list.
+        /// </summary>
+        /// <param name="roleIDS"></param>
+        /// <returns></returns>
+        public static Role[] GetRoles(string roleIDS)
+        {
+            var rolelist = roleIDS.Split(',');
+            return RoleList.Where(p => rolelist.Contains(p.RoleID.ToString())).ToArray();
+        }
+
+        /// <summary>
+        /// Get the role id string for the role list.
+        /// </summary>
+        /// <param name="roles"></param>
+        /// <returns></returns>
+        public static string GetRoleIDString(Role[] roles)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (Role role in roles)
+                sb.AppendFormat("{0},", role.RoleID);
+
+            string rolestr = sb.ToString();
+            if (!string.IsNullOrEmpty(rolestr))
+                rolestr = rolestr.TrimEnd(',');
+
+            return rolestr;
         }
 
         /// <summary>
