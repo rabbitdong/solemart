@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Solemart.EntityLib;
+using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
 
 namespace Solemart.Web.Areas.Manager.Controllers
@@ -22,17 +22,20 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// <summary>用户建立新类别请求的处理
         /// </summary>
         /// <returns>返回建立新列表的结果View</returns>
-        public ActionResult Create() {
+        public ActionResult Create(CategoryItem category)
+        {
             string cate_name = Request["cate_name"];
             string cate_addr = Request["cate_desc"];
             int sup_cate_id = -1;
             int.TryParse(Request["super_cate_id"], out sup_cate_id);
 
-            bool result = CategoryManager.Instance.AddNewCategory(cate_name, cate_addr, sup_cate_id);
-            if (result) {
+            bool result = CategoryManager.Instance.AddNewCategory(category);
+            if (result)
+            {
                 return Content("ok");
             }
-            else {
+            else
+            {
                 return Content("error");
             }
         }
@@ -40,26 +43,32 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// <summary>管理员请求修改列表操作的处理
         /// </summary>
         /// <returns>返回请求修改类别操作的View</returns>
-        public ActionResult Modify() {
+        public ActionResult Modify()
+        {
             List<Category> AllCates = CategoryManager.Instance.AllCategories;
             return View(AllCates);
         }
 
-        public ActionResult ModifyCate() {
+        public ActionResult ModifyCate()
+        {
             int src_cate_id = 0;
             int desc_cate_id = 0;
 
             if (int.TryParse(Request["src_cate"], out src_cate_id)
-                && int.TryParse(Request["desc_cate"], out desc_cate_id)) {
+                && int.TryParse(Request["desc_cate"], out desc_cate_id))
+            {
 
-                if (src_cate_id == desc_cate_id) {
+                if (src_cate_id == desc_cate_id)
+                {
                     return Content("error");
                 }
 
-                if (CategoryManager.Instance.ChangeCateToOtherSuperCate(src_cate_id, desc_cate_id)) {
+                if (CategoryManager.Instance.ChangeCateToOtherSuperCate(src_cate_id, desc_cate_id))
+                {
                     return Content("ok");
                 }
-                else {
+                else
+                {
                     return Content("error");
                 }
             }

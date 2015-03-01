@@ -1,13 +1,12 @@
-﻿@using Solemart.EntityLib
-@using Solemart.BusinessLib;
-@model List<Product>
+﻿@using Solemart.DataProvider;
+@using Solemart.DataProvider.Entity;
+@model List<ProductItem>
 
 @section header_style{}
 @section header_script{
     <script src="/Scripts/pages/default.js"></script>
 }
 
-@Html.Partial("_BillBoardNews")
 <div class="section">
     <div class="p-section">
         <ul class="p-list">

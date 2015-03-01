@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Security;
+using Solemart.BusinessLib;
 
 namespace Solemart.WebUtil
 {
@@ -16,46 +17,19 @@ namespace Solemart.WebUtil
         /// <param name="email"></param>
         /// <param name="pwdmd5"></param>
         /// <param name="isPersist"></param>
-        public static CommonDevUser Login(string email, string pwd, bool isPersist)
+        public static bool Login(string email, string pwd, bool isPersist)
         {
-            CommonDevUser user = UserManager.Login(0, email);
-            if (user != null)
-            {
-                FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, email,
-                    DateTime.Now, DateTime.Now.AddMinutes(30), isPersist, user.UserID.ToString());
-                string encTicket = FormsAuthentication.Encrypt(ticket);
-                HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket);
-                if (isPersist)
-                    authCookie.Expires = DateTime.Now.AddMinutes(30);
-                HttpContext.Current.Response.Cookies.Add(authCookie);
-                HttpContext.Current.User = user;
-            }
-            return user;
-
-            UserManager um = UserManager.Instance;
-
             HttpContext ctx = HttpContext.Current;
-            User user = um.OnLogin(name, pwd);
+            SolemartUser user = UserManager.OnLogin(email, pwd);
             if (user != null)
             {
-                if (ctx.Session["user"] == null)
-                    ctx.Session.Add("user", user);
-                else
-                {
-                    EntityLib.User preuser = ctx.Session["user"] as EntityLib.User;
-                    if (preuser.UserID != user.UserID)
-                        ctx.Session["user"] = user;
-                }
-
-                DateTime expire_time = ispersist ? DateTime.Now.AddMinutes(30) : DateTime.Now.AddYears(1);
                 FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1,
-                    "LC@" + name, DateTime.Now, expire_time, ispersist, "member");
+                    "LC@" + email, DateTime.Now, DateTime.Now.AddMinutes(30), isPersist, "member");
                 HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(ticket));
-
-                cookie.Expires = expire_time;
+                if(isPersist)
+                    cookie.Expires = DateTime.Now.AddMinutes(30);
+                ctx.User = user;
                 ctx.Response.Cookies.Add(cookie);
-
-                ctx.Session["cart"] = Cart.GetUserCart(user);
 
                 return true;
             }
@@ -67,12 +41,12 @@ namespace Solemart.WebUtil
         /// 用户直接登陆系统（已经是系统的用户）
         /// </summary>
         /// <param name="user"></param>
-        public static void Login(CommonDevUser user)
+        public static void Login(SolemartUser user)
         {
             if (user == null)
                 return;
 
-            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, user.Email,
+            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, user.UserName,
                 DateTime.Now, DateTime.Now.AddMinutes(30), false, user.UserID.ToString());
             string encTicket = FormsAuthentication.Encrypt(ticket);
             HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket);
@@ -83,13 +57,14 @@ namespace Solemart.WebUtil
 
         public static void Logout()
         {
-            CommonDevUser user = HttpContext.Current.User as CommonDevUser;
+            SolemartUser user = HttpContext.Current.User as SolemartUser;
             if (user != null)
             {
-                FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, user.Email,
+                FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, user.UserName,
                     DateTime.Now, DateTime.Now.AddDays(-1), false, user.UserID.ToString());
                 string encTicket = FormsAuthentication.Encrypt(ticket);
                 HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket);
+                authCookie.Expires = DateTime.Now;
                 HttpContext.Current.Response.Cookies.Add(authCookie);
                 FormsAuthentication.SignOut();
             }

@@ -10,10 +10,6 @@ namespace Solemart.BusinessLib
 {
     public class Searcher
     {
-        private ProductManager pm = ProductManager.Instance;
-
-        private static Searcher instance = new Searcher();
-
         private Thread index_t = null;  //生成索引的线程
         private Mutex mutex = null;
 
@@ -22,14 +18,6 @@ namespace Solemart.BusinessLib
         /// <summary>LOG的缓存
         /// </summary>
         private Stack<string> log_cache = new Stack<string>();
-
-        private Searcher()
-        {
-            mutex = new Mutex();
-            index_t = new Thread(new ThreadStart(Thread_Run));
-            //index_t.IsBackground = true;
-            //index_t.Start();
-        }
 
         /// <summary>运行的写线程
         /// </summary>
@@ -42,13 +30,6 @@ namespace Solemart.BusinessLib
 
 
             }
-        }
-
-        /// <summary>获取搜索对象的实例
-        /// </summary>
-        public static Searcher Instane
-        {
-            get { return instance; }
         }
 
         /// <summary>获取IDS表示的字符串

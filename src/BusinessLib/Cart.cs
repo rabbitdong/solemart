@@ -37,6 +37,12 @@ namespace Solemart.BusinessLib
             }
         }
 
+        public List<CartItem> CartItems
+        {
+            get { return cartItems; }
+            set { cartItems = value; }
+        }
+
         /// <summary>
         /// Add a product to shopping cart
         /// </summary>
@@ -51,7 +57,7 @@ namespace Solemart.BusinessLib
             }
             else
             {
-                SaledProductItem product = ProductManager.Instance.GetSaledProductByID(productID);
+                SaledProductItem product = ProductManager.GetSaledProductByID(productID);
                 if (product == null)
                     throw new ArgumentException(string.Format("该ID={0}的商品不存在", productID));
                 CartItem pi = new CartItem { ProductID = product.ProductID, Amount = count, UnitPrice = product.Price * product.Discount };
@@ -128,31 +134,6 @@ namespace Solemart.BusinessLib
             else
                 cartItem.Amount = amount;
 
-            return true;
-        }
-
-        /// <summary>
-        /// Get the cart of the user
-        /// </summary>
-        /// <param name="user">用户对象</param>
-        /// <returns>该用户的购物车</returns>
-        /// <remarks>该方法用于用户登录时，获取前次登录的购物车对象，表示为未完成的购物行为</remarks>
-        public static Cart GetUserCart(UserItem user)
-        {
-            using (SolemartDBContext context = new SolemartDBContext())
-            {
-                Cart cart = new Cart();
-                cart.cartItems = context.CartItems.Include("Product").Where(c => c.UserID == user.UserID).ToList();
-                return cart;
-            }
-        }
-
-        /// <summary>保存购物车
-        /// </summary>
-        /// <param name="user">要保存购物车的用户</param>
-        /// <returns>是否成功保存</returns>
-        public bool Save(UserItem user)
-        {
             return true;
         }
     }

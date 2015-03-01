@@ -16,7 +16,7 @@ namespace Solemart.BusinessLib {
         /// </summary>
         /// <param name="orderItem">该订单的产品列表</param>
         /// <returns>return true if success, or false</returns>
-        public bool NewOrder(OrderItem orderItem) 
+        public static bool NewOrder(OrderItem orderItem) 
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -36,7 +36,7 @@ namespace Solemart.BusinessLib {
         /// </summary>
         /// <param name="orderID">某个订单的订单ID</param>
         /// <returns>如果获取订单，返回该订单对象，否则返回null</returns>
-        public OrderItem GetOrderInfo(int orderID) 
+        public static OrderItem GetOrderInfo(int orderID) 
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -50,7 +50,7 @@ namespace Solemart.BusinessLib {
         /// <param name="userID">要获取订单的用户</param>
         /// <param name="page_size">分页的大小，页索引从0开始</param>
         /// <returns>订单列表</returns>
-        public List<OrderItem> GetPagedUserOrder(int userID, int pageIndex, int pageSize, out int totalPageCount) 
+        public static List<OrderItem> GetPagedUserOrder(int userID, int pageIndex, int pageSize, out int totalPageCount) 
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -68,7 +68,7 @@ namespace Solemart.BusinessLib {
         /// </summary>
         /// <param name="orderStatus">订单的类别</param>
         /// <returns>获取到的订单总数</returns>
-        public int GetOrderCount(OrderStatus orderStatus) 
+        public static int GetOrderCount(OrderStatus orderStatus) 
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -83,7 +83,7 @@ namespace Solemart.BusinessLib {
         /// <param name="status">获取的订单的状态</param>
         /// <returns>获取到的订单的数量</returns>
         /// <remarks>如果status值是AllStatus，获取该用户的所有订单的数量</remarks>
-        public int GetUserOrderCount(int userID, OrderStatus orderStatus)
+        public static int GetUserOrderCount(int userID, OrderStatus orderStatus)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -100,7 +100,7 @@ namespace Solemart.BusinessLib {
         /// <param name="pageIndex">获取订单的页索引(从0开始)</param>
         /// <param name="pageSize">分页的大小</param>
         /// <returns>获取到的订单列表(按时间倒序排列)</returns>
-        public List<OrderItem> GetPagedOrders(OrderStatus orderStatus, int pageIndex, int pageSize, out int totalPageCount) 
+        public static List<OrderItem> GetPagedOrders(OrderStatus orderStatus, int pageIndex, int pageSize, out int totalPageCount) 
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -118,7 +118,7 @@ namespace Solemart.BusinessLib {
         /// </summary>
         /// <param name="orderID">要发货的订单的订单号</param>
         /// <returns>是否发货成功</returns>
-        public bool SendOrder(int orderID) 
+        public static bool SendOrder(int orderID) 
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -135,7 +135,7 @@ namespace Solemart.BusinessLib {
         /// </summary>
         /// <param name="orderID">要支付的订单的ID</param>
         /// <returns>是否成功支付</returns>
-        public bool PayOrder(int orderID, string tradeNo = "") 
+        public static bool PayOrder(int orderID, string tradeNo = "") 
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -154,7 +154,7 @@ namespace Solemart.BusinessLib {
         /// </summary>
         /// <param name="orderID">要确认的订单ID</param>
         /// <returns>用户的确认结果</returns>
-        public bool ConfirmOrder(int orderID) 
+        public static bool ConfirmOrder(int orderID) 
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -169,7 +169,7 @@ namespace Solemart.BusinessLib {
         /// <summary>
         /// Get the new order count
         /// </summary>
-        public int GetNewOrderCount()
+        public static int GetNewOrderCount()
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -182,7 +182,7 @@ namespace Solemart.BusinessLib {
         /// </summary>
         /// <param name="orderID">要取消的订单ID</param>
         /// <returns>是否取消成功</returns>
-        public bool CancelOrder(int orderID) 
+        public static bool CancelOrder(int orderID) 
         {
             return true;
         }

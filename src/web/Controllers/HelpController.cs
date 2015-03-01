@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Solemart.EntityLib;
+using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
-using SolemartUser = Solemart.EntityLib.User;
+
 
 namespace Solemart.Web.Controllers
 {
@@ -28,9 +28,9 @@ namespace Solemart.Web.Controllers
         /// <returns>返回处理结果</returns>
         public ActionResult NewAdvise() {
             string content = Request["content"];
-            SolemartUser user = Session["user"] as SolemartUser;
+            SolemartUser user = User as SolemartUser;
 
-            if (AdviseManager.Instance.NewAdvise(user, content)) {
+            if (AdviseManager.NewAdvise(user.UserID, content)) {
                 return Content("ok");
             }
             else {

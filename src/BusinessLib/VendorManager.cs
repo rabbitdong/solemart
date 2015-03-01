@@ -14,7 +14,7 @@ namespace Solemart.BusinessLib
         /// </summary>
         /// <param name="vendor">供应商名称</param>
         /// <returns>成功添加一个供应商，返回true，否则返回false</returns>
-        public bool AddNewVendor(VendorItem vendor) 
+        public static bool AddNewVendor(VendorItem vendor) 
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -31,7 +31,7 @@ namespace Solemart.BusinessLib
         /// </summary>
         /// <param name="vendorID">要删除的供应商ID</param>
         /// <returns>是否删除成功</returns>
-        public bool DeleteVendor(int vendorID) 
+        public static bool DeleteVendor(int vendorID) 
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -53,7 +53,7 @@ namespace Solemart.BusinessLib
         /// <param name="pageSize"></param>
         /// <param name="totalPageCount"></param>
         /// <returns>获取的供应商信息的列表</returns>
-        public List<VendorItem> GetPagedVendorInfos(int pageIndex, int pageSize, out int totalPageCount) 
+        public static List<VendorItem> GetPagedVendorInfos(int pageIndex, int pageSize, out int totalPageCount) 
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -70,7 +70,7 @@ namespace Solemart.BusinessLib
         /// </summary>
         /// <param name="productID">要获取供应商信息的商品</param>
         /// <returns>获取到的供应商信息，如果没有返回null</returns>
-        public VendorItem GetVendorInfoByProduct(int productID) 
+        public static VendorItem GetVendorInfoByProduct(int productID) 
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {

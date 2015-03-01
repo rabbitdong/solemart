@@ -12,25 +12,10 @@ namespace Solemart.BusinessLib
     /// </summary>
     public class ProductManager
     {
-        private static ProductManager instance = new ProductManager();
-
-        /// <summary>
-        /// The private constructor
-        /// </summary>
-        private ProductManager() { }
-
-        /// <summary>
-        /// Get the product manager object
-        /// </summary>
-        public static ProductManager Instance
-        {
-            get { return instance; }
-        }
-
         /// <summary>
         /// Get the total amount of the saled products.
         /// </summary>
-        public int TotalProductCount
+        public static int TotalProductCount
         {
             get
             {
@@ -46,7 +31,7 @@ namespace Solemart.BusinessLib
         /// </summary>
         /// <param name="productID"></param>
         /// <returns></returns>
-        public SaledProductItem GetSaledProductByID(int productID)
+        public static SaledProductItem GetSaledProductByID(int productID)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -60,7 +45,7 @@ namespace Solemart.BusinessLib
         /// </summary>
         /// <param name="newSaledProductItem">The product put to saling.</param>
         /// <returns>return true if success, or return false</returns>
-        public bool PutToSaling(SaledProductItem newSaledProductItem)
+        public static bool PutToSaling(SaledProductItem newSaledProductItem)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -83,7 +68,7 @@ namespace Solemart.BusinessLib
         /// </summary>
         /// <param name="productID">要下架的商品的ID</param>
         /// <returns>是否下架成功</returns>
-        public bool TakeOffSaling(int productID)
+        public static bool TakeOffSaling(int productID)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -103,7 +88,7 @@ namespace Solemart.BusinessLib
         /// </summary>
         /// <param name="productID">要获取的商品的ID</param>
         /// <returns>商品的最后的入库价格</returns>
-        public decimal GetLastStockPrice(int productID)
+        public static decimal GetLastStockPrice(int productID)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -123,7 +108,7 @@ namespace Solemart.BusinessLib
         /// </summary>
         /// <param name="image"></param>
         /// <returns>是否添加成功</returns>
-        public bool AddNewImageToProduct(ProductImageItem image)
+        public static bool AddNewImageToProduct(ProductImageItem image)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -137,7 +122,7 @@ namespace Solemart.BusinessLib
         /// </summary>
         /// <param name="mimeType">MIME类型，如"image/jpeg"等</param>
         /// <returns></returns>
-        public string FromMimeTypeGetExtendName(string mimeType)
+        public static string FromMimeTypeGetExtendName(string mimeType)
         {
             string[,] mapping = { { "image/jpeg", "jpg" }, { "image/png", "png" }, { "image/gif", "gif" } };
 
@@ -158,7 +143,7 @@ namespace Solemart.BusinessLib
         /// <param name="extName">图片的扩展名, 如jpg, png等</param>
         /// <returns>图像名称的字符串</returns>
         /// <remarks>图像名称定为 pid_+编号.xxx</remarks>
-        public string GenerateProductImageFileName(int productID, string extName)
+        public static string GenerateProductImageFileName(int productID, string extName)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -204,7 +189,7 @@ namespace Solemart.BusinessLib
         /// <param name="pid">要删除图片的商品ID</param>
         /// <param name="imageID">删除的图片的ID</param>
         /// <returns>删除成功返回true，否则返回false</returns>
-        public bool DeleteProductImage(int productID, int imageID)
+        public static bool DeleteProductImage(int productID, int imageID)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -228,7 +213,7 @@ namespace Solemart.BusinessLib
         /// <param name="amount"></param>
         /// <param name="remark"></param>
         /// <returns>入库成功，返回true，否则返回false</returns>
-        public bool InStockProduct(ProductItem product, decimal price, int amount, string remark)
+        public static bool InStockProduct(ProductItem product, decimal price, int amount, string remark)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -257,7 +242,7 @@ namespace Solemart.BusinessLib
         /// <param name="productID">the id of product want to reserve</param>
         /// <returns>是否保留成功，如果该产品的库存数量大于amount，应该要能保留成功。成功返回true，否则返回false</returns>
         /// <remarks>该接口在用户下订单的时候使用</remarks>
-        public bool ReserveProduct(int productID, int count)
+        public static bool ReserveProduct(int productID, int count)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -278,7 +263,7 @@ namespace Solemart.BusinessLib
         /// <param name="productID">要去除的商品保留数量列表</param>
         /// <param name="count"></param>
         /// <returns>成功返回true，否则返回false</returns>
-        public bool UnReserveProducts(int productID, int count)
+        public static bool UnReserveProducts(int productID, int count)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -298,7 +283,7 @@ namespace Solemart.BusinessLib
         /// </summary>
         /// <param name="productID">要出货的商品列表</param>
         /// <returns>出货成功返回true，否则返回false</returns>
-        public bool ShippingProducts(int productID, int count)
+        public static bool ShippingProducts(int productID, int count)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -319,17 +304,17 @@ namespace Solemart.BusinessLib
         /// <summary>
         /// Make a comment for a product
         /// </summary>
-        /// <param name="user">进行评论的用户</param>
+        /// <param name="userID">进行评论的用户</param>
         /// <param name="product">要评论的商品对象</param>
         /// <param name="level">评价的星级</param>
         /// <param name="content">评论的内容</param>
         /// <returns>是否评论成功，成功返回true，否则返回false</returns>
-        public bool CommentProduct(UserItem user, int productID, EvaluteGrade level, string content)
+        public static bool CommentProduct(int userID, int productID, EvaluteGrade level, string content)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
                 ProductCommentItem productComment = new ProductCommentItem();
-                productComment.UserID = user.UserID;
+                productComment.UserID = userID;
                 productComment.ProductID = productID;
                 productComment.Grade = level;
                 productComment.Content = content;
@@ -348,7 +333,7 @@ namespace Solemart.BusinessLib
         /// <param name="pageSize">获取的每页评论的数量</param>
         /// <param name="totalPageCount">The total page count of the comments</param>
         /// <returns>获取的评论的列表, 按时间倒序排列</returns>
-        public IList<ProductCommentItem> GetProductComment(int productID, int pageIndex, int pageSize, out int totalPageCount)
+        public static IList<ProductCommentItem> GetProductComment(int productID, int pageIndex, int pageSize, out int totalPageCount)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -371,7 +356,7 @@ namespace Solemart.BusinessLib
         /// <param name="pageSize">每页的产品数量</param>
         /// <param name="totalPageCount"></param>
         /// <returns>获取到的产品的列表</returns>
-        public IList<ProductItem> GetPagedProductsByCategory(int categoryID, int pageIndex, int pageSize, out int totalPageCount)
+        public static IList<ProductItem> GetPagedProductsByCategory(int categoryID, int pageIndex, int pageSize, out int totalPageCount)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -390,7 +375,7 @@ namespace Solemart.BusinessLib
         /// </summary>
         /// <param name="product">The modified product item</param>
         /// <returns>是否修改成功</returns>
-        public bool ModifyProductInfo(ProductItem product)
+        public static bool ModifyProductInfo(ProductItem product)
         {
             return false;
         }

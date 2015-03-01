@@ -96,7 +96,7 @@ namespace Solemart.WebUtil
                 else
                     resultString = ResultData.ToString();
 
-                return string.Format("{0}|{1}|{2}|{3}", (int)ResultCode, ResultMessage, Format.ToDisplay(), resultString.ToBase64String());
+                return string.Format("{0}|{1}|{2}|{3}", (int)ResultCode, ResultMessage, Format.ToDisplayStr(), resultString.ToBase64String());
             }
         }
     }

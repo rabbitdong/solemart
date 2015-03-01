@@ -8,18 +8,20 @@ using System.Security.Cryptography;
 using Solemart.DataProvider.Entity;
 using Solemart.DataProvider;
 
-namespace Solemart.BusinessLib {
+namespace Solemart.BusinessLib
+{
     /// <summary>
     /// Bulletin Manager
     /// </summary>
-    public class BillboardManager 
+    public class BulletinManager
     {
         /// <summary>
         /// Publish a new bulletin
         /// </summary>
         /// <param name="bulletin">The bulletin information</param>
         /// <returns></returns>
-        public bool CreateNewBillBoard(BulletinItem bulletin) {
+        public static bool CreateNewBulletin(BulletinItem bulletin)
+        {
             using (SolemartDBContext context = new SolemartDBContext())
             {
                 bulletin.PublishTime = DateTime.Now;
@@ -33,7 +35,8 @@ namespace Solemart.BusinessLib {
         /// </summary>
         /// <returns>获取到的有效的公告的列表</returns>
         /// <remarks>有效的公告列表表示时间未超期的公告</remarks>
-        public List<BulletinItem> GetValidBillBoardList() {
+        public static List<BulletinItem> GetValidBillBoardList()
+        {
             return null;
         }
     }
@@ -41,7 +44,8 @@ namespace Solemart.BusinessLib {
     /// <summary>
     /// The manager class of the advise
     /// </summary>
-    public class AdviseManager {
+    public class AdviseManager
+    {
         /// <summary>
         /// Get the advise list
         /// </summary>
@@ -49,7 +53,7 @@ namespace Solemart.BusinessLib {
         /// <param name="pageSize">The page size</param>
         /// <param name="totalPageCount">The total page count</param>
         /// <returns>获取到的建议列表</returns>
-        public List<AdviserItem> GetPagedAdvises(int pageIndex, int pageSize, out int totalPageCount)
+        public static List<AdviserItem> GetPagedAdvises(int pageIndex, int pageSize, out int totalPageCount)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -64,14 +68,15 @@ namespace Solemart.BusinessLib {
         /// <summary>
         /// The user publish a advise
         /// </summary>
-        /// <param name="user">发表建议的用户ID</param>
+        /// <param name="userID">发表建议的用户ID</param>
         /// <param name="content">建议的内容</param>
         /// <returns>是否成功发表</returns>
-        public bool NewAdvise(UserItem user, string content) {
+        public static bool NewAdvise(int userID, string content)
+        {
             using (SolemartDBContext context = new SolemartDBContext())
             {
                 AdviserItem advise = new AdviserItem();
-                advise.UserID = user.UserID;
+                advise.UserID = userID;
                 advise.Content = content;
                 advise.AdviseTime = DateTime.Now;
                 advise.IsViewed = false;
