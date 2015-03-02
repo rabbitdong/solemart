@@ -14,6 +14,8 @@ namespace Solemart.SystemUtil
         /// </summary>
         public string DisplayStr;
 
+        public EnumDisplayAttribute() { }
+
         /// <summary>
         /// Constructor of EnumDisplayAttribute
         /// </summary>

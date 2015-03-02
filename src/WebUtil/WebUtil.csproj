@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -49,6 +52,10 @@
     <Compile Include="WebResultCode.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BusinessLib\BusinessLib.csproj">
+      <Project>{9e9280a4-7b28-4130-b712-5030e54b5311}</Project>
+      <Name>BusinessLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SystemUtil\SystemUtil.csproj">
       <Project>{ad5e4432-2d4c-4519-b834-2b917686f98c}</Project>
       <Name>SystemUtil</Name>

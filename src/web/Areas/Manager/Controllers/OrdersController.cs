@@ -3,27 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Solemart.EntityLib;
+using System.Xml;
+using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
 using Solemart.SystemUtil;
 using Com.Alipay;
-using System.Xml;
 
 namespace Solemart.Web.Areas.Manager.Controllers
 {
     [Authorize(Roles = "su,operator")]
     public class OrdersController : Controller
     {
-        OrderManager om = OrderManager.Instance;
         //
         // GET: /Manager/Orders/
-        public ActionResult Index(int? id) {
-            int pi=id??1;  //表示页索引
+        public ActionResult Index(int? id)
+        {
+            int pi = id ?? 1;  //表示页索引
+            int totalPageCount = 0;
 
-            ViewData["PageCount"] = (om.GetNewOrderCount() + 9) / 10;
+            ViewData["PageCount"] = (OrderManager.GetNewOrderCount() + 9) / 10;
             ViewData["CurrentPageIndex"] = pi;
 
-            List<OrderItem> NewOrders = OrderManager.Instance.GetPagedOrders(OrderStatus.Ordered, pi - 1);
+            List<OrderItem> NewOrders = OrderManager.GetPagedOrders(OrderStatus.Ordered, pi, 10, out totalPageCount);
             return View(NewOrders);
         }
 
@@ -32,12 +33,13 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// <returns>返回用户获取新订单的结果View</returns>
         public ActionResult New(int? id)
         {
-            int pi = id??1; //表示页索引
+            int pi = id ?? 1; //表示页索引
+            int totalPageCount = 0;
 
-            ViewData["PageCount"] = (om.GetNewOrderCount() + 9) / 10;
+            ViewData["PageCount"] = (OrderManager.GetNewOrderCount() + 9) / 10;
             ViewData["CurrentPageIndex"] = pi;
 
-            List<OrderItem> NewOrders = OrderManager.Instance.GetPagedOrders(OrderStatus.Ordered, pi - 1);
+            List<OrderItem> NewOrders = OrderManager.GetPagedOrders(OrderStatus.Ordered, pi, 10, out totalPageCount);
 
             return View("Index", NewOrders);
         }
@@ -45,28 +47,32 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// <summary>获取在发送中的订单的请求处理
         /// </summary>
         /// <returns>返回在发送中的订单的结果View</returns>
-        public ActionResult Sending() {
+        public ActionResult Sending()
+        {
             int pi = 1; //表示页索引
+            int totalPageCount = 0; 
             if (Request["p"] != null && int.TryParse(Request["p"], out pi)) ;
 
             ViewData["PageCount"] = 1;
             ViewData["CurrentPageIndex"] = pi;
 
-            List<OrderItem> SendingOrders = OrderManager.Instance.GetPagedOrders(OrderStatus.Sending, pi - 1);
+            List<OrderItem> SendingOrders = OrderManager.GetPagedOrders(OrderStatus.Sending, pi, 10, out totalPageCount);
             return View("Index", SendingOrders);
         }
 
         /// <summary>获取已经接收订单的列表请求处理
         /// </summary>
         /// <returns>返回已经接收的订单的请求结果View</returns>
-        public ActionResult Received() {
+        public ActionResult Received()
+        {
             int pi = 1; //表示页索引
+            int totalPageCount = 0;
             if (Request["p"] != null && int.TryParse(Request["p"], out pi)) ;
 
             ViewData["PageCount"] = 1;
             ViewData["CurrentPageIndex"] = pi;
 
-            List<OrderItem> ReceivedOrders = om.GetPagedOrders(OrderStatus.Received, pi - 1);
+            List<OrderItem> ReceivedOrders = OrderManager.GetPagedOrders(OrderStatus.Received, pi, 10, out totalPageCount);
             return View("Index", ReceivedOrders);
         }
 
@@ -74,9 +80,11 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// </summary>
         /// <param name="id">要发送的订单ID</param>
         /// <returns>返回发送请求的结果View</returns>
-        public ActionResult SendOrder(int id) {
-            OrderItem CurrentOrder = om.GetOrderInfo(id);
-            if (CurrentOrder == null) {
+        public ActionResult SendOrder(int id)
+        {
+            OrderItem CurrentOrder = OrderManager.GetOrderInfo(id);
+            if (CurrentOrder == null)
+            {
                 return Content("Order ID is not exist!");
             }
 
@@ -87,15 +95,17 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// </summary>
         /// <param name="id">要发货的订单ID</param>
         /// <returns>返回发货处理的结果View</returns>
-        public ActionResult Send(int id) {
-            OrderItem oi = om.GetOrderInfo(id);
+        public ActionResult Send(int id)
+        {
+            OrderItem oi = OrderManager.GetOrderInfo(id);
             if (oi == null)
                 return Content("error-order no found!");
-            if (oi.AddressInfo.Pay == PaymentType.OnLine) {
-                LogManager.Instance.Log(string.Format("确认发货，订单号：{0}，结果:{1}", id, ComfirmAlipay(oi)));
-            }
-            om.SendOrder(id);
-            ProductManager.Instance.ShippingProducts(oi.Products);
+            //if (oi.AddressInfo.Pay == PaymentType.OnLine)
+            //{
+            //    LogManager.Instance.Log(string.Format("确认发货，订单号：{0}，结果:{1}", id, ComfirmAlipay(oi)));
+            //}
+            //OrderManager.SendOrder(id);
+            //ProductManager.ShippingProducts(oi.Products);
 
             return Content("ok");
         }
@@ -104,7 +114,8 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// </summary>
         /// <param name="oi"></param>
         /// <returns></returns>
-        private bool ComfirmAlipay(OrderItem oi) {
+        private bool ComfirmAlipay(OrderItem oi)
+        {
             if (oi == null)
                 return false;
 
@@ -134,17 +145,19 @@ namespace Solemart.Web.Areas.Manager.Controllers
             string sHtmlText = Submit.BuildRequest(sParaTemp);
 
             XmlDocument xmlDoc = new XmlDocument();
-            try {
+            try
+            {
                 xmlDoc.LoadXml(sHtmlText);
                 string strXmlResponse = xmlDoc.SelectSingleNode("/alipay/is_success").InnerText;
-                LogManager.Instance.Error("alipay - " + strXmlResponse);
-                if (strXmlResponse == "T") {
+                if (strXmlResponse == "T")
+                {
                     return true;
                 }
                 else
                     return false;
             }
-            catch (Exception exp) {
+            catch (Exception exp)
+            {
                 return false;
             }
         }

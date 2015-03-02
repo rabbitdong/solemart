@@ -8,10 +8,12 @@ using Solemart.DataProvider;
 using Solemart.DataProvider.Entity;
 using Solemart.SystemUtil;
 
-namespace Solemart.BusinessLib {
+namespace Solemart.BusinessLib
+{
     /// <summary>类别管理类
     /// </summary>
-    public class CategoryManager {
+    public class CategoryManager
+    {
 
         private static CategoryManager instance = new CategoryManager();
 
@@ -23,7 +25,8 @@ namespace Solemart.BusinessLib {
         /// <summary>
         /// 获取类别管理对象
         /// </summary>
-        public static CategoryManager Instance {
+        public static CategoryManager Instance
+        {
             get { return instance; }
         }
 
@@ -32,7 +35,8 @@ namespace Solemart.BusinessLib {
         /// </summary>
         /// <param name="newCategory">The category want to add</param>
         /// <returns>Return true if success, or return false</returns>
-        public Result<string> AddNewCategory(CategoryItem newCategory) {
+        public Result<string> AddNewCategory(CategoryItem newCategory)
+        {
             using (SolemartDBContext context = new SolemartDBContext())
             {
                 if (context.CategoryItems.First(c => c.CategoryName == newCategory.CategoryName) != null)
@@ -65,13 +69,16 @@ namespace Solemart.BusinessLib {
         /// <param name="categoryList">The category list to search</param>
         /// <param name="categoryID">The category id to search</param>
         /// <returns>Return the category if get one, or return null</returns>
-        private CategoryItem GetCategoryInList(IList<CategoryItem> categoryList, int categoryID) {
+        private CategoryItem GetCategoryInList(IList<CategoryItem> categoryList, int categoryID)
+        {
             CategoryItem findedCategory = null;
-            foreach (CategoryItem category in categoryList) {
+            foreach (CategoryItem category in categoryList)
+            {
                 if (category.CategoryID == categoryID)
                     return category;
 
-                if (category.SubCategories != null) {
+                if (category.SubCategories != null)
+                {
                     findedCategory = GetCategoryInList(category.SubCategories, categoryID);
                     if (findedCategory != null)
                         return findedCategory;
@@ -86,14 +93,16 @@ namespace Solemart.BusinessLib {
         /// </summary>
         /// <param name="categoryID">要获取的类别的ID</param>
         /// <returns>返回获取的类别，如果没有，返回null</returns>
-        public CategoryItem GetCategoryById(int categoryID) {
+        public CategoryItem GetCategoryById(int categoryID)
+        {
             return GetCategoryInList(categoryList, categoryID);
         }
 
         /// <summary>
         /// Load the category list.
         /// </summary>
-        private void LoadCategoryList() {
+        private void LoadCategoryList()
+        {
             if (categoryList == null)
                 categoryList = new List<CategoryItem>();
 
@@ -101,7 +110,7 @@ namespace Solemart.BusinessLib {
             categoryList.Clear();
 
             //Save the list get from the DataProvider
-            using(SolemartDBContext context=new SolemartDBContext())
+            using (SolemartDBContext context = new SolemartDBContext())
             {
                 List<CategoryItem> nostackCategoryList = context.CategoryItems.ToList();
 
@@ -129,8 +138,10 @@ namespace Solemart.BusinessLib {
         /// <summary>
         /// Get the category list(hierarchical structure).
         /// </summary>
-        public IList<CategoryItem> Categories {
-            get {
+        public IList<CategoryItem> Categories
+        {
+            get
+            {
                 if (categoryList != null)
                     return categoryList;
 
@@ -144,9 +155,11 @@ namespace Solemart.BusinessLib {
         /// Get the first category of the child category.
         /// </summary>
         /// <returns></returns>
-        public CategoryItem GetFirstChildCate() {
+        public CategoryItem GetFirstChildCate()
+        {
             CategoryItem category = Categories[0];
-            while (category.SubCategories != null && category.SubCategories.Count > 0) {
+            while (category.SubCategories != null && category.SubCategories.Count > 0)
+            {
                 category = category.SubCategories[0];
             }
 
@@ -170,7 +183,8 @@ namespace Solemart.BusinessLib {
 
             //原来的类别ID
             int src_super_cate_id = 0;
-            if (cate.ParentCategoryID != 0) {
+            if (cate.ParentCategoryID != 0)
+            {
                 src_super_cate = GetCategoryInList(categoryList, src_super_cate_id);
             }
 
@@ -178,7 +192,8 @@ namespace Solemart.BusinessLib {
                 return false;
 
 
-            if (super_cate.SubCategories == null) {
+            if (super_cate.SubCategories == null)
+            {
                 super_cate.SubCategories = new List<CategoryItem>();
             }
             super_cate.SubCategories.Add(cate);
@@ -212,7 +227,8 @@ namespace Solemart.BusinessLib {
         /// </summary>
         public List<CategoryItem> AllCategories
         {
-            get {
+            get
+            {
                 List<CategoryItem> all_cates = new List<CategoryItem>();
                 foreach (CategoryItem cate in Categories)
                 {

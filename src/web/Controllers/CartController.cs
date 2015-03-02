@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Solemart.EntityLib;
 using Solemart.BusinessLib;
 using System.Collections.Specialized;
 using Com.Alipay;
 using System.Configuration;
-using SolemartUser = Solemart.EntityLib.User;
+using Solemart.DataProvider.Entity;
+using Solemart.BusinessLib;
+using Solemart.SystemUtil;
 
 namespace Solemart.Web.Controllers
 {
@@ -26,11 +27,12 @@ namespace Solemart.Web.Controllers
         /// </summary>
         /// <param name="id">加入购物车的物品ID</param>
         /// <returns>加入购物车后的View</returns>
-        public ActionResult Add(int id) {
+        public ActionResult Add(int id)
+        {
             Cart cart = Session["cart"] as Cart;
-            Product product = ProductManager.Instance.GetProductByID(id);
+            SaledProductItem product = ProductManager.GetSaledProductByID(id);
             if (cart != null)
-                cart.AddToCart(product, 1);
+                cart.AddToCart(product.ProductID, 1);
 
             return RedirectToAction("Index", "Cart");
         }
@@ -39,12 +41,13 @@ namespace Solemart.Web.Controllers
         /// </summary>
         /// <param name="id">要修改的购物车的物品ID</param>
         /// <returns>修改后返回的View</returns>
-        public ActionResult Modify(int id) {
+        public ActionResult Modify(int id)
+        {
             Cart cart = Session["cart"] as Cart;
-            Product product = ProductManager.Instance.GetProductByID(id);
+            SaledProductItem product = ProductManager.GetSaledProductByID(id);
 
             if (cart != null)
-                cart.AddToCart(product, 1);
+                cart.AddToCart(product.ProductID, 1);
 
             return View("Index", cart);
         }
@@ -52,68 +55,71 @@ namespace Solemart.Web.Controllers
         /// <summary>用户请求进行结帐的处理
         /// </summary>
         /// <returns>用户进行结帐的视图</returns>
-        public ActionResult CheckOut() {
-            UserManager um = UserManager.Instance;
-            Cart mycart = Session["cart"] as Cart;
-
-            if (mycart.Products == null || mycart.Products.Count == 0)
+        public ActionResult CheckOut()
+        {
+            SolemartUser user = User as SolemartUser;
+            if (user.Cart.CartItems == null || user.Cart.CartItems.Count == 0)
                 return RedirectToAction("", "Home");
 
-            SolemartUser user = Session["user"] as SolemartUser;
-            SendAddressInfo address = null;
+            SendAddressItem address = null;
 
             if (user != SolemartUser.Anonymous)
-                address = um.GetSendAddressInfo(user.UserID);
-            else {
-                address = Session["anonymous-addrinfo"] as SendAddressInfo;
+                address = UserManager.GetSendAddressInfo(user.UserID);
+            else
+            {
+                address = Session["anonymous-addrinfo"] as SendAddressItem;
             }
 
-            if (address == null) {
-                address = new SendAddressInfo();
-                UserAppendInfo uai = um.GetUserAppendInfo(user.UserID);
+            if (address == null)
+            {
+                address = new SendAddressItem();
+                UserAppendInfoItem uai = UserManager.GetUserAppendInfo(user.UserID);
                 if (uai.Address != null && uai.Address != "")
                     address.Address = uai.Address;
-                if (uai.Phone1 != null && uai.Phone1 != "")
-                    address.Address = uai.Phone1;
+                if (uai.Phone != null && uai.Phone != "")
+                    address.Address = uai.Phone;
             }
 
             ViewData["address"] = address;
-            return View(mycart);
+            return View(user.Cart);
         }
 
         /// <summary>用户请求保存送货信息的处理
         /// </summary>
         /// <returns>返回用户保存送货信息的结果View</returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult SaveAddrInfo() {
-            UserManager um = UserManager.Instance;
-
+        public ActionResult SaveAddrInfo()
+        {
             int pay_type = 1;
 
-            if (Request["paytype"] != null && !int.TryParse(Request["paytype"], out pay_type)) {
+            if (Request["paytype"] != null && !int.TryParse(Request["paytype"], out pay_type))
+            {
                 return Content("error-paytype");
             }
 
             SolemartUser user = Session["user"] as SolemartUser;
 
-            SendAddressInfo addr_info = new SendAddressInfo();
+            SendAddressItem addr_info = new SendAddressItem();
             addr_info.UserID = user.UserID;
             addr_info.Receiver = Request["receiver"];
             addr_info.Address = Request["address"];
-            addr_info.Phone1 = Request["phone"];
-            addr_info.Post = Request["post"];
-            addr_info.Channel = ChannelType.ByManual;
-            addr_info.Pay = (PayType)pay_type;
-            
-            if (user == SolemartUser.Anonymous) {
+            addr_info.Phone = Request["phone"];
+            addr_info.PostCode = Request["post"];
+            addr_info.DeliverWay = DeliverWay.ByManual;
+            addr_info.PaymentType = (PaymentType)pay_type;
+
+            if (user == SolemartUser.Anonymous)
+            {
                 Session["anonymous-addrinfo"] = addr_info;
                 return Content("ok");
             }
-            else if (um.SaveSendAddressInfoForUser(addr_info)) {
+            else if (UserManager.SaveSendAddressInfoForUser(addr_info))
+            {
                 ViewData["address"] = addr_info;
                 return Content("ok");
             }
-            else {
+            else
+            {
                 return Content("error");
             }
         }
@@ -122,38 +128,43 @@ namespace Solemart.Web.Controllers
         /// </summary>
         /// <returns>返回用户提交订单的结果</returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult CheckoutOrder() {
-            UserManager um = UserManager.Instance;
-            Cart mycart = Session["cart"] as Cart;
+        public ActionResult CheckoutOrder()
+        {
+            SolemartUser user = User as SolemartUser;
 
-            if (mycart.Products.Count == 0) {
+            if (user.Cart.CartItems.Count == 0)
+            {
                 Response.Write("error");
                 Response.End();
             }
 
-            SolemartUser user = Session["user"] as SolemartUser;
 
             OrderItem oi = new OrderItem();
-            oi.Products = mycart.Products;
-            oi.OwnedUser = user;
-            if (user == SolemartUser.Anonymous) {
-                oi.AddressInfo = Session["anonymous-addrinfo"] as SendAddressInfo;
-            }
-            else {
-                oi.AddressInfo = um.GetSendAddressInfo(user.UserID);
-            }
-            oi.TotalPrice = mycart.TotalPrice;
+            //oi.Products = mycart.Products;
+            //oi.OwnedUser = user;
+            //if (user == SolemartUser.Anonymous)
+            //{
+            //    oi.AddressInfo = Session["anonymous-addrinfo"] as SendAddressItem;
+            //}
+            //else
+            //{
+            //    oi.AddressInfo = UserManager.GetSendAddressInfo(user.UserID);
+            //}
+            oi.TotalPrice = user.Cart.TotalPrice;
             oi.Remark = Request["remark"];
-        
-            int order_id = OrderManager.Instance.NewOrder(oi);
+
+            if (!OrderManager.NewOrder(oi))
+                return Content("error");
 
             //新订单产生后，刷新最受欢迎的产品列表
-            ProductManager.Instance.RefleshMostPopularProducts();
+            //ProductManager.RefleshMostPopularProducts();
 
-            if (order_id != -1) {
+            if (oi.OrderID != -1)
+            {
                 // 已进入订单后，临时购物车上物品需要清除
-                mycart.ClearAndSave(user);
-                if (oi.AddressInfo.Pay == PayType.OnLine) {
+                user.Cart.ClearAndSave(user.UserID);
+                if (oi.PaymentType == PaymentType.OnLine)
+                {
                     #region 填写支付宝参数
                     //支付类型
                     string payment_type = "1";
@@ -202,23 +213,23 @@ namespace Solemart.Web.Controllers
                     //需以http://开头的完整路径，如：http://www.Solemart.com/myorder.html
 
                     //收货人姓名
-                    string receive_name = oi.AddressInfo.Receiver;
+                    string receive_name = oi.Receiver;
                     //如：张三
 
                     //收货人地址
-                    string receive_address = oi.AddressInfo.Address;
+                    string receive_address = oi.Address;
                     //如：XX省XXX市XXX区XXX路XXX小区XXX栋XXX单元XXX号
 
                     //收货人邮编
-                    string receive_zip = oi.AddressInfo.Post == null ? "350600" : oi.AddressInfo.Post;
+                    string receive_zip = oi.PostCode == null ? "350600" : oi.PostCode;
                     //如：123456
 
                     //收货人电话号码
-                    string receive_phone = oi.AddressInfo.Phone1;
+                    string receive_phone = oi.Phone;
                     //如：0571-88158090
 
                     //收货人手机号码
-                    string receive_mobile = oi.AddressInfo.Phone1;
+                    string receive_mobile = oi.Phone;
                     //如：13312341234
 
 
@@ -252,11 +263,13 @@ namespace Solemart.Web.Controllers
                     string sHtmlText = Submit.BuildRequest(sParaTemp, "get", "确认");
                     return Content("ok-alipay-" + sHtmlText);
                 }
-                else {
-                    return Content("ok-"+order_id);
+                else
+                {
+                    return Content("ok-" + oi.OrderID);
                 }
             }
-            else {
+            else
+            {
                 return Content("error");
             }
         }
@@ -264,28 +277,33 @@ namespace Solemart.Web.Controllers
         /// <summary>用户确定结帐的处理
         /// </summary>
         /// <returns>返回结帐完成后的View</returns>
-        public ActionResult CheckOutCompleted(int id) {
+        public ActionResult CheckOutCompleted(int id)
+        {
             int order_id = id;
 
             string trade_no = "";
             OrderItem current_order = null;
-            User current_user = Session["user"] as User;
-            if (Request["trade_no"] != null && Request["is_success"] != null && Request["is_success"] == "T") {
+            SolemartUser current_user = User as SolemartUser;
+            if (Request["trade_no"] != null && Request["is_success"] != null && Request["is_success"] == "T")
+            {
                 trade_no = Request["trade_no"];
                 int.TryParse(Request["out_trade_no"].TrimStart('0'), out order_id);
                 //判断是否付账成功
-                if (IsPaySuccess()) {
-                    OrderManager.Instance.PayOrder(order_id, trade_no);
+                if (IsPaySuccess())
+                {
+                    OrderManager.PayOrder(order_id, trade_no);
                 }
 
-                current_order = OrderManager.Instance.GetOrderInfo(order_id);
-                if (current_user != SolemartUser.Anonymous ||( current_user != null && current_order.OwnedUser.Name != current_user.Name)) {
+                current_order = OrderManager.GetOrderInfo(order_id);
+                if (current_user != SolemartUser.Anonymous || (current_user != null && current_order.OwnedUser.Name != current_user.Name))
+                {
                     return RedirectToAction("", "Home");
                 }
             }
 
-            current_order = OrderManager.Instance.GetOrderInfo(order_id);
-            if (current_user != SolemartUser.Anonymous ||(current_user != null && current_order.OwnedUser.Name != current_user.Name)) {
+            current_order = OrderManager.GetOrderInfo(order_id);
+            if (current_user != SolemartUser.Anonymous || (current_user != null && current_order.OwnedUser.Name != current_user.Name))
+            {
                 return RedirectToAction("", "Home");
             }
 
@@ -296,7 +314,8 @@ namespace Solemart.Web.Controllers
         /// <summary>获取支付宝GET过来通知消息，并以“参数名=参数值”的形式组成数组
         /// </summary>
         /// <returns>request回来的信息组成的数组</returns>
-        public SortedDictionary<string, string> GetRequestGet() {
+        public SortedDictionary<string, string> GetRequestGet()
+        {
             int i = 0;
             SortedDictionary<string, string> sArray = new SortedDictionary<string, string>();
             NameValueCollection coll;
@@ -306,7 +325,8 @@ namespace Solemart.Web.Controllers
             // Get names of all forms into a string array.
             String[] requestItem = coll.AllKeys;
 
-            for (i = 0; i < requestItem.Length; i++) {
+            for (i = 0; i < requestItem.Length; i++)
+            {
                 sArray.Add(requestItem[i], Request.QueryString[requestItem[i]]);
             }
 
@@ -316,19 +336,22 @@ namespace Solemart.Web.Controllers
         /// <summary>判断是否付账成功
         /// </summary>
         /// <returns></returns>
-        private bool IsPaySuccess() {
+        private bool IsPaySuccess()
+        {
             SortedDictionary<string, string> sPara = GetRequestGet();
             Notify aliNotify = new Notify();
             bool verifyResult = aliNotify.Verify(sPara, Request.QueryString["notify_id"], Request.QueryString["sign"]);
             if (verifyResult)//验证成功
-        {
+            {
                 //交易状态
                 string trade_status = Request.QueryString["trade_status"];
 
-                if (Request.QueryString["trade_status"] == "WAIT_SELLER_SEND_GOODS") {
+                if (Request.QueryString["trade_status"] == "WAIT_SELLER_SEND_GOODS")
+                {
                     return true;
                 }
-                else if (Request.QueryString["trade_status"] == "TRADE_FINISHED") {
+                else if (Request.QueryString["trade_status"] == "TRADE_FINISHED")
+                {
                     return true;
                 }
             }
