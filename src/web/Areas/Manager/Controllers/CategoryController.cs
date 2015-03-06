@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
+using Solemart.SystemUtil;
 
 namespace Solemart.Web.Areas.Manager.Controllers
 {
@@ -29,8 +30,8 @@ namespace Solemart.Web.Areas.Manager.Controllers
             int sup_cate_id = -1;
             int.TryParse(Request["super_cate_id"], out sup_cate_id);
 
-            bool result = CategoryManager.Instance.AddNewCategory(category);
-            if (result)
+            Result<string> result = CategoryManager.Instance.AddNewCategory(category);
+            if (result.ResultCode == ResultCode.Success)
             {
                 return Content("ok");
             }
@@ -45,7 +46,7 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// <returns>返回请求修改类别操作的View</returns>
         public ActionResult Modify()
         {
-            List<Category> AllCates = CategoryManager.Instance.AllCategories;
+            List<CategoryItem> AllCates = CategoryManager.Instance.AllCategories;
             return View(AllCates);
         }
 

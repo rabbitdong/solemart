@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Solemart.BusinessLib;
 using System.Collections.Specialized;
 using Com.Alipay;
 using System.Configuration;
@@ -174,7 +173,7 @@ namespace Solemart.Web.Controllers
                     //需http://格式的完整路径，不能加?id=123这类自定义参数
 
                     //页面跳转同步通知页面路径
-                    string return_url = ConfigurationManager.AppSettings["website"] + "Cart/CheckOutComplete/" + order_id;
+                    string return_url = ConfigurationManager.AppSettings["website"] + "Cart/CheckOutComplete/" + oi.OrderID;
                     //需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/
 
                     //卖家支付宝帐户
@@ -182,7 +181,7 @@ namespace Solemart.Web.Controllers
                     //必填
 
                     //商户订单号
-                    string out_trade_no = order_id.ToString("000000");
+                    string out_trade_no = oi.OrderID.ToString("000000");
                     //商户网站订单系统中唯一订单号，必填
 
                     //订单名称
@@ -295,14 +294,14 @@ namespace Solemart.Web.Controllers
                 }
 
                 current_order = OrderManager.GetOrderInfo(order_id);
-                if (current_user != SolemartUser.Anonymous || (current_user != null && current_order.OwnedUser.Name != current_user.Name))
+                if (current_user != SolemartUser.Anonymous || (current_user != null && current_order.User.UserName != current_user.UserName))
                 {
                     return RedirectToAction("", "Home");
                 }
             }
 
             current_order = OrderManager.GetOrderInfo(order_id);
-            if (current_user != SolemartUser.Anonymous || (current_user != null && current_order.OwnedUser.Name != current_user.Name))
+            if (current_user != SolemartUser.Anonymous || (current_user != null && current_order.User.UserName != current_user.UserName))
             {
                 return RedirectToAction("", "Home");
             }

@@ -18,14 +18,14 @@ namespace Solemart.Web.Areas.Manager.Controllers
         //
         // GET: /Manager/ProductManager/
 
-        public ActionResult Index()
+        public ActionResult Index(int? p)
         {
-            int pi = 1; //表示页索引
-            if (Request["p"] != null && int.TryParse(Request["p"], out pi)) ;
+            int pi = p??0; //表示页索引
+            int totalPageCount = 0;
 
-            List<ProductItem> PagedProdList = ProductManager.GetPagedProduct(pi - 1);
+            List<SaledProductItem> PagedProdList = ProductManager.GetPagedSaledProducts(pi, 10, out totalPageCount);
 
-            ViewData["PageCount"] = ProductManager.ProductPagedCount;
+            ViewData["PageCount"] = totalPageCount;
             ViewData["CurrentPageIndex"] = pi;
 
             return View(PagedProdList);
@@ -37,7 +37,7 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// <returns>修改产品的视图</returns>
         public ActionResult Modify(int id)
         {
-            Product CurrentProduct = ProductManager.GetProductByID(id);
+            ProductItem CurrentProduct = ProductManager.GetProductByID(id);
 
             return View(CurrentProduct);
         }
@@ -46,31 +46,9 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// </summary>
         /// <param name="id">要修改的产品的ID</param>
         /// <returns>返回修改的结果View</returns>
-        public ActionResult CommitModify(int id)
+        public ActionResult CommitModify(ProductItem product)
         {
-            Product CurrentProduct = ProductManager.Instance.GetProductByID(id);
-            string pname = Request["pname"];
-            int cateid = 0;
-            string unit = Request["unit"];
-            string spec = Request["spec"];
-            string desc = Request["desc"];
-
-            if (pname == null || pname.Trim() == "" || unit == null || unit.Trim() == ""
-                || Request["cateid"] == null || !int.TryParse(Request["cateid"], out cateid))
-            {
-                return Content("error");
-            }
-
-            if (CurrentProduct.Name != pname)
-                CurrentProduct.Name = pname;
-            if (CurrentProduct.OwnedCategory.CateID != cateid)
-                CurrentProduct.OwnedCategory = CategoryManager.Instance.GetCateById(cateid);
-            if (CurrentProduct.Unit != unit)
-                CurrentProduct.Unit = unit;
-
-            CurrentProduct.Desc = desc;
-            CurrentProduct.Spec = spec;
-            if (pm.ModifyProductInfo(CurrentProduct))
+            if (ProductManager.ModifyProductInfo(product))
             {
                 return Content("ok");
             }
@@ -84,25 +62,13 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// </summary>
         /// <param name="id">要处理的产品的ID</param>
         /// <returns>删除图片的结果</returns>
-        public ActionResult DeleteProductImage(int id)
+        public ActionResult DeleteProductImage(int id, int imageID)
         {
-            Product CurrentProduct = ProductManager.Instance.GetProductByID(id);
-            if (CurrentProduct == null)
+            ProductImageItem img = ProductManager.GetProductImage(id, imageID);
+            if (img != null && ProductManager.DeleteProductImage(id, imageID))
             {
-                return Content("error");
-            }
-
-            int iid = 0;
-            if (!int.TryParse(Request["iid"], out iid))
-            {
-                return Content("error");
-            }
-
-            ProductImage img = CurrentProduct.Images.First(a => a.ImgID == iid);
-            if (img != null && pm.DeleteProductImage(CurrentProduct, iid))
-            {
-                System.IO.File.Delete(Server.MapPath("~/images/product/normal/" + img.Url));
-                System.IO.File.Delete(Server.MapPath("~/images/product/thumb/" + img.Url));
+                System.IO.File.Delete(Server.MapPath("~/images/product/normal/" + img.ImageUrl));
+                System.IO.File.Delete(Server.MapPath("~/images/product/thumb/" + img.ImageUrl));
                 return Content("ok");
             }
             else
@@ -115,7 +81,7 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// <returns>添加的产品的结果View</returns>
         public ActionResult AddNewProductImage(int id)
         {
-            Product CurrentProduct = ProductManager.Instance.GetProductByID(id);
+            ProductItem CurrentProduct = ProductManager.GetProductByID(id);
             if (CurrentProduct == null)
             {
                 return Content("error");
@@ -128,8 +94,8 @@ namespace Solemart.Web.Areas.Manager.Controllers
             }
 
             string mimetype = file.ContentType;
-            string file_name = pm.GenerateProductImageFileName(CurrentProduct.ProductID,
-                pm.FromMimeTypeGetExtendName(mimetype));
+            string file_name = ProductManager.GenerateProductImageFileName(CurrentProduct.ProductID,
+                ProductManager.FromMimeTypeGetExtendName(mimetype));
 
             BitmapDecoder decoder = BitmapDecoder.Create(file.InputStream, BitmapCreateOptions.None, BitmapCacheOption.Default);
             if (decoder.Frames[0].PixelWidth != 350 || decoder.Frames[0].PixelHeight != 350)
@@ -146,8 +112,13 @@ namespace Solemart.Web.Areas.Manager.Controllers
             encoder.Save(thumb_file);
 
             file.SaveAs(HttpContext.Server.MapPath("~/Images/product/normal/" + file_name));
+            ProductImageItem item = new ProductImageItem();
+            item.ProductID = CurrentProduct.ProductID;
+            item.ImageUrl = file_name;
+            item.MimeType = file.ContentType;
+            item.Description = "";
 
-            if (pm.AddNewImageToProduct(CurrentProduct.ProductID, file.ContentType, file_name))
+            if (ProductManager.AddNewImageToProduct(item))
             {
                 return Content("ok");
             }
@@ -164,7 +135,7 @@ namespace Solemart.Web.Areas.Manager.Controllers
         public ActionResult GetLastStockPrice(int id)
         {
             decimal price = 0.0m;
-            price = pm.GetLastStockPrice(id);
+            price = ProductManager.GetLastStockPrice(id);
             price = price + price / 2;
 
             return Content(price.ToString("C2"));
@@ -176,7 +147,7 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// <returns>商品下架的结果</returns>
         public ActionResult GetBackSaling(int id)
         {
-            if (pm.GetBackSaling(id))
+            if (ProductManager.TakeOffSaling(id))
             {
                 return Content("ok");
             }
@@ -201,7 +172,12 @@ namespace Solemart.Web.Areas.Manager.Controllers
 
 
             bool is_spec_flag = Request["isspec"] == "true";
-            if (pm.PutToSaling(id, price, discount, is_spec_flag))
+            SaledProductItem item = new SaledProductItem();
+            item.ProductID = id;
+            item.Price = price;
+            item.Discount = discount;
+            item.SpecialFlag = is_spec_flag;
+            if (ProductManager.PutToSaling(item))
             {
                 return Content("ok");
             }
@@ -223,37 +199,20 @@ namespace Solemart.Web.Areas.Manager.Controllers
             }
             else
             {
-                Product ChangedProduct = pm.GetProductByID(id.Value);
+                ProductItem ChangedProduct = ProductManager.GetProductByID(id.Value);
                 if (ChangedProduct == null)
                     return Content("error");
                 return View(ChangedProduct);
             }
         }
 
-        /// <summary>入库一个新产品
+        /// <summary>
+        /// In stock a new product
         /// </summary>
         /// <returns>返回入库的结果</returns>
-        public ActionResult InstockNewProduct()
+        public ActionResult InstockNewProduct(ProductItem product, decimal price, int amount, string remark)
         {
-            string prod_name = Request["prod_name"];
-            decimal price = 0.0m;
-            int cate_id = -1;
-            int brand_id = -1;
-            int vendor_id = -1;
-            int amount = 0;
-            if (!decimal.TryParse(Request["price"], out price) ||
-                !int.TryParse(Request["cate_id"], out cate_id) ||
-                !int.TryParse(Request["vendor"], out vendor_id) ||
-                !int.TryParse(Request["brand"], out brand_id) ||
-                !int.TryParse(Request["amount"], out amount))
-            {
-                return Content("error");
-            }
-
-            string unit = Request["unit"];
-            string prod_spec = Request["prod_spec"];
-
-            if (ProductManager.Instance.InStockNewProduct(prod_name, cate_id, vendor_id, prod_spec, brand_id, price, amount, unit))
+            if (ProductManager.InStockProduct(product, price, amount, remark))
             {
                 return Content("ok");
             }
@@ -267,10 +226,10 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// </summary>
         /// <param name="id">要入库的商品ID</param>
         /// <remarks>返回入库的操作结果</remarks>
-        public ActionResult InstockProduct(int id)
+        public ActionResult InstockProduct(int id, string remark)
         {
-            Product ChangedProduct = pm.GetProductByID(id);
-            if (ChangedProduct == null)
+            ProductItem product = ProductManager.GetProductByID(id);
+            if (product == null)
             {
                 return Content("error");
             }
@@ -283,7 +242,7 @@ namespace Solemart.Web.Areas.Manager.Controllers
                 return Content("error");
             }
 
-            if (ProductManager.Instance.InStockProduct(id, price, amount))
+            if (ProductManager.InStockProduct(product, price, amount, remark))
             {
                 return Content("ok");
             }

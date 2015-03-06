@@ -1,7 +1,7 @@
-﻿@using Solemart.EntityLib;
+﻿@using Solemart.BusinessLib;
 
 @{
-    Solemart.EntityLib.User CurrentUser = Session["user"] as Solemart.EntityLib.User;
+    SolemartUser CurrentUser = HttpContext.Current.User as SolemartUser;
 }
 <!DOCTYPE html>
 <html>
@@ -19,7 +19,7 @@
         }
 
         function logout() {
-            @if((Session["user"] as Solemart.EntityLib.User).LoginType == LoginType.QQ){
+            @if(CurrentUser.LoginType == LoginType.QQ){
                 <text>
             QC.Login.signOut();
                 </text>
@@ -45,7 +45,7 @@
                 </li>
             </ul>
             <ul id="account-actions">
-                @if (HttpContext.Current.User.Identity.IsAuthenticated && (Session["user"] as Solemart.EntityLib.User).Name != Solemart.EntityLib.User.Anonymous.Name) {
+                @if (HttpContext.Current.User.Identity.IsAuthenticated && CurrentUser.UserName != SolemartUser.Anonymous.UserName) {
                 <li>
                     <a href="javascript:void;" onclick="javascript:logout();">注销</a>
                 </li>
@@ -58,7 +58,7 @@
                 <li>
                     <a href="/Cart">购物车</a>
                 </li>
-                <li>欢迎:@CurrentUser.Name
+                <li>欢迎:@CurrentUser.UserName
                     <a href="/Account">我的帐户</a>
                 </li>
                 } else {

@@ -14,11 +14,10 @@ namespace Solemart.Web.Areas.Manager.Controllers
         //
         // GET: /Manager/Vendor/
 
-        public ActionResult Index()
+        public ActionResult Index(int? p)
         {
             int totalPageCount = 0;
-            int pi = 1; //表示页索引
-            if (Request["p"] != null && int.TryParse(Request["p"], out pi)) ;
+            int pi = p ?? 0; //表示页索引
 
             return View(VendorManager.GetPagedVendorInfos(pi, 10, out totalPageCount));
         }

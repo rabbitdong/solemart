@@ -100,7 +100,7 @@ CREATE TABLE SaledProductItems(
 #商品的图像信息表
 CREATE TABLE ProductImageItems(
 	ImageID		INTEGER AUTO_INCREMENT PRIMARY KEY ,
-	ProductID	INTEGER REFERENCES ProductItems(ProductID),
+	ProductID	INTEGER REFERENCES ProductItems(ProductID) on delete cascade,
 	MimeType	VARCHAR(20),
 	ImageUrl	NVARCHAR(50),
 	Description NVARCHAR(200)

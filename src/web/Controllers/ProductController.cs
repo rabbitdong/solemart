@@ -14,13 +14,12 @@ namespace Solemart.Web.Controllers
         /// <summary>用户选择产品页时的返回
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public ActionResult Index(int? p)
         {
             CategoryItem cate = CategoryManager.Instance.GetFirstChildCate();
             ViewData["CurrentCateID"] = cate.CategoryID;
 
-            int pi = 0; //表示页索引
-            if (Request["p"] != null && int.TryParse(Request["p"], out pi)) ;
+            int pi = p ?? 0; //表示页索引
 
             int CurrentCatePageCount = 0;
             IList<ProductItem> products = ProductManager.GetPagedProductsByCategory(cate.CategoryID, pi, 10, out CurrentCatePageCount);
@@ -34,13 +33,12 @@ namespace Solemart.Web.Controllers
         /// </summary>
         /// <param name="id">类别的ID</param>
         /// <returns>该类别的View</returns>
-        public ActionResult Cate(int id)
+        public ActionResult Cate(int id, int? p)
         {
             ViewData["CurrentCateID"] = id;
 
             CategoryItem cate = CategoryManager.Instance.GetCategoryById(id);
-            int pi = 1; //表示页索引
-            if (Request["p"] != null && int.TryParse(Request["p"], out pi)) ;
+            int pi = p ?? 0; //表示页索引
 
             int CurrentCatePageCount = 0;
             IList<ProductItem> products = ProductManager.GetPagedProductsByCategory(cate.CategoryID, pi, 9, out CurrentCatePageCount);

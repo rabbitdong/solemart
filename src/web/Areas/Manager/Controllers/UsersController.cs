@@ -14,11 +14,10 @@ namespace Solemart.Web.Areas.Manager.Controllers
         //
         // GET: /Manager/User/
 
-        public ActionResult Index()
+        public ActionResult Index(int? p)
         {
             int totalPageCount = 0;
-            int pi = 1; //表示页索引
-            if (Request["p"] != null && int.TryParse(Request["p"], out pi)) ;
+            int pi = p ?? 0; //表示页索引
 
             ViewData["PageCount"] = (UserManager.TotalUserCount + 9) / 10;
             ViewData["CurrentPageIndex"] = pi;

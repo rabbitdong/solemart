@@ -66,7 +66,7 @@ namespace Solemart.Web.Areas.Manager.Controllers
             string logo_filename = BrandManager.GetLogoFileName(brand, mimetype);
             file.SaveAs(HttpContext.Server.MapPath("~/Images/logo/" + logo_filename));
 
-            bm.UpdateBrandImage(brand, logo_filename);
+            BrandManager.UpdateBrandItem(null);
             return Content("ok-" + logo_filename);
         }
     }

@@ -12,6 +12,7 @@ namespace Solemart.BusinessLib
     /// </summary>
     public class ProductManager
     {
+        #region 商品的查询处理
         /// <summary>
         /// Get the total amount of the saled products.
         /// </summary>
@@ -27,7 +28,7 @@ namespace Solemart.BusinessLib
         }
 
         /// <summary>
-        /// Get the product by the product id
+        /// Get the product on saled by the product id
         /// </summary>
         /// <param name="productID"></param>
         /// <returns></returns>
@@ -38,6 +39,58 @@ namespace Solemart.BusinessLib
                 return context.SaledProductItems.Find(productID);
             }
         }
+
+        /// <summary>
+        /// Get the product by the product id.
+        /// </summary>
+        /// <param name="productID"></param>
+        /// <returns></returns>
+        public static ProductItem GetProductByID(int productID)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                return context.ProductItems.Find(productID);
+            }
+        }
+
+        /// <summary>
+        /// Get the paged all product
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="totalPageCount"></param>
+        /// <returns></returns>
+        public static List<ProductItem> GetPagedAllProducts(int pageIndex, int pageSize, out int totalPageCount)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                var q = from p in context.ProductItems
+                        orderby p.ProductID
+                        select p;
+                totalPageCount = (q.Count() - 1) / pageSize + 1;
+                return q.Skip(pageIndex * pageSize).Take(pageSize).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Get the paged product list on saling.
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="totalPageCount"></param>
+        /// <returns></returns>
+        public static List<SaledProductItem> GetPagedSaledProducts(int pageIndex, int pageSize, out int totalPageCount)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                var q = from p in context.SaledProductItems.Include("Product")
+                        orderby p.ProductID
+                        select p;
+                totalPageCount = (q.Count() - 1) / pageSize + 1;
+                return q.Skip(pageIndex * pageSize).Take(pageSize).ToList();
+            }
+        }
+        #endregion
 
         #region 上架/下架处理
         /// <summary>
@@ -200,6 +253,33 @@ namespace Solemart.BusinessLib
                     return context.SaveChanges() > 0;
                 }
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the image list of the product
+        /// </summary>
+        /// <param name="productID"></param>
+        /// <returns></returns>
+        public static List<ProductImageItem> GetProductImage(int productID)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                return context.ProductImageItems.Where(p => (p.ProductID == productID)).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Get the product image of the product
+        /// </summary>
+        /// <param name="productID"></param>
+        /// <param name="imageID"></param>
+        /// <returns></returns>
+        public static ProductImageItem GetProductImage(int productID, int imageID)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                return context.ProductImageItems.FirstOrDefault(p => (p.ProductID == productID && p.ImageID == imageID));
             }
         }
         #endregion

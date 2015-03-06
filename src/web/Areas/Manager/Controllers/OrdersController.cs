@@ -47,12 +47,10 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// <summary>获取在发送中的订单的请求处理
         /// </summary>
         /// <returns>返回在发送中的订单的结果View</returns>
-        public ActionResult Sending()
+        public ActionResult Sending(int? p)
         {
-            int pi = 1; //表示页索引
+            int pi = p ?? 0; //表示页索引
             int totalPageCount = 0; 
-            if (Request["p"] != null && int.TryParse(Request["p"], out pi)) ;
-
             ViewData["PageCount"] = 1;
             ViewData["CurrentPageIndex"] = pi;
 
@@ -63,11 +61,10 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// <summary>获取已经接收订单的列表请求处理
         /// </summary>
         /// <returns>返回已经接收的订单的请求结果View</returns>
-        public ActionResult Received()
+        public ActionResult Received(int? p)
         {
-            int pi = 1; //表示页索引
+            int pi = p ?? 0; //表示页索引
             int totalPageCount = 0;
-            if (Request["p"] != null && int.TryParse(Request["p"], out pi)) ;
 
             ViewData["PageCount"] = 1;
             ViewData["CurrentPageIndex"] = pi;

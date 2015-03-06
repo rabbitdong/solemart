@@ -9,6 +9,7 @@ using System.Net;
 using System.Text;
 using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
+using Solemart.SystemUtil;
 
 namespace Solemart.Web.Controllers
 {
@@ -16,20 +17,18 @@ namespace Solemart.Web.Controllers
     {
         /// <summary>在UI上显示的正常的商品列表
         /// </summary>
-        protected IList<ProductItem> ProductList = null;
 
         private CategoryManager cm = CategoryManager.Instance;
 
-        public ActionResult Index()
+        public ActionResult Index(int? p)
         {
-            int pi = 1; //表示页索引
-            if (Request["p"] != null && int.TryParse(Request["p"], out pi)) ;
-
-            ProductList = ProductManager.GetSalePagedProducts(pi - 1);    //处理的页索引从0开始，这个需要减1
+            int pi = p ?? 0; //表示页索引
+            int totalPageCount = 0;
+            List<SaledProductItem> products = ProductManager.GetPagedSaledProducts(pi, 10, out totalPageCount);    //处理的页索引从0开始，这个需要减1
             ViewData["CurrentPageIndex"] = pi;
-            ViewData["PageCount"] = ProductManager.SaleProductPagedCount;
+            ViewData["PageCount"] = totalPageCount;
 
-            return View(ProductList);
+            return View(products);
         }
 
         /// <summary>用户注册的处理
@@ -105,10 +104,7 @@ namespace Solemart.Web.Controllers
         /// <returns>返回的产品列表</returns>
         public ActionResult Search(string id)
         {
-            ProductList = Searcher.GetPagedProductsByKey(id);
-            ViewData["PageCount"] = 0;
-            ViewData["CurrentPageIndex"] = 1;
-            return View("Index", ProductList);
+            return View("Index");
         }
 
         /// <summary>返回登录的View
@@ -153,7 +149,7 @@ namespace Solemart.Web.Controllers
             if (openid == null || openid == "")
                 return Content("error");
 
-            User user = UserManager.Instance.OnQQLogin(openid, nickname);
+            UserItem user = UserManager.OnQQLogin(openid, nickname);
             if (user != null)
             {
                 if (Session["user"] == null)
@@ -173,8 +169,6 @@ namespace Solemart.Web.Controllers
 
                 cookie.Expires = expire_time;
                 Response.Cookies.Add(cookie);
-
-                Session["cart"] = Cart.GetUserCart(user);
             }
 
             if (user != null)
@@ -205,16 +199,10 @@ namespace Solemart.Web.Controllers
         public ActionResult ResetPwd()
         {
             string email = Request["email"];
-            string from = "adon_hua@hotmail.com";
-
-            string pwd = UserManager.Instance.GenerateRandomPwd();
-
-            SmtpClient client = new SmtpClient("...");
-            client.Credentials = new NetworkCredential(from, "...");
-            client.EnableSsl = true;
+            string pwd = EncryptUtil.GenerateRandomPassword();
 
             string content = string.Format("您的新密码是:{0}, 请登录网站{1}修改你的密码", pwd, "http://xxx/");
-            client.Send(from, email, "您的密码重置密码----来自Solemart.com的邮件", pwd);
+            EmailServer.SendEmail(email, "", content);
             return Content("邮件已经发送，请查收");
         }
 

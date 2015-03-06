@@ -10,7 +10,6 @@ namespace Solemart.BusinessLib
 {
     public class Searcher
     {
-        private Thread index_t = null;  //生成索引的线程
         private Mutex mutex = null;
 
         private string[] preset_keywords = { "耳机", "蓝牙", "鼠标", "手机膜", "TF", "内存卡", "音箱", "耳麦", "线", "充电器" };
