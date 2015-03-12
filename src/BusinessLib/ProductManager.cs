@@ -329,7 +329,7 @@ namespace Solemart.BusinessLib
                 ProductItem product = context.ProductItems.Find(productID);
                 if (product != null)
                 {
-                    product.ReserceCount += count;
+                    product.ReserveCount += count;
                     return context.SaveChanges() > 0;
                 }
 
@@ -348,9 +348,9 @@ namespace Solemart.BusinessLib
             using (SolemartDBContext context = new SolemartDBContext())
             {
                 ProductItem product = context.ProductItems.Find(productID);
-                if (product != null && product.ReserceCount >= count)
+                if (product != null && product.ReserveCount >= count)
                 {
-                    product.ReserceCount += count;
+                    product.ReserveCount += count;
                     return context.SaveChanges() > 0;
                 }
 
@@ -368,9 +368,9 @@ namespace Solemart.BusinessLib
             using (SolemartDBContext context = new SolemartDBContext())
             {
                 ProductItem product = context.ProductItems.Find(productID);
-                if (product != null && product.ReserceCount >= count)
+                if (product != null && product.ReserveCount >= count)
                 {
-                    product.ReserceCount -= count;
+                    product.ReserveCount -= count;
                     product.StockCount -= count;
                     return context.SaveChanges() > 0;
                 }

@@ -149,6 +149,16 @@ namespace Solemart.DataProvider.Entity
         /// The description of the image item
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// 是否作为首页的图片显示
+        /// </summary>
+        public bool ForLogo { get; set; }
+
+        /// <summary>
+        /// 图片的添加时间
+        /// </summary>
+        public DateTime AddTime { get; set; }
     }
     #endregion
 
@@ -198,7 +208,7 @@ namespace Solemart.DataProvider.Entity
         /// <summary>
         /// 商品的预留数量（表示被订购，但还没发货的数量）
         /// </summary>
-        public int ReserceCount { get; set; }
+        public int ReserveCount { get; set; }
 
         /// <summary>
         /// 商品的品牌ID信息
