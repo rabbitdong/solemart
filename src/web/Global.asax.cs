@@ -64,6 +64,10 @@ namespace Solemart.Web
 
                 HttpContext.Current.User = user;
             }
+            else
+            {
+                HttpContext.Current.User = SolemartUser.Anonymous;
+            }
         }
 
         void Application_Error(object sender, EventArgs e)

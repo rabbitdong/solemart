@@ -5,9 +5,13 @@ using System.Text;
 using Solemart.DataProvider.Entity;
 using System.Security.Principal;
 using Solemart.DataProvider;
+using Solemart.SystemUtil;
 
 namespace Solemart.BusinessLib
 {
+    /// <summary>
+    /// 系统的用户对象
+    /// </summary>
     public class SolemartUser : IPrincipal
     {
         private UserItem userItem;
@@ -24,7 +28,7 @@ namespace Solemart.BusinessLib
         /// <summary>
         /// The system anonymous user.
         /// </summary>
-        public static SolemartUser Anonymous = new SolemartUser { userItem = new UserItem { UserName = "Anonymous", UserID = 0 } };
+        public static SolemartUser Anonymous = new SolemartUser { userItem = new UserItem { UserName = "Anonymous", UserID = 0, Roles = Role.Anonymous.RoleName } };
 
         public string UserName
         {
@@ -34,6 +38,16 @@ namespace Solemart.BusinessLib
         public int UserID
         {
             get { return userItem.UserID; }
+        }
+
+        public bool IsLoginQQ
+        {
+            get { return userItem.LoginType == LoginType.QQ; }
+        }
+
+        public string[] RoleNames
+        {
+            get { return Role.GetRoleNames(Role.GetRoles(userItem.Roles)); }
         }
 
         /// <summary>
@@ -49,7 +63,8 @@ namespace Solemart.BusinessLib
 
         public bool IsInRole(string role)
         {
-            throw new NotImplementedException();
+            return Identity != null && Identity.IsAuthenticated &&
+                !string.IsNullOrWhiteSpace(role) && (RoleNames.Contains(role));
         }
 
         /// <summary>

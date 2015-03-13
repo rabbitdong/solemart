@@ -282,6 +282,20 @@ namespace Solemart.BusinessLib
                 return context.ProductImageItems.FirstOrDefault(p => (p.ProductID == productID && p.ImageID == imageID));
             }
         }
+
+        /// <summary>
+        /// Get the product image of the product
+        /// </summary>
+        /// <param name="productID"></param>
+        /// <param name="imageID"></param>
+        /// <returns></returns>
+        public static ProductImageItem GetProductLogoImage(int productID)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                return context.ProductImageItems.FirstOrDefault(p => (p.ProductID == productID && p.ForLogo));
+            }
+        }
         #endregion
 
         #region 商品的库存处理

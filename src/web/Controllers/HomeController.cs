@@ -10,25 +10,42 @@ using System.Text;
 using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
 using Solemart.SystemUtil;
+using Solemart.Web.Models;
 
 namespace Solemart.Web.Controllers
 {
     public class HomeController : Controller
     {
-        /// <summary>在UI上显示的正常的商品列表
+        /// <summary>
+        /// Display the product list.
         /// </summary>
-
-        private CategoryManager cm = CategoryManager.Instance;
-
         public ActionResult Index(int? p)
         {
             int pi = p ?? 0; //表示页索引
             int totalPageCount = 0;
-            List<SaledProductItem> products = ProductManager.GetPagedSaledProducts(pi, 10, out totalPageCount);    //处理的页索引从0开始，这个需要减1
-            ViewData["CurrentPageIndex"] = pi;
-            ViewData["PageCount"] = totalPageCount;
+            List<SaledProductItem> products = ProductManager.GetPagedSaledProducts(pi, 10, out totalPageCount);
 
-            return View(products);
+            ProductListViewModel model = new ProductListViewModel();
+            model.PageIndex = pi;
+            model.TotalPageCount = totalPageCount;
+            foreach (SaledProductItem product in products)
+            {
+                ProductForListViewModel pmodel = new ProductForListViewModel();
+                ProductItem productItem = product.Product;
+                ProductImageItem imageItem = ProductManager.GetProductLogoImage(product.ProductID);
+                pmodel.ProductID = product.ProductID;
+                pmodel.ProductName = product.Product.ProductName;
+                pmodel.Price = product.Price;
+                pmodel.Discount = product.Discount;
+                pmodel.IsSpecial = product.SpecialFlag;
+                pmodel.Unit = product.Product.Unit;
+                pmodel.IsOutOfStock = (product.Product.StockCount - product.Product.ReserveCount) == 0;
+                pmodel.ProductImageName = productItem.ProductName;
+                pmodel.ProductImageUrl = imageItem.ImageUrl;
+                model.ProductList.Add(pmodel);
+            }
+
+            return View(model);
         }
 
         /// <summary>用户注册的处理

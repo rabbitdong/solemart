@@ -167,6 +167,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\IPagerModel.cs" />
     <Compile Include="Models\PagerModel.cs" />
     <Compile Include="Models\ProductForListViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -386,9 +387,6 @@
     <Folder Include="Areas\Acknowledge\Views\Shared\" />
     <Folder Include="Areas\Manager\Models\" />
     <Folder Include="Scripts\pages\a\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLib\BusinessLib.csproj">

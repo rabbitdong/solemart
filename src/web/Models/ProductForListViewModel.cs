@@ -6,11 +6,28 @@ using System.Web;
 namespace Solemart.Web.Models
 {
     /// <summary>
+    /// 产品列表页面使用的ViewModel
+    /// </summary>
+    public class ProductListViewModel : IPagerModel
+    {
+        public ProductListViewModel()
+        {
+            ProductList = new List<ProductForListViewModel>();
+        }
+
+        public int PageIndex { get; set; }
+        public int TotalPageCount { get; set; }
+        public IList<ProductForListViewModel> ProductList { get; set; }
+    }
+
+    /// <summary>
     /// 用于商品列表显示的ViewModel
     /// </summary>
     public class ProductForListViewModel
     {
         public int ProductID { get; set; }
+
+        public string ProductName { get; set; }
 
         public string ProductImageUrl { get; set; }
 

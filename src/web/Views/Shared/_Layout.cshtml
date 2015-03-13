@@ -5,11 +5,10 @@
 }
 <!DOCTYPE html>
 <html>
-<head runat="server">
-    <title>@(ViewBag.Title == null?"叟玛特":ViewBag.Title)</title>
+<head>
+    <title>@(ViewBag.Title == null ? "叟玛特" : ViewBag.Title)</title>
     <link rel="stylesheet" href="/Content/style.css" />
     <link rel="stylesheet" href="/Content/header.css" />
-    @RenderSection("header_style", false)
     <script src="/Scripts/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101023556" data-redirecturi="http://www.solemart.com/Home/Login" charset="utf-8"></script>
     <script type="text/javascript">
@@ -19,9 +18,9 @@
         }
 
         function logout() {
-            @if(CurrentUser.LoginType == LoginType.QQ){
+            @if(CurrentUser.IsLoginQQ){
                 <text>
-            QC.Login.signOut();
+                QC.Login.signOut();
                 </text>
             }
             $.post("/Home/Logout",
@@ -31,7 +30,6 @@
                 });
         }
     </script>
-    @RenderSection("header_script", false)
 </head>
 <body>
     <div class="header">
@@ -45,33 +43,38 @@
                 </li>
             </ul>
             <ul id="account-actions">
-                @if (HttpContext.Current.User.Identity.IsAuthenticated && CurrentUser.UserName != SolemartUser.Anonymous.UserName) {
-                <li>
-                    <a href="javascript:void;" onclick="javascript:logout();">注销</a>
-                </li>
-                <li>
-                    <a href="/Account/Favorite">收藏</a>
-                </li>
-                <li>
-                    <a href="/Account/Order">订单</a>
-                </li>
-                <li>
-                    <a href="/Cart">购物车</a>
-                </li>
-                <li>欢迎:@CurrentUser.UserName
-                    <a href="/Account">我的帐户</a>
-                </li>
-                } else {
-                <li>
-                    <a href="/Home/Login">登录或注册新帐号</a>
-                </li>
+                @if (CurrentUser.Identity.IsAuthenticated && CurrentUser.UserName != SolemartUser.Anonymous.UserName)
+                {
+                    <li>
+                        <a href="javascript:void;" onclick="javascript:logout();">注销</a>
+                    </li>
+                    <li>
+                        <a href="/Account/Favorite">收藏</a>
+                    </li>
+                    <li>
+                        <a href="/Account/Order">订单</a>
+                    </li>
+                    <li>
+                        <a href="/Cart">购物车</a>
+                    </li>
+                    <li>
+                        欢迎:@CurrentUser.UserName
+                        <a href="/Account">我的帐户</a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="/Home/Login">登录或注册新帐号</a>
+                    </li>
                 }
 
-                @if (HttpContext.Current.User.Identity.IsAuthenticated 
-                    &&(HttpContext.Current.User.IsInRole("su") || HttpContext.Current.User.IsInRole("operator"))) {
-                <li>
-                    <a href="/Manager/Product">管理</a>
-                </li>
+                @if (CurrentUser.Identity.IsAuthenticated
+                    && (HttpContext.Current.User.IsInRole("su") || HttpContext.Current.User.IsInRole("operator")))
+                {
+                    <li>
+                        <a href="/Manager/Product">管理</a>
+                    </li>
                 }
             </ul>
         </div>
@@ -79,7 +82,8 @@
         <div class="header-bar">
             <div id="logo-area">
                 <a href="/">
-                    <img class="logo_img" src="/Images/logo.png"/></a>
+                    <img class="logo_img" src="/Images/logo.png" />
+                </a>
             </div>
             <div id="advise-area">
                 <p>罗源本地网购</p>
@@ -101,7 +105,7 @@
         </div>
     </div>
     <div id="main">
-    @RenderBody()
+        @RenderBody()
     </div>
     <footer>
         <h3>用心&nbsp;&nbsp;专业</h3>
