@@ -1,19 +1,11 @@
-﻿@using Solemart.EntityLib;
+﻿@using Solemart.DataProvider.Entity;
 @using Solemart.BusinessLib;
 @model Cart
 
 @{
     ViewBag.Title = "购物车 —— 叟玛特";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@section header_style{
-    <link rel="stylesheet" href="/Content/cart.css" />
-}
-
-@section header_script{
-    <script type="text/javascript" src="/Scripts/pages/um/cart.js"></script>
-}
 <div class="cart_content">
     <div class="cart_head">
         <h3>您的购物车中有 @Model.Products.Count 件物品:</h3>
@@ -81,3 +73,35 @@
     <div class="cart_foot">
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        $("input.prodamount").focusout(function () {
+            var amnt = parseInt($(this).val());
+            var prod_id = $(this).next().val();
+            if (amnt < 0) {
+                alert("数量不能小于0，等于0是删除该商品");
+                return;
+            }
+
+            $.post("/Cart/Modify/" + prod_id,
+                {
+                    amount: amnt
+                },
+                function (result) {
+                    if (result == "ok")
+                        window.location.reload();
+                    else
+                        alert("error");
+                });
+        });
+    });
+
+    function checkout(link) {
+        if ($("table.cart tbody td").size() == 0) {
+            alert("购物车中没有物品");
+            return;
+        }
+        window.location.href = "/Cart/CheckOut";
+    }
+</script>

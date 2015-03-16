@@ -3,14 +3,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@section header_style{
-    <link rel="stylesheet" href="/Content/u_account.css" />
-}
-
-@section header_script{
-    <script type="text/javascript" src="/Scripts/pages/login.js"></script>
-    <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101023556" data-redirecturi="http://www.solemart.com/Home/Login" charset="utf-8"></script>
-}
 <div class="cont" id="login_pane">
     <h2 class="subTitle">登录...</h2>
     <div class="contentArea">
@@ -71,3 +63,39 @@
         </ul>
     </div>
 </div>
+<script type="text/javascript">
+    $(function () {
+        $("#login_pane input[type!=checkbox]").focusin(function () {
+            var login_err = $("#login_err_msg");
+            if (login_err.css("visibility") == "visible")
+                login_err.css("visibility", "hidden");
+        });
+
+        $("#user_login").click(function () {
+            var url = "/Home/OnLogin?" + window.location.href.substring(window.location.href.indexOf("ReturnUrl"), window.location.href.length);
+            $.post(url,
+                {
+                    uname: $("#uname").val(),
+                    pwd: $("#pwd").val(),
+                    ispersist: $("#persist").is(":checked")
+                },
+                function (result) {
+                    if (result != "error")
+                        window.location.href = result;
+                    else {
+                        $("#login_err_msg").css("visibility", "visible");
+                    }
+                });
+            return false;
+        });
+
+        $(window.document).keypress(function (e) {
+            if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                $('div#login_pane button').click();
+                return false;
+            } else {
+                return true;
+            }
+        });
+    });
+</script>

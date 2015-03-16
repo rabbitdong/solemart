@@ -1,34 +1,8 @@
-﻿@using Solemart.EntityLib;
+﻿@using Solemart.DataProvider.Entity;
 @model OrderItem
 
 @{
     ViewBag.Title = "结账完成 —— 叟玛特";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-@section header_style{
-    <link rel="stylesheet" href="/Content/cart.css" />
-}
-
-@section header_script{
-    <script type="text/javascript">
-        function cancel_order(oid, btn) {
-            if (!window.confirm("确定取消订单? \r\n取消后，该订单不再生效，我们不会派送您订购的商品")) {
-                return false;
-            }
-
-            $.post("/Account/CancelOrder/"+oid,
-                { },
-                function (result) {
-                    if (result == "ok") {
-                        $("#order_title").html("订单已取消");                        
-                        $(btn).remove();
-                    }
-                    else
-                        alert(result);
-                });
-        }
-    </script>
 }
 
 <a class="comm_btn r" href="/Account/Order">查看历史订单列表</a>
@@ -86,3 +60,22 @@
         <p><span class="order_subhead">付款状态:</span>@(Model.IsPay?"已付款":"未付款")</p>            
     </div>
 </div>
+
+<script type="text/javascript">
+    function cancel_order(oid, btn) {
+        if (!window.confirm("确定取消订单? \r\n取消后，该订单不再生效，我们不会派送您订购的商品")) {
+            return false;
+        }
+
+        $.post("/Account/CancelOrder/"+oid,
+            { },
+            function (result) {
+                if (result == "ok") {
+                    $("#order_title").html("订单已取消");
+                    $(btn).remove();
+                }
+                else
+                    alert(result);
+            });
+    }
+</script>

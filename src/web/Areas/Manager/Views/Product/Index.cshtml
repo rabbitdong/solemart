@@ -1,56 +1,9 @@
-﻿@using Solemart.EntityLib;
-@model List<Product>
+﻿@using Solemart.DataProvider.Entity;
+@model List<ProductItem>
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Areas/Manager/Views/Shared/_ManagerLayout.cshtml";
-}
-
-@section header_script_manager{
-    <script type="text/javascript">
-        function puttosaling(pid) {
-            $.post("/Manager/Product/GetLastStockPrice/" + pid, {},
-                function (result) {
-                    $("#edit_putto_saling").css("display", "block");
-                    $("#edit_putto_saling #putto_sale_pid").val(pid);
-                    $("#edit_putto_saling #recommend_price").html(result);
-                });
-        }
-
-        function modisaling(pid) {
-            $.post("/Manager/Product/GetLastStockPrice/" + pid, {},
-                function (result) {
-                    $("#edit_putto_saling").css("display", "block");
-                    $("#edit_putto_saling #putto_sale_pid").val(pid);
-                    $("#edit_putto_saling #recommend_price").html(result);
-                });
-        }
-
-        function getbacksaling(pid) {
-            $.post("/Manager/Product/GetBackSaling/" + pid, {},
-                function (result) {
-                    if (result == "ok")
-                        window.location.reload();
-                    else
-                        alert(result);
-                });
-        }
-
-        function puttosaleok() {
-            $.post("/Manager/Product/PutToSaling/" + $("#putto_sale_pid").val(),
-                {
-                    discount: $("#putto_sale_discount").val(),
-                    price: $("#putto_sale_price").val(),
-                    isspec:$("#putto_sale_specprice").is(":checked")
-                },
-                function (result) {
-                    if (result == "ok")
-                        window.location.reload();
-                    else
-                        alert(result);
-                });
-        }
-    </script>
 }
 
 <h1>查看货品列表:</h1>
@@ -78,7 +31,7 @@
     </thead>
     <tbody>
         @if(Model!=null && Model.Count >0){
-        foreach (Product prod in Model) {
+        foreach (ProductItem prod in Model) {
         <tr>
             <td>@prod.ProductID</td>
             <td>@prod.OwnedCategory.CateName</td>
@@ -143,3 +96,48 @@
         </ol>
     </fieldset>
 </div>
+
+<script type="text/javascript">
+    function puttosaling(pid) {
+        $.post("/Manager/Product/GetLastStockPrice/" + pid, {},
+            function (result) {
+                $("#edit_putto_saling").css("display", "block");
+                $("#edit_putto_saling #putto_sale_pid").val(pid);
+                $("#edit_putto_saling #recommend_price").html(result);
+            });
+    }
+
+    function modisaling(pid) {
+        $.post("/Manager/Product/GetLastStockPrice/" + pid, {},
+            function (result) {
+                $("#edit_putto_saling").css("display", "block");
+                $("#edit_putto_saling #putto_sale_pid").val(pid);
+                $("#edit_putto_saling #recommend_price").html(result);
+            });
+    }
+
+    function getbacksaling(pid) {
+        $.post("/Manager/Product/GetBackSaling/" + pid, {},
+            function (result) {
+                if (result == "ok")
+                    window.location.reload();
+                else
+                    alert(result);
+            });
+    }
+
+    function puttosaleok() {
+        $.post("/Manager/Product/PutToSaling/" + $("#putto_sale_pid").val(),
+            {
+                discount: $("#putto_sale_discount").val(),
+                price: $("#putto_sale_price").val(),
+                isspec: $("#putto_sale_specprice").is(":checked")
+            },
+            function (result) {
+                if (result == "ok")
+                    window.location.reload();
+                else
+                    alert(result);
+            });
+    }
+</script>

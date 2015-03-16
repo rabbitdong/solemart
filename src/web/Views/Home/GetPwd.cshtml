@@ -2,20 +2,6 @@
     ViewBag.Title = "取回密码 —— 叟玛特";
     Layout = "~/Areas/Manager/Views/Shared/_ManagerLayout.cshtml";
 }
-@section header_style{}
-@section header_script{
-    <script type="text/javascript">
-        function resetpwd() {
-            $.post("/Home/ResetPwd",
-                {
-                    email: $("#email").val()
-                },
-                function (result) {
-                    alert(result);
-                });
-        }
-    </script>
-}
 
 <div>
     <div class="cont" id="login_pane">
@@ -31,3 +17,15 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    function resetpwd() {
+        $.post("/Home/ResetPwd",
+            {
+                email: $("#email").val()
+            },
+            function (result) {
+                alert(result);
+            });
+    }
+</script>

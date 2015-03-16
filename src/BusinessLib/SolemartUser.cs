@@ -19,6 +19,29 @@ namespace Solemart.BusinessLib
 
         public SolemartUser() { }
 
+        /// <summary>
+        /// Create the user object by the userid.
+        /// </summary>
+        /// <param name="userid"></param>
+        public SolemartUser(int userid) 
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserItem useritem = context.UserItems.Find(userid);
+                if (useritem == null)
+                {
+                    throw new KeyNotFoundException("The user of the userid doesn't exist!");
+                }
+
+                this.userItem = useritem;
+                cart = GetUserCart();
+            }
+        }
+
+        /// <summary>
+        /// Create the user object by the useritem data.
+        /// </summary>
+        /// <param name="user"></param>
         public SolemartUser(UserItem user)
         {
             this.userItem = user;
@@ -96,6 +119,42 @@ namespace Solemart.BusinessLib
         public Cart Cart
         {
             get { return cart; }
+        }
+    }
+
+    /// <summary>
+    /// 系统用户缓存类
+    /// </summary>
+    public class SolemartUserCache
+    {
+        private static List<SolemartUser> _userCache = new List<SolemartUser>();
+
+        /// <summary>
+        /// Get the user object from the cache.
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public static SolemartUser GetUser(int userid)
+        {
+            SolemartUser user = _userCache.Find(u => u.UserID == userid);
+            if (user == null)
+            {
+                user = new SolemartUser(userid);
+                _userCache.Add(user);
+            }
+
+            return user;
+        }
+
+        /// <summary>
+        /// Drop the user object in cache by manual.
+        /// </summary>
+        /// <param name="userid"></param>
+        public static void DropUserInCache(int userid)
+        {
+            SolemartUser user = _userCache.Find(u => u.UserID == userid);
+            if (user != null)
+                _userCache.Remove(user);
         }
     }
 }

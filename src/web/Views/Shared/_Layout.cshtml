@@ -9,7 +9,9 @@
     <title>@(ViewBag.Title == null ? "叟玛特" : ViewBag.Title)</title>
     <link rel="stylesheet" href="/Content/style.css" />
     <link rel="stylesheet" href="/Content/header.css" />
+    @RenderSection("header_style", false);
     <script src="/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="/Scripts/commutil.js"></script>
     <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101023556" data-redirecturi="http://www.solemart.com/Home/Login" charset="utf-8"></script>
     <script type="text/javascript">
         function search_product() {
@@ -78,7 +80,7 @@
                 }
             </ul>
         </div>
-
+        <!--
         <div class="header-bar">
             <div id="logo-area">
                 <a href="/">
@@ -103,7 +105,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <div id="main">
         @RenderBody()
     </div>

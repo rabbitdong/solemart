@@ -173,14 +173,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\cart.css" />
     <Content Include="Content\ebooks.css" />
     <Content Include="Content\header.css" />
     <Content Include="Content\jquery-ui-1.10.3.custom.min.css" />
     <Content Include="Content\m.css" />
     <Content Include="Content\mobile.css" />
     <Content Include="Content\pager_style.css" />
-    <Content Include="Content\prod_list.css" />
     <Content Include="Content\style.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -237,10 +235,8 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\tinyeditor.css" />
-    <Content Include="Content\u_account.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
     <Content Include="Areas\Acknowledge\Views\EBooks\Index.cshtml" />
     <Content Include="Areas\Acknowledge\Views\Web.config" />
     <Content Include="Areas\Manager\Views\Acknowledge\EBooks.cshtml" />
@@ -260,7 +256,6 @@
     <Content Include="Areas\Manager\Views\Vendor\Index.cshtml" />
     <Content Include="Areas\Manager\Views\Vendor\New.cshtml" />
     <Content Include="Areas\Manager\Views\Web.config" />
-    <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Images\accent.png" />
     <Content Include="Images\bg-title01.jpg" />
     <Content Include="Images\bullet.png" />
@@ -315,12 +310,8 @@
     <Content Include="Scripts\ajaxupload.3.5.js" />
     <Content Include="Scripts\commutil.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\jquery-1.8.2.js" />
-    <Content Include="Scripts\jquery-1.8.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.10.3.custom.min.js" />
-    <Content Include="Scripts\jquery-ui-1.8.24.js" />
-    <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -330,15 +321,6 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\pages\advise.js" />
-    <Content Include="Scripts\pages\default.js" />
-    <Content Include="Scripts\pages\login.js" />
-    <Content Include="Scripts\pages\pd.js" />
-    <Content Include="Scripts\pages\um\account.js" />
-    <Content Include="Scripts\pages\um\cart.js" />
-    <Content Include="Scripts\pages\um\checkout.js" />
-    <Content Include="Scripts\pages\um\myorders.js" />
-    <Content Include="Scripts\pages\u_reg.js" />
     <Content Include="Scripts\qc_loader.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -352,25 +334,14 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\Favorite.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\Order.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\_RemoveExternalLoginsPartial.cshtml" />
-    <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
     <Content Include="Views\Cart\CheckOut.cshtml" />
     <Content Include="Views\Cart\CheckOutCompleted.cshtml" />
     <Content Include="Views\Cart\Index.cshtml" />
     <Content Include="Views\Help\About.cshtml" />
     <Content Include="Views\Help\Index.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\GetPwd.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
@@ -379,14 +350,12 @@
     <Content Include="Views\Product\Detail.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Product\_CateList.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Pager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Acknowledge\Models\" />
     <Folder Include="Areas\Acknowledge\Views\Shared\" />
     <Folder Include="Areas\Manager\Models\" />
-    <Folder Include="Scripts\pages\a\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLib\BusinessLib.csproj">

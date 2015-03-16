@@ -3,14 +3,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@section header_style{
-    <link rel="stylesheet" href="/Content/u_account.css" />
-}
-
-@section header_script{
-    <script src="/Scripts/pages/advise.js"></script>
-}
-
 <div class="cont" id="help-pane">
     <h2 class="subTitle">购物流程</h2>
     <p>
@@ -41,3 +33,36 @@
         </ul>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        var txtarea = $("textarea#adviser");
+
+        txtarea.focusin(function () {
+            $("p.err_tip").css("visibility", "hidden");
+        });
+
+        txtarea.focusout(function () {
+            if ($.trim(txtarea.val()).length < 8) {
+                $("p.err_tip").css("visibility", "visible");
+            }
+        });
+    });
+
+    function commit_advise() {
+        var txtarea = $("textarea#adviser");
+
+        if ($.trim(txtarea.val()).length <= 8) {
+            $("p.err_tip").css("visibility", "visible");
+            return false;
+        }
+
+        $.post("/Help/NewAdvise",
+            {
+                content: $("textarea#adviser").val()
+            },
+            function (result) {
+                alert(result);
+            });
+    }
+</script>
