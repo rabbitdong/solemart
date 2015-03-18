@@ -57,6 +57,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataProvider", "src\DataPro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLib", "src\BusinessLib\BusinessLib.csproj", "{9E9280A4-7B28-4130-B712-5030E54B5311}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "usertool", "tools\usertool\usertool.csproj", "{C6DC12F8-0102-4C64-802E-084EA6778F57}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{9E9280A4-7B28-4130-B712-5030E54B5311}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E9280A4-7B28-4130-B712-5030E54B5311}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E9280A4-7B28-4130-B712-5030E54B5311}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6DC12F8-0102-4C64-802E-084EA6778F57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6DC12F8-0102-4C64-802E-084EA6778F57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6DC12F8-0102-4C64-802E-084EA6778F57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6DC12F8-0102-4C64-802E-084EA6778F57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,5 +111,6 @@ Global
 		{AD5E4432-2D4C-4519-B834-2B917686F98C} = {EC7617FD-C0F4-428E-9635-C4D8553DE6C3}
 		{F908EC89-0480-43C3-9830-0323158D8D20} = {EC7617FD-C0F4-428E-9635-C4D8553DE6C3}
 		{9E9280A4-7B28-4130-B712-5030E54B5311} = {EC7617FD-C0F4-428E-9635-C4D8553DE6C3}
+		{C6DC12F8-0102-4C64-802E-084EA6778F57} = {A825943F-3CBA-4896-909D-6B39AABA1B79}
 	EndGlobalSection
 EndGlobal

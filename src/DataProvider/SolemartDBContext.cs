@@ -60,6 +60,55 @@ namespace Solemart.DataProvider
         }
 
         /// <summary>
+        /// Insert a new local register user
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <param name="regTime"></param>
+        /// <returns></returns>
+        public int RegisterNewUser(string username, string email, string password, DateTime regTime)
+        {
+            password = EncryptUtil.GetHashPwd(password);
+            var q = this.Database.SqlQuery<int>("insert into useritems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, @LoginType, @RegTime, '2');select mysql_insert_id();",
+                new MySqlParameter("@UserName", username),
+                new MySqlParameter("@Email", email), new MySqlParameter("@Password", password),
+                new MySqlParameter("@LoginType", (int)LoginType.Local), new MySqlParameter("@RegTime", regTime));
+            return q.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Insert a new local register user
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <param name="regTime"></param>
+        /// <returns></returns>
+        public int RegisterNewUser(string email, string password, DateTime regTime)
+        {
+            password = EncryptUtil.GetHashPwd(password);
+            var q = this.Database.SqlQuery<int>("insert into useritems(UserName, Email, Password, LoginType, RegTime, Roles) values(@Email, @Email, @Password, @LoginType, @RegTime, '2');select mysql_insert_id();",
+                new MySqlParameter("@Email", email), new MySqlParameter("@Password", password),
+                new MySqlParameter("@LoginType", (int)LoginType.Local), new MySqlParameter("@RegTime", regTime));
+            return q.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Insert a new QQ register user.
+        /// </summary>
+        /// <param name="qqemail"></param>
+        /// <param name="password"></param>
+        /// <param name="regTime"></param>
+        /// <returns></returns>
+        public int RegisterNewQQUser(string qqemail, string password, DateTime regTime)
+        {
+            password = EncryptUtil.GetHashPwd(password);
+            var q = this.Database.SqlQuery<int>("insert into useritems(UserName, Email, Password, LoginType, RegTime, Roles) values(@Email, @Email, @Password, @LoginType, @RegTime, '2');select mysql_insert_id();",
+                new MySqlParameter("@Email", qqemail), new MySqlParameter("@Password", password),
+                new MySqlParameter("@LoginType", (int)LoginType.QQ), new MySqlParameter("@RegTime", regTime));
+            return q.FirstOrDefault();
+        }
+
+        /// <summary>
         /// Update the user password
         /// </summary>
         /// <param name="userID"></param>

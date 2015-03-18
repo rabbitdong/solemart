@@ -2,4 +2,6 @@
 src/*/bin
 src/*/obj
 tools/*/bin
+tools/*/obj
+tools/*/obj/*
 *.user

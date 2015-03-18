@@ -2,17 +2,18 @@ CREATE DATABASE solemart;
 USE solemart;
 
 CREATE TABLE UserItems(
-	 UserID  	INTEGER PRIMARY KEY,
+	 UserID  	INTEGER AUTO_INCREMENT PRIMARY KEY,
 	 UserName 	VARCHAR(30),
 	 PASSWORD 	CHAR(128),
 	 Email 		VARCHAR(30),
-	 LogType    INT DEFAULT 0, #登录方式：0-本网站注册登录， 1-qq帐号登录
-	 RegTime    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	 LoginType    	INT DEFAULT 0, #登录方式：0-本网站注册登录， 1-qq帐号登录
+	 RegTime    DATETIME,
 	 Roles		VARCHAR(50),	#逗号分隔的RoleID列表
 	 OpenID		VARCHAR(32) DEFAULT '' #外部网站验证时提供的ID信息
 ) CHARACTER SET utf8;
 
 CREATE INDEX idx_email_users ON UserItems(Email);
+ALTER TABLE UserItems ADD CONSTRAINT uni_username UNIQUE (UserName);
 
 #User Append Info
 CREATE TABLE UserAppendInfoItems(
