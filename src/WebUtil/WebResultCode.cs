@@ -13,7 +13,12 @@ namespace Solemart.WebUtil
         /// <summary>
         /// 成功
         /// </summary>
-        Success = 1,
+        Success = 0,
+
+        /// <summary>
+        /// 错误
+        /// </summary>
+        Error = 1,
 
         /// <summary>
         /// 会话已经过期
@@ -49,10 +54,5 @@ namespace Solemart.WebUtil
         /// 编号不存在
         /// </summary>
         CodeNotExist = 0x4001,
-
-        /// <summary>
-        /// 错误
-        /// </summary>
-        Error=0,
     }
 }

@@ -10,6 +10,7 @@ using System.Text;
 using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
 using Solemart.SystemUtil;
+using Solemart.WebUtil;
 using Solemart.Web.Models;
 
 namespace Solemart.Web.Controllers
@@ -135,25 +136,18 @@ namespace Solemart.Web.Controllers
         /// <summary>用户进行登录的处理
         /// </summary>
         /// <returns>返回用户登录的结果</returns>
-        public ActionResult OnLogin()
+        public ActionResult OnLogin(string username, string password, bool isPersist, string ReturnUrl)
         {
-            string name = Request["uname"];
-            string pwd = Request["pwd"];
-            bool ispersist = false;
-
-            if (Request["ispersist"] == "true")
-                ispersist = true;
-
-            if (Solemart.WebUtil.AccountUtil.Login(name, pwd, ispersist))
+            if (Solemart.WebUtil.AccountUtil.Login(username, password, isPersist))
             {
-                string redirect_url = FormsAuthentication.GetRedirectUrl("LC@" + name, ispersist);
+                string redirect_url = FormsAuthentication.GetRedirectUrl("LC@" + username, isPersist);
                 if (redirect_url == null || redirect_url == "")
                     redirect_url = "/";
 
-                return Content(redirect_url);
+                return Content(new WebResult<string> { ResultCode = WebResultCode.Success, ResultData = redirect_url }.ResponseString);
             }
             else
-                return Content("error");
+                return Content(WebResult<string>.UserNameOrPasswordErrorResult.ResponseString);
         }
 
         /// <summary>

@@ -66,7 +66,7 @@ CREATE TABLE VendorItems(
 	VendorUrl	NVARCHAR(300),		#供应商的网站链接地址
 	VendorEmail VARCHAR(50),
 	VendorPhone	VARCHAR(15),
-	RecordTime	DATETIME DEFAULT CURRENT_TIMESTAMP,	
+	RecordTime	DATETIME,	
 	Evaluation	NVARCHAR(50),		#供应商评价
 	ExtContent  NVARCHAR(2000)		#JSON结构的扩展字段
 )CHARACTER SET utf8;
@@ -101,12 +101,12 @@ CREATE TABLE SaledProductItems(
 #商品的图像信息表
 CREATE TABLE ProductImageItems(
 	ImageID		INTEGER AUTO_INCREMENT PRIMARY KEY ,
-	ProductID	INTEGER REFERENCES ProductItems(ProductID) on delete cascade,
+	ProductID	INTEGER REFERENCES ProductItems(ProductID) ON DELETE CASCADE,
 	MimeType	VARCHAR(20),
 	ImageUrl	NVARCHAR(50),
 	Description NVARCHAR(200),
     ForLogo     INTEGER DEFAULT 1,  #是否作为LOGO图片显示（首页的图片显示）
-    AddTime     DateTime default now(),
+    ADDTIME     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) CHARACTER SET utf8;
 
 #商品的评价表
@@ -116,7 +116,7 @@ CREATE TABLE ProductCommentItems(
 	UserID		INTEGER REFERENCES UserItems(UserID),
 	Grade		INTEGER NOT NULL DEFAULT 5,
 	Content		NVARCHAR(500),
-	CommentTime	DATETIME DEFAULT CURRENT_TIMESTAMP 	#评价的时间，默认是记录写入的时间
+	CommentTime	DATETIME 	#评价的时间，默认是记录写入的时间
 )CHARACTER SET utf8;
 
 CREATE TABLE PriceHistoryItems(
@@ -131,7 +131,7 @@ CREATE TABLE PriceHistoryItems(
 CREATE TABLE InStockItems(
 	InStockID	INTEGER AUTO_INCREMENT PRIMARY KEY,
 	ProductID	INTEGER REFERENCES ProductItems(ProductID),
-	InStockTime	DATETIME DEFAULT CURRENT_TIMESTAMP,	#商品入库的时间
+	InStockTime	DATETIME,	#商品入库的时间
 	Amount		INTEGER NOT NULL DEFAULT 0,			#商品的库存数量
 	Price		DECIMAL(10,2) NOT NULL DEFAULT 0.0,		#商品的入库价格
 	Remark		NVARCHAR(200)
@@ -151,7 +151,7 @@ CREATE TABLE CartItems(
 CREATE TABLE OrderItems(
 	OrderID		INTEGER AUTO_INCREMENT PRIMARY KEY,
 	UserID		INTEGER,
-	OrderTime	DATETIME DEFAULT CURRENT_TIMESTAMP,
+	OrderTime	DATETIME,
 	SendTime	DATETIME,
 	ReceiveTime	DATETIME,
 	CancelTime  DATETIME,
@@ -195,7 +195,7 @@ CREATE TABLE AdviserItems(
 	AdviseID	INTEGER AUTO_INCREMENT PRIMARY KEY,
 	UserID		INTEGER REFERENCES UserItems(UserID),
 	Content		NVARCHAR(200) NOT NULL,
-	AdviseTime	DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	AdviseTime	DATETIME,
 	IsViewed	INTEGER NOT NULL DEFAULT 0		#该建议是否被考虑, 0 indicate the advise isn't be adopt.
 ) CHARACTER SET utf8;
 
@@ -203,7 +203,7 @@ CREATE TABLE AdviserItems(
 CREATE TABLE BulletinItems(
    BulletinID   INTEGER PRIMARY KEY AUTO_INCREMENT,
    Content      NVARCHAR(500),
-   PublishTime	DATETIME DEFAULT CURRENT_TIMESTAMP,
+   PublishTime	DATETIME,
    AbortTime    DATETIME
 ) CHARACTER SET utf8;
 
@@ -212,13 +212,14 @@ CREATE TABLE BulletinItems(
 CREATE TABLE FavoriteItems(
 	UserID			INTEGER REFERENCES UserItems(UserID),
 	ProductID		INTEGER REFERENCES Products(ProductID),
-	FavoriteTime		DATETIME DEFAULT CURRENT_TIMESTAMP,
+	FavoriteTime		DATETIME,
 	Description		NVARCHAR(200),
 	CONSTRAINT pk_Favorites PRIMARY KEY (UserID, ProductID)
 ) CHARACTER SET utf8;
 
 #下面是非系统关键表
 #用户组表(用户创建的分组列表)
+/*
 CREATE TABLE Groups(
    GroupID      INTEGER PRIMARY KEY AUTO_INCREMENT,
    GroupName    VARCHAR(30) NOT NULL,
@@ -261,4 +262,4 @@ CREATE TABLE Keyworks(
    Keyword		NVARCHAR(20),
    Frequency	INTEGER             --该关键字的频率
 ) CHARACTER SET utf8;
-
+*/

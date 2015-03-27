@@ -28,7 +28,7 @@ namespace UserTool
 
             MySqlConnection connection = new MySqlConnection(connectionString);
 
-            string createUserSql = "insert into useritems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '4')";
+            string createUserSql = "insert into UserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '4')";
             MySqlParameter[] parameters = new MySqlParameter[4];
             parameters[0] = new MySqlParameter("@UserName", args[1]);
             parameters[1] = new MySqlParameter("@Email", args[2]);
