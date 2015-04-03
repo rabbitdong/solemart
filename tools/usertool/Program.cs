@@ -10,6 +10,8 @@ namespace UserTool
 {
     class Program
     {
+        private static string ConnectionString = EncryptUtil.DecryptString(ConfigurationManager.ConnectionStrings["solemart-mysql"].ConnectionString);
+
         static void Main(string[] args)
         {
             if (args.Length < 1 || args[0] == "/?" || args[0] == "/h")
@@ -18,21 +20,29 @@ namespace UserTool
                 return;
             }
 
-            if (args[0] == "/a" && args.Length < 4)
+            if (args[0] == "/a" && args.Length == 4)
             {
-                Console.WriteLine("usage: usertool /a username, email, password");
+                CreateAdminAccount(args[1], args[2], args[3]);
+                return;
+            }
+            else if (args[0] == "/s")
+            {
+                ShowAdminAccount();
                 return;
             }
 
-            string connectionString = EncryptUtil.DecryptString(ConfigurationManager.ConnectionStrings["solemart-mysql"].ConnectionString);
+            Console.WriteLine("usage: usertool /a[s] username, email, password");
+        }
 
-            MySqlConnection connection = new MySqlConnection(connectionString);
+        private static void CreateAdminAccount(string username, string email, string password)
+        {
+            MySqlConnection connection = new MySqlConnection(ConnectionString);
 
             string createUserSql = "insert into UserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '4')";
             MySqlParameter[] parameters = new MySqlParameter[4];
-            parameters[0] = new MySqlParameter("@UserName", args[1]);
-            parameters[1] = new MySqlParameter("@Email", args[2]);
-            parameters[2] = new MySqlParameter("@Password", EncryptUtil.GetHashPwd(args[3]));
+            parameters[0] = new MySqlParameter("@UserName", username);
+            parameters[1] = new MySqlParameter("@Email", email);
+            parameters[2] = new MySqlParameter("@Password", EncryptUtil.GetHashPwd(password));
             parameters[3] = new MySqlParameter("@RegTime", DateTime.Now);
 
             try
@@ -47,6 +57,29 @@ namespace UserTool
                 else
                 {
                     Console.WriteLine("create the admin user failed!");
+                }
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        private static void ShowAdminAccount()
+        {
+            MySqlConnection connection = new MySqlConnection(ConnectionString);
+
+            string queryUserSql = "select * from UserItems where Roles='4'";
+            try
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand(queryUserSql, connection);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Console.WriteLine("username[{0}]", reader["UserName"]);
+                    }
                 }
             }
             finally

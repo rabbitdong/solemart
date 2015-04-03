@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@(ViewBag.Title == null ? "叟玛特" : ViewBag.Title)</title>
+    <title>@(ViewBag.Title == null ? "Project" : ViewBag.Title)</title>
     <link rel="stylesheet" href="/Content/style.css" />
     <link rel="stylesheet" href="/Content/header.css" />
     @RenderSection("header_style", false);
@@ -37,12 +37,12 @@
     <div class="header">
         <div class="g-actions">
             <ul id="help-actions">
-                <li>
+                @*<li>
                     <strong>[12/7]客服18065911899</strong>
                 </li>
                 <li>
                     <a href="/Help">帮助和建议</a>
-                </li>
+                </li>*@
             </ul>
             <ul id="account-actions">
                 @if (CurrentUser.Identity.IsAuthenticated && CurrentUser.UserName != SolemartUser.Anonymous.UserName)
@@ -80,8 +80,7 @@
                 }
             </ul>
         </div>
-        <!--
-        <div class="header-bar">
+        @*<div class="header-bar">
             <div id="logo-area">
                 <a href="/">
                     <img class="logo_img" src="/Images/logo.png" />
@@ -105,13 +104,13 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>*@
     <div id="main">
         @RenderBody()
     </div>
     <footer>
-        <h3>用心&nbsp;&nbsp;专业</h3>
-        <p>Copyright&copy; 2014 www.solemart.com All Rights Reserved</p>
+        @*<h3>用心&nbsp;&nbsp;专业</h3>
+        <p>Copyright&copy; 2014 www.solemart.com All Rights Reserved</p>*@
     </footer>
     @RenderSection("scripts", required: false)
 </body>

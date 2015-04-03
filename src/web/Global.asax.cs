@@ -20,6 +20,7 @@ namespace Solemart.Web
 
         private void Application_Start(object sender, EventArgs e)
         {
+            ConfigSettings.LoadAppConfig();
             // Code that runs on application startup
             AreaRegistration.RegisterAllAreas();
 
