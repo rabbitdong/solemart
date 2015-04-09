@@ -149,8 +149,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Areas\Acknowledge\AcknowledgeAreaRegistration.cs" />
-    <Compile Include="Areas\Acknowledge\Controllers\EBooksController.cs" />
     <Compile Include="Areas\Manager\Controllers\AcknowledgeController.cs" />
     <Compile Include="Areas\Manager\Controllers\AdviseController.cs" />
     <Compile Include="Areas\Manager\Controllers\BillBoardController.cs" />
@@ -161,6 +159,9 @@
     <Compile Include="Areas\Manager\Controllers\UsersController.cs" />
     <Compile Include="Areas\Manager\Controllers\VendorController.cs" />
     <Compile Include="Areas\Manager\ManagerAreaRegistration.cs" />
+    <Compile Include="Areas\Manager\Models\CategoryManagerViewModel.cs" />
+    <Compile Include="Areas\Manager\Models\ProductInStockViewModel.cs" />
+    <Compile Include="Areas\Manager\Models\ProductManagerViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
@@ -239,8 +240,6 @@
     <Content Include="Content\tinyeditor.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Areas\Acknowledge\Views\EBooks\Index.cshtml" />
-    <Content Include="Areas\Acknowledge\Views\Web.config" />
     <Content Include="Areas\Manager\Views\Acknowledge\EBooks.cshtml" />
     <Content Include="Areas\Manager\Views\Advise\Index.cshtml" />
     <Content Include="Areas\Manager\Views\BillBoard\Index.cshtml" />
@@ -356,11 +355,7 @@
     <Content Include="Views\Product\_CateList.cshtml" />
     <Content Include="Views\Shared\_Pager.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Areas\Acknowledge\Models\" />
-    <Folder Include="Areas\Acknowledge\Views\Shared\" />
-    <Folder Include="Areas\Manager\Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\BusinessLib\BusinessLib.csproj">
       <Project>{9e9280a4-7b28-4130-b712-5030e54b5311}</Project>

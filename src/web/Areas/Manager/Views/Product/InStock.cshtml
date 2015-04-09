@@ -1,67 +1,27 @@
-﻿@using Solemart.EntityLib;
+﻿@using Solemart.DataProvider.Entity;
 @using Solemart.BusinessLib;
-@model Product
+@model ProductItem
 
 @{
-    ViewBag.Title = "InStock";
     Layout = "~/Areas/Manager/Views/Shared/_ManagerLayout.cshtml";
-    List<Category> Categories = CategoryManager.Instance.Categories;
-    List<BrandInfo> BrandList = BrandManager.Instance.GetAllUsedBrands();
-    IEnumerable<VendorInfoCache> VendorList = VendorManager.Instance.VendorNameCache;
+    IList<CategoryItem> Categories = CategoryManager.Instance.Categories;
+    List<BrandItem> BrandList = BrandManager.GetAllUsedBrands();
+    IEnumerable<VendorItem> VendorList = VendorManager.GetAllVendors();
 }
 
-@section header_script_manager{
-    <script type="text/javascript">
-        function postback() {
-            var url, post_data;
-            @if(Model == null){
-                <text>
-                url = "/Manager/Product/InstockNewProduct" ;   //说明有商品ID携带，要传回这个商品ID，他表示入库旧商品
-                post_data = {
-                    prod_name: $("#prod_name").val(),
-                    price: $("#price").val(),
-                    cate_id: $("#cate_id").val(),
-                    amount: $("#amount").val(),
-                    unit: $("#unit").val(),
-                    prod_spec: $("#prod_spec").val(),
-                    brand:$("#brand").val(),
-                    vendor:$("#vendor").val()
-                };
-                </text>
-            }else{
-                <text>
-                url = "/Manager/Product/InstockProduct/" + @Model.ProductID;
-                post_data = {
-                    price: $("#price").val(),
-                    amount: $("#amount").val(),
-                    vendor: $("#vendor").val()
-                };
-            </text>
-            }
-
-            $.post(url, post_data,
-                function (result) {
-                    if (result == "ok")
-                        window.location.href = "/Manager/Product";
-                    else
-                        alert(result);
-                });
-        }
-    </script>
-}
-
-<h1>@((Model!=null?"添加库存:":"添加新货品:"))</h1>
+<h1>@((Model != null ? "添加库存:" : "添加新货品:"))</h1>
 <fieldset>
     <ol>
-        @if(Model!=null){
-        <li>
-            <label for="prod_id">商品ID:</label>
-            <input name="prod_id" tabindex="1" id="prod_id" type="text" value="@Model.ProductID" @(Model!=null?"disabled='disabled'":"") />                
-        </li>
+        @if (Model != null)
+        {
+            <li>
+                <label for="prod_id">商品ID:</label>
+                <input name="prod_id" tabindex="1" id="prod_id" type="text" value="@Model.ProductID" @(Model != null ? "disabled='disabled'" : "") />
+            </li>
         }
         <li>
             <label for="prod_name">商品名称:</label>
-            <input name="prod_name" tabindex="1" id="prod_name" type="text" value="@(Model==null?"":Model.Name)" @(Model!=null?"disabled='disabled'":"")/>                
+            <input name="prod_name" tabindex="1" id="prod_name" type="text" value="@(Model==null?"":Model.ProductName)" @(Model != null ? "disabled='disabled'" : "") />
         </li>
         <li>
             <label for="price">进货价格:</label>
@@ -69,15 +29,18 @@
         </li>
         <li>
             <label for="cate">所属类别:</label>
-            <select id="cate_id" name="cate" @(Model!=null?"disabled='disabled'":"")>
-                @foreach (Category cate in Categories) {
-                <optgroup label="@cate.CateName">
-                    @if(cate.SubCategories != null){
-                    foreach (Category subcate in cate.SubCategories) {
-                    <option value="@subcate.CateID" @(Model != null && Model.OwnedCategory.CateID==subcate.CateID?"selected":"")>@subcate.CateName</option>
-                    }
-                    }
-                </optgroup>
+            <select id="cate_id" name="cate" @(Model != null ? "disabled='disabled'" : "")>
+                @foreach (CategoryItem cate in Categories)
+                {
+                    <optgroup label="@cate.CategoryName">
+                        @if (cate.SubCategories != null)
+                        {
+                            foreach (CategoryItem subcate in cate.SubCategories)
+                            {
+                                <option value="@subcate.CategoryID" @(Model != null && Model.CategoryID == subcate.CategoryID ? "selected" : "")>@subcate.CategoryName</option>
+                            }
+                        }
+                    </optgroup>
                 }
             </select>
         </li>
@@ -87,25 +50,27 @@
         </li>
         <li>
             <label for="unit">商品计量单位:</label>
-            <input name="unit" tabindex="2" id="unit" type="text" value="@(Model==null?"件":Model.Unit)" @(Model!=null?"disabled='disabled'":"")/>
+            <input name="unit" tabindex="2" id="unit" type="text" value="@(Model==null?"件":Model.Unit)" @(Model != null ? "disabled='disabled'" : "") />
         </li>
         <li>
             <label for="prod_spec">商品规格描述:</label>
-            <input name="prod_spec" tabindex="2" id="prod_spec" type="text" value="@(Model==null?"":Model.Spec)" @(Model!=null?"disabled='disabled'":"")/>
+            <input name="prod_spec" tabindex="2" id="prod_spec" type="text" value="@(Model==null?"":Model.Specification)" @(Model != null ? "disabled='disabled'" : "") />
         </li>
         <li>
             <label for="brand">商品的品牌</label>
-            <select id="brand" @(Model!=null?"disabled='disabled'":"")>
-                @foreach(BrandInfo brand in BrandList){
-                <option value="@brand.BrandID" @((Model!=null && brand.BrandID == Model.BrandID)?"selected":"")>@brand.Name</option>
+            <select id="brand" @(Model != null ? "disabled='disabled'" : "")>
+                @foreach (BrandItem brand in BrandList)
+                {
+                    <option value="@brand.BrandID" @((Model != null && brand.BrandID == Model.BrandID) ? "selected" : "")>@brand.ZhName</option>
                 }
             </select>
         </li>
         <li>
             <label for="vendor">商品的供应商:</label>
-            <select id="vendor" @(Model!=null?"disabled='disabled'":"")>
-                @foreach(VendorInfoCache vendor in VendorList){
-                <option value="@vendor.VendorID" @((Model!=null && vendor.VendorID == Model.VendorID)?"selected":"")>@vendor.VendorName</option>
+            <select id="vendor" @(Model != null ? "disabled='disabled'" : "")>
+                @foreach (VendorItem vendor in VendorList)
+                {
+                    <option value="@vendor.VendorID" @((Model != null && vendor.VendorID == Model.VendorID) ? "selected" : "")>@vendor.VendorName</option>
                 }
             </select>
         </li>
@@ -115,3 +80,41 @@
         </li>
     </ol>
 </fieldset>
+
+<script type="text/javascript">
+    function postback() {
+        var url, post_data;
+        @if(Model == null){
+                <text>
+        url = "/Manager/Product/InstockNewProduct" ;   //说明有商品ID携带，要传回这个商品ID，他表示入库旧商品
+        post_data = {
+            ProductName: $("#prod_name").val(),
+            StockPrice: $("#price").val(),
+            CategoryID: $("#cate_id").val(),
+            StockAmount: $("#amount").val(),
+            Unit: $("#unit").val(),
+            Specification: $("#prod_spec").val(),
+            BrandID:$("#brand").val(),
+            VendorID:$("#vendor").val()
+        };
+        </text>
+            }else{
+                <text>
+        url = "/Manager/Product/InstockProduct/" + @Model.ProductID;
+        post_data = {
+            StockPrice: $("#price").val(),
+            StockAmount: $("#amount").val(),
+            VendorID: $("#vendor").val()
+        };
+        </text>
+            }
+
+        $.post(url, post_data,
+            function (result) {
+                if (result == "ok")
+                    window.location.href = "/Manager/Product";
+                else
+                    alert(result);
+            });
+    }
+</script>

@@ -1,7 +1,6 @@
 ﻿@{
-    ViewBag.Title = ViewBag.Title == null ? "管理 —— 叟玛特" : ViewBag.Title;
     Layout = "~/Views/Shared/_Layout.cshtml";
-    int NewOrderCount = Solemart.BusinessLib.OrderManager.Instance.GetNewOrderCount();
+    int NewOrderCount = Solemart.BusinessLib.OrderManager.GetNewOrderCount();
 }
 
 @section header_style{
@@ -51,13 +50,6 @@
     <div class="subcls">
         <ul>
             <li><a href="/Manager/Brand">品牌列表</a></li>
-        </ul>
-    </div>
-
-    <h2>资料管理</h2>
-    <div class="subcls">
-        <ul>
-            <li><a href="/Manager/Acknowledge/EBooks">电子书管理</a></li>
         </ul>
     </div>
 

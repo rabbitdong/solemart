@@ -6,10 +6,11 @@ using System.Web.Mvc;
 using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
 using Solemart.SystemUtil;
+using Solemart.WebUtil;
 
 namespace Solemart.Web.Areas.Manager.Controllers
 {
-    [Authorize(Roles = "su,operator")]
+    [Authorize(Roles = "Super,Operator")]
     public class CategoryController : Controller
     {
         //
@@ -25,20 +26,11 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// <returns>返回建立新列表的结果View</returns>
         public ActionResult Create(CategoryItem category)
         {
-            string cate_name = Request["cate_name"];
-            string cate_addr = Request["cate_desc"];
-            int sup_cate_id = -1;
-            int.TryParse(Request["super_cate_id"], out sup_cate_id);
-
             Result<string> result = CategoryManager.Instance.AddNewCategory(category);
             if (result.ResultCode == ResultCode.Success)
-            {
-                return Content("ok");
-            }
-            else
-            {
-                return Content("error");
-            }
+                return Content(WebResult<string>.SuccessResult.ResponseString);
+
+            return Content(WebResult<string>.NormalErrorResult.ResponseString);
         }
 
         /// <summary>管理员请求修改列表操作的处理

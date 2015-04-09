@@ -1,24 +1,5 @@
 ﻿@{
-    ViewBag.Title = "New";
     Layout = "~/Areas/Manager/Views/Shared/_ManagerLayout.cshtml";
-}
-
-@section header_script_manager{
-    <script type="text/javascript">
-        function postback() {
-            $.post("/Manager/Vendor/NewVendor",
-                {
-                    fact_name: $("#fact_name").val(),
-                    fact_addr: $("#fact_addr").val(),
-                    phone1: $("#phone1").val(),
-                    charge_name: $("#charge_name").val(),
-                    url:$("#url").val()
-                },
-                function (data) {
-                    alert(data);
-                });
-        }
-    </script>
 }
 
 <div class="normal">
@@ -52,3 +33,19 @@
         </ol>
     </fieldset>
 </div>
+
+<script type="text/javascript">
+    function postback() {
+        $.post("/Manager/Vendor/NewVendor",
+            {
+                VendorName: $("#fact_name").val(),
+                Address: $("#fact_addr").val(),
+                VendorPhone: $("#phone1").val(),
+                ContactName: $("#charge_name").val(),
+                VendorUrl: $("#url").val()
+            },
+            function (data) {
+                alert(data);
+            });
+    }
+</script>

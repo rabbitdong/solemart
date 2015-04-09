@@ -39,14 +39,14 @@ namespace Solemart.BusinessLib
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                if (context.CategoryItems.First(c => c.CategoryName == newCategory.CategoryName) != null)
+                if (context.CategoryItems.FirstOrDefault(c => c.CategoryName == newCategory.CategoryName) != null)
                     return Result<string>.DuplicatedField;
 
                 context.CategoryItems.Add(newCategory);
                 if (context.SaveChanges() <= 0)
                     return Result<string>.NormalErrorResult;
 
-                if (newCategory.ParentCategoryID != 0)
+                if (newCategory.ParentCategoryID != null)
                 {
                     CategoryItem parentCategory = GetCategoryInList(categoryList, newCategory.ParentCategoryID);
                     if (parentCategory.SubCategories == null)
@@ -69,7 +69,7 @@ namespace Solemart.BusinessLib
         /// <param name="categoryList">The category list to search</param>
         /// <param name="categoryID">The category id to search</param>
         /// <returns>Return the category if get one, or return null</returns>
-        private CategoryItem GetCategoryInList(IList<CategoryItem> categoryList, int categoryID)
+        private CategoryItem GetCategoryInList(IList<CategoryItem> categoryList, int? categoryID)
         {
             CategoryItem findedCategory = null;
             foreach (CategoryItem category in categoryList)
@@ -118,7 +118,7 @@ namespace Solemart.BusinessLib
                 {
                     string cate_name = category.CategoryName;
 
-                    if (category.ParentCategoryID == 0)
+                    if (category.ParentCategoryID == null)
                     {
                         categoryList.Add(category);    //只添加顶级的类别到列表中
                     }
@@ -209,17 +209,17 @@ namespace Solemart.BusinessLib
 
         /// <summary>把项super_cate的子项插入到cate_list中
         /// </summary>
-        /// <param name="cate_list">要插入的列表</param>
-        /// <param name="super_cate">要插入的子项的父项</param>
-        private void InsertSubCateToList(List<CategoryItem> cate_list, CategoryItem super_cate)
+        /// <param name="categoryList">要插入的列表</param>
+        /// <param name="superCategory">要插入的子项的父项</param>
+        private void InsertSubCateToList(List<CategoryItem> categoryList, CategoryItem superCategory)
         {
-            if (super_cate.SubCategories == null)
+            if (superCategory.SubCategories == null)
                 return;
 
-            foreach (CategoryItem cate in super_cate.SubCategories)
+            foreach (CategoryItem cate in superCategory.SubCategories)
             {
-                cate_list.Add(cate);
-                InsertSubCateToList(cate_list, cate);
+                categoryList.Add(cate);
+                InsertSubCateToList(categoryList, cate);
             }
         }
 

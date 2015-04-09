@@ -1,5 +1,5 @@
-﻿@using Solemart.EntityLib;
-@model List<VendorInfo>
+﻿@using Solemart.DataProvider.Entity;
+@model List<VendorItem>
 
 @{
     ViewBag.Title = "Index";
@@ -27,13 +27,13 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(VendorInfo vendor in Model){
+        @foreach(VendorItem vendor in Model){
         <tr>
             <td>@vendor.VendorID</td>
             <td>@vendor.VendorName</td>
             <td>@vendor.ContactName</td>
-            <td>@vendor.Phone1</td>
-            <td>@vendor.Url</td>
+            <td>@vendor.VendorPhone</td>
+            <td>@vendor.VendorUrl</td>
             <td>@vendor.Evaluation</td>
         </tr>
         }

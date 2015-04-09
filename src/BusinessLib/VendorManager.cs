@@ -66,6 +66,18 @@ namespace Solemart.BusinessLib
         }
 
         /// <summary>
+        /// Get all the vendor list
+        /// </summary>
+        /// <returns>获取的供应商信息的列表</returns>
+        public static List<VendorItem> GetAllVendors()
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                return context.VendorItems.ToList();
+            }
+        }
+
+        /// <summary>
         /// Get the vendor info of the product
         /// </summary>
         /// <param name="productID">要获取供应商信息的商品</param>

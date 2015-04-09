@@ -6,11 +6,11 @@ li { list-style: none; }
 a:link { color: #2c5987; text-decoration: none; }
 a:visited { color: #619eda; text-decoration: none; }
 .err_tip { color: red; visibility: hidden; }
-body { width: auto; max-width: 58em; font-size: 1em; text-align: center; margin: 0 auto; font-family: Verdana, Arial, sans; background-color: #f8f8ee; }
+body { width: auto; max-width: 58em; font-size: 1em; text-align: center; margin: 0 auto; font-family: Verdana, Arial, sans; background-color: #bdc3c7; }
 img { border: 0px; }
 footer { color: #8f8f8f; clear: both; }
 div.main { min-height: 50em; vertical-align: top; }
-.comm_btn { width: auto; overflow: visible; font-family: Verdana, Arial, sans; border-radius: 3px; color: #fff; letter-spacing: 1px; padding: 3px 10px; margin: 5px 15px; border: medium none currentColor; background-color: rgb(255, 93, 0); cursor:pointer; }
+.comm_btn { width: auto; overflow: visible; font-family: Verdana, Arial, sans; border-radius: 3px; color: #ecf0f1; letter-spacing: 1px; padding: 3px 10px; margin: 5px 15px; border: medium none currentColor; background-color: #2c3e50; cursor:pointer; }
 .disablebtn { background-color: #808080; }
 .ellipsis { overflow: hidden; text-overflow: ellipsis; -o-text-overflow: ellipsis; white-space: nowrap; }
 input[type=text], input[type=password] { height: 1.5em; }
@@ -79,9 +79,9 @@ ul.p-list { }
 
 /* 边栏的样式，应用于产品类别列表和管理的菜单 */
 div#cate { width: 20%; display: inline-block; vertical-align: top; }
-    div#cate p { font-size: 1.2em; }
-    div#cate h2 { font-size: 1.5em; border: 1px solid #b5bdc9; border-top-left-radius: 5px; border-top-right-radius: 5px; background-color: #d2dfef; }
-    div#cate li { font-size: 1.2em; padding: 0.25em 0em 0.25em 0em; border-left: 1px solid #b5bdc9; border-right: 1px solid #b5bdc9; background-color: #fff; }
+    div#cate p { font-size: 1em; }
+    div#cate h2 { font-size: 1.1em; border: 1px solid #b5bdc9; border-top-left-radius: 5px; border-top-right-radius: 5px; background-color: #d2dfef; }
+    div#cate li { font-size: 1em; padding: 0.25em 0em 0.25em 0em; border-left: 1px solid #b5bdc9; border-right: 1px solid #b5bdc9; background-color: #fff; }
         div#cate li a { display: inline-block; width: 100%; }
     div#cate ul li:first-child { padding-top: 0.5em; }
     div#cate ul li:last-child { border-bottom: 1px solid #b5bdc9; padding-bottom: 0.5em; margin-bottom: 0.5em; }

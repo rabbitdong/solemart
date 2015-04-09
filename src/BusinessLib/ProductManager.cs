@@ -64,7 +64,7 @@ namespace Solemart.BusinessLib
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                var q = from p in context.ProductItems
+                var q = from p in context.ProductItems.Include("SaledProduct")
                         orderby p.ProductID
                         select p;
                 totalPageCount = (q.Count() - 1) / pageSize + 1;
@@ -313,20 +313,15 @@ namespace Solemart.BusinessLib
             {
                 /* 在增加新产品的时候，先不增加库存数量，设置该库存为0，后面入库操作再填写库存数量 */
                 ProductItem existProduct = context.ProductItems.Find(product.ProductID);
-                bool needInStock = true;
                 if (existProduct == null)
                 {
                     context.ProductItems.Add(product);
-                    needInStock = context.SaveChanges() > 0;
-                }
-
-                if (needInStock)
-                {
                     InStockItem stockItem = new InStockItem { ProductID = product.ProductID, Price = price, Amount = amount, InStockTime = DateTime.Now, Remark = remark };
                     context.InStockItems.Add(stockItem);
+                    return context.SaveChanges() > 0;
                 }
 
-                return true;
+                return false;
             }
         }
 

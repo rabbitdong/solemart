@@ -7,10 +7,12 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
+using Solemart.Web.Areas.Manager.Models;
+using Solemart.WebUtil;
 
 namespace Solemart.Web.Areas.Manager.Controllers
 {
-    [Authorize(Roles = "su,operator")]
+    [Authorize(Roles = "Super,Operator")]
     public class ProductController : Controller
     {
         /// <summary>产品管理的实例
@@ -20,15 +22,15 @@ namespace Solemart.Web.Areas.Manager.Controllers
 
         public ActionResult Index(int? p)
         {
-            int pi = p??0; //表示页索引
+            int pi = p ?? 0; //表示页索引
             int totalPageCount = 0;
 
-            List<SaledProductItem> PagedProdList = ProductManager.GetPagedSaledProducts(pi, 10, out totalPageCount);
+            ProductManagerViewModel model = new ProductManagerViewModel();
+            model.ProductList = ProductManager.GetPagedAllProducts(pi, 10, out totalPageCount);
+            model.PageIndex = pi;
+            model.TotalPageCount = totalPageCount;
 
-            ViewData["PageCount"] = totalPageCount;
-            ViewData["CurrentPageIndex"] = pi;
-
-            return View(PagedProdList);
+            return View(model);
         }
 
         /// <summary>用户请求修改产品信息的处理
@@ -210,16 +212,16 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// In stock a new product
         /// </summary>
         /// <returns>返回入库的结果</returns>
-        public ActionResult InstockNewProduct(ProductItem product, decimal price, int amount, string remark)
+        public ActionResult InstockNewProduct(ProductInStockViewModel model)
         {
-            if (ProductManager.InStockProduct(product, price, amount, remark))
+            ProductItem product = new ProductItem { ProductName=model.ProductName, CategoryID = model.CategoryID, BrandID = model.BrandID, 
+                 Description = model.Description, Specification = model.Specification, VendorID=model.VendorID, Unit=model.Unit};
+            if (ProductManager.InStockProduct(product, model.StockPrice, model.StockAmount, model.Remark))
             {
-                return Content("ok");
+                return Content(WebResult<string>.SuccessResult.ResponseString);
             }
-            else
-            {
-                return Content("error");
-            }
+
+            return Content(WebResult<string>.NormalErrorResult.ResponseString);
         }
 
         /// <summary>入库一个存在的商品

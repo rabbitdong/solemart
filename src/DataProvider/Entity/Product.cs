@@ -64,9 +64,10 @@ namespace Solemart.DataProvider.Entity
         public string Description { get; set; }
 
         /// <summary>
-        /// The parent category id of the category, if no parent, the value is 0.
+        /// The parent category id of the category, if no parent, the value is null.
         /// </summary>
-        public int ParentCategoryID { get; set; }
+        [ForeignKey("SubCategories")]
+        public int? ParentCategoryID { get; set; }
 
         /// <summary>
         /// The child category list of the category.
@@ -115,7 +116,7 @@ namespace Solemart.DataProvider.Entity
         /// <summary>
         /// 受欢迎程度
         /// </summary>
-        public int Popularity { get; set; }
+        public int? Popularity { get; set; }
     }
     #endregion
 
@@ -250,6 +251,8 @@ namespace Solemart.DataProvider.Entity
         /// The extent content of the product(JSON)
         /// </summary>
         public string ExtContent { get; set; }
+
+        public SaledProductItem SaledProduct { get; set; }
     }
     #endregion
 
@@ -262,10 +265,9 @@ namespace Solemart.DataProvider.Entity
         /// <summary>
         /// The product id of the saled product
         /// </summary>
-        [Key]
+        [Key, ForeignKey("Product")]
         public int ProductID { get; set; }
 
-        [ForeignKey("ProductID")]
         public virtual ProductItem Product { get; set; }
 
         /// <summary>

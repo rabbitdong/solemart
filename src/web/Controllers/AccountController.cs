@@ -262,7 +262,7 @@ namespace Solemart.Web.Controllers
                 else
                     return false;
             }
-            catch (Exception exp)
+            catch (Exception)
             {
                 return false;
             }

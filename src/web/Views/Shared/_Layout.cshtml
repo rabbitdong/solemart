@@ -72,7 +72,7 @@
                 }
 
                 @if (CurrentUser.Identity.IsAuthenticated
-                    && (HttpContext.Current.User.IsInRole("su") || HttpContext.Current.User.IsInRole("operator")))
+                    && (HttpContext.Current.User.IsInRole("Super") || HttpContext.Current.User.IsInRole("operator")))
                 {
                     <li>
                         <a href="/Manager/Product">管理</a>

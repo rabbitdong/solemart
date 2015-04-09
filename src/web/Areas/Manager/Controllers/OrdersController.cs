@@ -153,7 +153,7 @@ namespace Solemart.Web.Areas.Manager.Controllers
                 else
                     return false;
             }
-            catch (Exception exp)
+            catch (Exception)
             {
                 return false;
             }

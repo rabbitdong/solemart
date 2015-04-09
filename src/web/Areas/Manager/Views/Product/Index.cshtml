@@ -1,8 +1,7 @@
 ﻿@using Solemart.DataProvider.Entity;
-@model List<ProductItem>
+@model Solemart.Web.Areas.Manager.Models.ProductManagerViewModel
 
 @{
-    ViewBag.Title = "Index";
     Layout = "~/Areas/Manager/Views/Shared/_ManagerLayout.cshtml";
 }
 
@@ -30,39 +29,49 @@
         </tr>
     </thead>
     <tbody>
-        @if(Model!=null && Model.Count >0){
-        foreach (ProductItem prod in Model) {
-        <tr>
-            <td>@prod.ProductID</td>
-            <td>@prod.OwnedCategory.CateName</td>
-            <td>@prod.Name</td>
-            @if(prod.IsSaling){
-            <td>@(prod.Discount+"%")</td>
-            <td>@(prod.IsSpec?"是":"否")</td>
-            <td>@(prod.SalePrice.ToString("C2"))</td>
-            }else{
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
+        @if (Model.ProductList.Count > 0)
+        {
+            foreach (ProductItem product in Model.ProductList)
+            {
+                <tr>
+                    <td>@product.ProductID</td>
+                    <td>@product.Category.CategoryName</td>
+                    <td>@product.ProductName</td>
+                    @if (product.SaledProduct != null)
+                    {
+                        <td>@(product.SaledProduct.Discount + "%")</td>
+                        <td>@(product.SaledProduct.SpecialFlag ? "是" : "否")</td>
+                        <td>@(product.SaledProduct.Price.ToString("C2"))</td>
+                    }
+                    else
+                    {
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    }
+                    <td><span class="prod_text ellipsis" title="@product.Specification">@product.Specification</span></td>
+                    <td><span class="prod_text ellipsis" title="@product.Description">@product.Description</span></td>
+                    <td>
+                        <a href="/Manager/Product/Modify/@product.ProductID">修改</a>
+                        <a href="/Manager/Product/InStock/@product.ProductID">入库</a>
+                        @if (product.SaledProduct != null)
+                        {
+                            <a href="javascript:void(0);" onclick="modisaling(@product.ProductID);">修改上架</a>
+                            <a href="javascript:void(0);" onclick="getbacksaling(@product.ProductID)">下架</a>
+                        }
+                        else
+                        {
+                            <a href="javascript:void(0);" onclick="puttosaling(@product.ProductID);">上架</a>
+                        }
+                    </td>
+                </tr>
             }
-            <td><span class="prod_text ellipsis" title="@prod.Spec">@prod.Spec</span></td>
-            <td><span class="prod_text ellipsis" title="@prod.Desc">@prod.Desc</span></td>
-            <td>
-                <a href="/Manager/Product/Modify/@prod.ProductID">修改</a>
-                <a href="/Manager/Product/InStock/@prod.ProductID">入库</a>
-                @if(prod.IsSaling){
-                <a href="javascript:void(0);" onclick="modisaling(@prod.ProductID);">修改上架</a>
-                <a href="javascript:void(0);" onclick="getbacksaling(@prod.ProductID)">下架</a>
-                }else{
-                <a href="javascript:void(0);" onclick="puttosaling(@prod.ProductID);">上架</a>
-                }
-            </td>
-        </tr>
         }
-        }else{
-        <tr>
-            <td colspan="6">没有商品</td>
-        </tr>
+        else
+        {
+            <tr>
+                <td colspan="9">没有商品</td>
+            </tr>
         }
     </tbody>
 </table>
