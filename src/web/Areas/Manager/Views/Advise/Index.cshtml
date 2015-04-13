@@ -1,5 +1,5 @@
-﻿@using Solemart.EntityLib;
-@model List<Adviser>
+﻿@using Solemart.DataProvider.Entity;
+@model List<AdviserItem>
 
 @{
     ViewBag.Title = "Index";
@@ -19,7 +19,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(Adviser advise in Model){
+        @foreach(AdviserItem advise in Model){
         <tr>
             <td></td>
             <td>@advise.Content</td>

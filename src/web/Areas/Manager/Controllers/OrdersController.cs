@@ -8,27 +8,30 @@ using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
 using Solemart.SystemUtil;
 using Com.Alipay;
+using Solemart.Web.Areas.Manager.Models;
 
 namespace Solemart.Web.Areas.Manager.Controllers
 {
-    [Authorize(Roles = "su,operator")]
+    [Authorize(Roles = "Super,Operator")]
     public class OrdersController : Controller
     {
-        //
-        // GET: /Manager/Orders/
         public ActionResult Index(int? id)
         {
             int pi = id ?? 1;  //表示页索引
             int totalPageCount = 0;
 
-            ViewData["PageCount"] = (OrderManager.GetNewOrderCount() + 9) / 10;
-            ViewData["CurrentPageIndex"] = pi;
+            List<OrderItem> orderList = OrderManager.GetPagedOrders(OrderStatus.Ordered, pi, 10, out totalPageCount);
+            OrderManagerViewModel model = new OrderManagerViewModel();
 
-            List<OrderItem> NewOrders = OrderManager.GetPagedOrders(OrderStatus.Ordered, pi, 10, out totalPageCount);
-            return View(NewOrders);
+            model.OrderList = orderList;
+            model.PageIndex = pi;
+            model.TotalPageCount = totalPageCount;
+
+            return View(model);
         }
 
-        /// <summary>获取用户的新订单的请求处理
+        /// <summary>
+        /// Get the paged new orders
         /// </summary>
         /// <returns>返回用户获取新订单的结果View</returns>
         public ActionResult New(int? id)
@@ -36,12 +39,13 @@ namespace Solemart.Web.Areas.Manager.Controllers
             int pi = id ?? 1; //表示页索引
             int totalPageCount = 0;
 
-            ViewData["PageCount"] = (OrderManager.GetNewOrderCount() + 9) / 10;
-            ViewData["CurrentPageIndex"] = pi;
+            List<OrderItem> orderList = OrderManager.GetPagedOrders(OrderStatus.Ordered, pi, 10, out totalPageCount);
+            OrderManagerViewModel model = new OrderManagerViewModel();
 
-            List<OrderItem> NewOrders = OrderManager.GetPagedOrders(OrderStatus.Ordered, pi, 10, out totalPageCount);
-
-            return View("Index", NewOrders);
+            model.OrderList = orderList;
+            model.PageIndex = pi;
+            model.TotalPageCount = totalPageCount;
+            return View("Index", model);
         }
 
         /// <summary>获取在发送中的订单的请求处理
@@ -51,11 +55,15 @@ namespace Solemart.Web.Areas.Manager.Controllers
         {
             int pi = p ?? 0; //表示页索引
             int totalPageCount = 0; 
-            ViewData["PageCount"] = 1;
-            ViewData["CurrentPageIndex"] = pi;
 
-            List<OrderItem> SendingOrders = OrderManager.GetPagedOrders(OrderStatus.Sending, pi, 10, out totalPageCount);
-            return View("Index", SendingOrders);
+            List<OrderItem> orderList = OrderManager.GetPagedOrders(OrderStatus.Sending, pi, 10, out totalPageCount);
+            OrderManagerViewModel model = new OrderManagerViewModel();
+
+            model.OrderList = orderList;
+            model.PageIndex = pi;
+            model.TotalPageCount = totalPageCount;
+
+            return View("Index", model);
         }
 
         /// <summary>获取已经接收订单的列表请求处理
@@ -66,11 +74,14 @@ namespace Solemart.Web.Areas.Manager.Controllers
             int pi = p ?? 0; //表示页索引
             int totalPageCount = 0;
 
-            ViewData["PageCount"] = 1;
-            ViewData["CurrentPageIndex"] = pi;
+            List<OrderItem> orderList = OrderManager.GetPagedOrders(OrderStatus.Received, pi, 10, out totalPageCount);
+            OrderManagerViewModel model = new OrderManagerViewModel();
 
-            List<OrderItem> ReceivedOrders = OrderManager.GetPagedOrders(OrderStatus.Received, pi, 10, out totalPageCount);
-            return View("Index", ReceivedOrders);
+            model.OrderList = orderList;
+            model.PageIndex = pi;
+            model.TotalPageCount = totalPageCount;
+
+            return View("Index", model);
         }
 
         /// <summary>管理员发送订单请求的处理

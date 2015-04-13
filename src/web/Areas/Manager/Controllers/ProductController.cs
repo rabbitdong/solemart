@@ -15,11 +15,6 @@ namespace Solemart.Web.Areas.Manager.Controllers
     [Authorize(Roles = "Super,Operator")]
     public class ProductController : Controller
     {
-        /// <summary>产品管理的实例
-        /// </summary>
-        //
-        // GET: /Manager/ProductManager/
-
         public ActionResult Index(int? p)
         {
             int pi = p ?? 0; //表示页索引
@@ -60,9 +55,11 @@ namespace Solemart.Web.Areas.Manager.Controllers
             }
         }
 
-        /// <summary>删除产品的请求处理
+        /// <summary>
+        /// Delete the product image
         /// </summary>
-        /// <param name="id">要处理的产品的ID</param>
+        /// <param name="id">product ID</param>
+        /// <param name="imageID">the image id to delete</param>
         /// <returns>删除图片的结果</returns>
         public ActionResult DeleteProductImage(int id, int imageID)
         {
@@ -224,9 +221,10 @@ namespace Solemart.Web.Areas.Manager.Controllers
             return Content(WebResult<string>.NormalErrorResult.ResponseString);
         }
 
-        /// <summary>入库一个存在的商品
+        /// <summary>
+        /// In stock a existed product
         /// </summary>
-        /// <param name="id">要入库的商品ID</param>
+        /// <param name="id">product ID want to in stock</param>
         /// <remarks>返回入库的操作结果</remarks>
         public ActionResult InstockProduct(int id, string remark)
         {

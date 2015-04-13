@@ -1,22 +1,23 @@
 ﻿@using Solemart.DataProvider.Entity;
 @using Solemart.BusinessLib;
 
-@model ProductItem
+@model SaledProductItem
 
 @{
-    ViewBag.Title = Model.ProductName + " - 叟玛特";    
+    ViewBag.Title = Model.Product.ProductName;    
     Layout = "~/Views/Shared/_Layout.cshtml";
     int CommentCount = 0;
     int AverageLevel = 5;
     CommentCount = ProductManager.GetProductCommentCount(Model, out AverageLevel);
     IList<ProductCommentItem> Comments = ProductManager.GetProductComment(Model, 0, 10);
     BrandItem  ProductBrand = BrandManager.GetBrandByID(Model.BrandID);
+    List<ProductImageItem> Images = ProductManager.GetProductImage(Model.ProductID);
 }
 
 <div class="product_detail">
 
     <div class="center_stage l">
-        <h2>@Model.Name </h2>
+        <h2>@Model.Product.ProductName </h2>
 
         <div class="vote_area">
             <span class="comment_star" title="@AverageLevel 星">
@@ -26,25 +27,15 @@
             <a href="#">@CommentCount 个评论</a>
         </div>
 
-        <div class="thumb_area r">
-            @if(Model.Images !=null){ 
-            for(int i=0; i< Model.Images.Length; ++i){ 
-            <a href="javascript:void(0);" @((i==0)?"class='active'":"")  onclick="javascript:show_image('@Model.Images[i].Url ', this);" style="background-image: url(/images/product/thumb/@Model.Images[i].Url )"></a>
-            } 
-            } 
+        <div class="imageWrapper">
+            <div id="scroller">
+                @foreach(ProductImageItem img in Images){
+                    <img id="main_img" src="/images/product/normal/@img.ImageUrl " />
+                }
+            </div>
         </div>
 
-        <div class="center_image">
-            @if(Model.Images!=null && Model.Images.Length > 0){ 
-            <img id="main_img" src="/images/product/normal/@Model.Images[0].Url " />
-            }else{ 
-            <img id="main_img" src="/images/product/no-img.png" />
-            } 
-        </div>
-
-        <div class="product_info">
-            @Model.Desc 
-        </div>
+        <div class="product_info">@Model.Product.Description</div>
     </div>
 
     <div class="brand_logo r">
@@ -58,47 +49,16 @@
     <div class="shopcart_area r">
         <h2>
             @if(Model.Discount!=100){ 
-            <span  class="past_price">@Model.SalePrice.ToString("C2") </span>
-            <span>@((Model.SalePrice*Model.Discount/100).ToString("C2")) </span>
+            <span  class="past_price">@Model.Price.ToString("C2") </span>
+            <span>@((Model.Price*Model.Discount/100).ToString("C2")) </span>
             }else{ 
-            <span>@Model.SalePrice.ToString("C2") </span>
+            <span>@Model.Price.ToString("C2") </span>
             } 
         </h2>
         <p>
             <span>剩余数量:</span>
-            <span>@(Model.StockCount-Model.ReserceCount) </span>
+            <span>@(Model.Product.StockCount-Model.Product.ReserveCount) </span>
         </p>
-        @if(Model.Spec != null && Model.Spec == "size"){ 
-        <div class="show_size">
-            <h3>尺码:</h3>
-            <ul>
-                <li>
-                    <a href="#">36</a>
-                </li>
-                <li>
-                    <a href="#">37</a>
-                </li>
-                <li>
-                    <a href="#">38</a>
-                </li>
-            </ul>
-
-        </div>
-        <div class="show_color">
-            <h3>颜色:</h3>
-            <ul>
-                <li class="show_color_red">
-                    <a href="#">&nbsp;</a>
-                </li>
-                <li class="show_color_green">
-                    <a href="#">&nbsp;</a>
-                </li>
-                <li class="show_color_blue">
-                    <a href="#">&nbsp;</a>
-                </li>
-            </ul>
-        </div>
-        } 
 
         <div class="add_to_cart">
             <a href="/Cart/Add/@Model.ProductID" title="把一件本商品放入购物车">放入购物车</a>

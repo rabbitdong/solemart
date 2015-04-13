@@ -8,7 +8,7 @@ using Solemart.BusinessLib;
 
 namespace Solemart.Web.Areas.Manager.Controllers
 {
-    [Authorize(Roles = "su,operator")]
+    [Authorize(Roles = "Super,Operator")]
     public class AdviseController : Controller
     {
         //

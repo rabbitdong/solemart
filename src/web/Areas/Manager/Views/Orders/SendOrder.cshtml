@@ -1,4 +1,4 @@
-﻿@using Solemart.EntityLib;
+﻿@using Solemart.DataProvider.Entity;
 @model OrderItem
 
 @{
@@ -41,13 +41,13 @@
         <h3>叟玛特订单</h3>
     </header>
     <div id="orderlist">
-        <h3>注册用户：@Model.OwnedUser.Name</h3>
+        <h3>注册用户：@Model.User.UserName</h3>
         <div class="orderinfo_head">
             <span class="order_subhead">订单号:</span><span>@Model.OrderID.ToString("000000")</span>
             <span class="order_subhead">下单时间:</span> <span>@Model.OrderTime</span>
         </div>
         <div class="orderinfo_conent">
-            @if(Model.Status == OrderStatus.Ordered){
+            @if(Model.Status == Solemart.SystemUtil.OrderStatus.Ordered){
             <p class="r">
                 <a href="javascript:;" onclick="sendorder(@Model.OrderID)" class="comm_btn">发货</a>
             </p>
@@ -58,7 +58,7 @@
             </p>
             <p>
                 <span class="order_subhead">送货信息:</span>
-                <span>@Model.AddressInfo.Receiver &nbsp; @Model.AddressInfo.Address &nbsp;@Model.AddressInfo.Post &nbsp; @Model.AddressInfo.Phone1</span>
+                <span>@Model.Receiver &nbsp; @Model.Address &nbsp;@Model.PostCode &nbsp; @Model.Phone</span>
             </p>
             <p>
                 <span class="order_subhead">商品备注:</span>

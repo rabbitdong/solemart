@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
+using Solemart.WebUtil;
 
 namespace Solemart.Web.Areas.Manager.Controllers
 {
@@ -36,13 +37,8 @@ namespace Solemart.Web.Areas.Manager.Controllers
         public ActionResult NewVendor(VendorItem vendor)
         {
             if (VendorManager.AddNewVendor(vendor))
-            {
-                return Content("ok");
-            }
-            else
-            {
-                return Content("error");
-            }
+                return Content(WebResult<string>.SuccessResult.ResponseString);
+            return Content(WebResult<string>.NormalErrorResult.ResponseString);
         }
     }
 }

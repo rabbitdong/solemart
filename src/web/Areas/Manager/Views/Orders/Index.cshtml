@@ -1,12 +1,7 @@
-﻿@using Solemart.EntityLib;
-@model List<OrderItem>
+﻿@using Solemart.DataProvider.Entity;
+@model List<Solemart.Web.Areas.Manager.Models.OrderManagerViewModel>
 @{
-    ViewBag.Title = "New";
     Layout = "~/Areas/Manager/Views/Shared/_ManagerLayout.cshtml";
-}
-
-@section header_style_manager{
-    <link rel="stylesheet" href="/Content/cart.css" />
 }
 
 <h1>查看新订单列表:</h1>
@@ -19,7 +14,7 @@
 <div id="orderlist">
     <div>
         <ul>
-            @foreach (OrderItem oi in Model) {
+            @foreach (OrderItem oi in Model.OrderList) {
             <li>
                 <div class="orderinfo_head">
                     <span class="order_subhead">订单号:</span><span>@oi.OrderID.ToString("000000")</span>
