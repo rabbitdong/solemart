@@ -1,49 +1,38 @@
 ﻿@using Solemart.DataProvider.Entity;
 @using Solemart.BusinessLib;
 
-@model SaledProductItem
+@model Solemart.Web.Models.ProductDetailViewModel
 
 @{
-    ViewBag.Title = Model.Product.ProductName;    
+    ViewBag.Title = Model.ProductName;    
     Layout = "~/Views/Shared/_Layout.cshtml";
-    int CommentCount = 0;
     int AverageLevel = 5;
-    CommentCount = ProductManager.GetProductCommentCount(Model, out AverageLevel);
-    IList<ProductCommentItem> Comments = ProductManager.GetProductComment(Model, 0, 10);
-    BrandItem  ProductBrand = BrandManager.GetBrandByID(Model.BrandID);
-    List<ProductImageItem> Images = ProductManager.GetProductImage(Model.ProductID);
+    int TotalPageCount = 0;
+    IList<ProductCommentItem> Comments = ProductManager.GetProductComment(Model.ProductID, 0, 10, out TotalPageCount);
 }
 
 <div class="product_detail">
 
     <div class="center_stage l">
-        <h2>@Model.Product.ProductName </h2>
+        <h2>@Model.ProductName </h2>
 
         <div class="vote_area">
             <span class="comment_star" title="@AverageLevel 星">
                 <a href="javascript:;" class="star_@AverageLevel"></a>
                 <a href="javascript:;" class="no_star"></a>
             </span>
-            <a href="#">@CommentCount 个评论</a>
+            <a href="#">@Model.CommentCount 个评论</a>
         </div>
 
         <div class="imageWrapper">
             <div id="scroller">
-                @foreach(ProductImageItem img in Images){
+                @foreach(ProductImageItem img in Model.Images){
                     <img id="main_img" src="/images/product/normal/@img.ImageUrl " />
                 }
             </div>
         </div>
 
-        <div class="product_info">@Model.Product.Description</div>
-    </div>
-
-    <div class="brand_logo r">
-        @if(ProductBrand.Image != null && ProductBrand.Image != ""){  
-        <img src="/images/logo/@ProductBrand.Image " title="@ProductBrand.Name " />           
-        }else{ 
-        <h3>@BrandManager.Instance.GetBrandByID(Model.BrandID).Name </h3>
-        } 
+        <div class="product_info">@Model.ProductDescription</div>
     </div>
 
     <div class="shopcart_area r">
@@ -57,7 +46,7 @@
         </h2>
         <p>
             <span>剩余数量:</span>
-            <span>@(Model.Product.StockCount-Model.Product.ReserveCount) </span>
+            <span>@Model.RemainAmount</span>
         </p>
 
         <div class="add_to_cart">
@@ -88,17 +77,17 @@
             <textarea placeholder="这里写上您的评论"></textarea>
         </div>
         <div id="comments-list">
-            @foreach(ProductCommentItem pc in Comments){ 
+            @foreach(ProductCommentItem comment in Comments){ 
             <div class="review_item">
                 <h3>
-                    <em>@(pc.User==null?"匿名用户":pc.User.Name) </em><span>先生:</span>
-                    <span class="comment_star" title="@((int)(pc.Grade))  星">
-                        <a href="javascript:;" class="star_@((int)(pc.Grade)) "></a>
+                    <em>@(comment.UserItem.UserName</em><span>先生:</span>
+                    <span class="comment_star" title="@((int)(comment.Grade))  星">
+                        <a href="javascript:;" class="star_@((int)(comment.Grade)) "></a>
                         <a href="javascript:;" class="no_star"></a>
                     </span>
                 </h3>
-                <p class="r">@pc.CommentTime.ToShortDateString()  @pc.CommentTime.ToShortTimeString() </p>
-                <p class="content">@pc.Content </p>
+                <p class="r">@comment.CommentTime.ToShortDateString()  @comment.CommentTime.ToShortTimeString() </p>
+                <p class="content">@comment.Content </p>
             </div>
             } 
         </div>
@@ -113,6 +102,13 @@
     var cur_pid = @Model.ProductID ;
 
     $(function () {
+        var myScroll = new IScroll('#imageWrapper', {
+            scrollX: true,
+            scrollY: false,
+            mouseWheel: true,
+            scrollbars: false
+        });
+
         $("#write_comment").hide();
 
         $("#write_comment .comment_star a").mouseenter(function () {

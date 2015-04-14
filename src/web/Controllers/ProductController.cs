@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
 using Solemart.SystemUtil;
+using Solemart.Web.Models;
 
 namespace Solemart.Web.Controllers
 {
@@ -54,9 +55,44 @@ namespace Solemart.Web.Controllers
         /// <returns>产品详细页面</returns>
         public ActionResult Detail(int id)
         {
-            SaledProductItem CurrentProduct = ProductManager.GetSaledProductByID(id);
+            SaledProductItem saleInfo = ProductManager.GetSaledProductByID(id);
+            ProductItem product = ProductManager.GetProductByID(id);
+            List<ProductImageItem> images = ProductManager.GetProductImage(id);
+            int commentCount = ProductManager.GetProductCommentCount(id);
 
-            return View(CurrentProduct);
+            ProductDetailViewModel model = new ProductDetailViewModel
+            {
+                ProductID = id,
+                ProductName = product.ProductName,
+                ProductDescription = product.Description,
+                Price = saleInfo.Price,
+                Discount = saleInfo.Discount,
+                SpecialFlag = saleInfo.SpecialFlag,
+                RemainAmount = product.StockCount - product.ReserveCount,
+                BrandDescription = product.Brand.Description,
+                BrandLogo = product.Brand.BrandLogo,
+                BrandUrl = product.Brand.BrandUrl,
+                BrandName = product.Brand.ZhName,
+                CommentCount = commentCount,
+                Images = images
+            };
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// The the comment list of product
+        /// </summary>
+        /// <param name="id">The product id</param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        public ActionResult GetComment(int id, int pageIndex, int pageSize)
+        {
+            int totalPageCount = 0;
+            IList<ProductCommentItem> comments = ProductManager.GetProductComment(id, pageIndex, pageSize, out totalPageCount);
+
+            return Json(comments);
         }
 
         /// <summary>用户写产品评论的处理

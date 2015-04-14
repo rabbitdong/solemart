@@ -54,6 +54,19 @@ namespace Solemart.BusinessLib
         }
 
         /// <summary>
+        /// Get the product (with brand information) by the product id.
+        /// </summary>
+        /// <param name="productID"></param>
+        /// <returns></returns>
+        public static ProductItem GetProductWithBrandByID(int productID)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                return context.ProductItems.Include("Brand").FirstOrDefault(p => p.ProductID == productID);
+            }
+        }
+
+        /// <summary>
         /// Get the paged all product
         /// </summary>
         /// <param name="pageIndex"></param>
@@ -433,6 +446,18 @@ namespace Solemart.BusinessLib
                             select pc;
                 totalPageCount = (query.Count() + 1) / pageSize;
                 return query.Skip(pageIndex * pageSize).Take(pageSize).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Get the total comment count of the product
+        /// </summary>
+        /// <returns>Get the total comment count of the product</returns>
+        public static int GetProductCommentCount(int productID)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                return context.ProductCommentItems.Count(p=>p.ProductID==productID);
             }
         }
         #endregion

@@ -23,6 +23,12 @@ namespace Solemart.DataProvider.Entity
         public int UserID { get; set; }
 
         /// <summary>
+        /// The user info of the comment.
+        /// </summary>
+        [ForeignKey("UserID")]
+        public virtual UserItem UserItem { get; set; }
+
+        /// <summary>
         /// 该评论所评论的商品
         /// </summary>
         public int ProductID { get; set; }
