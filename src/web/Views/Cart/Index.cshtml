@@ -8,8 +8,8 @@
 
 <div class="cart_content">
     <div class="cart_head">
-        <h3>您的购物车中有 @Model.Products.Count 件物品:</h3>
-        @if(Model.Products.Count>0){
+        <h3>您的购物车中有 @Model.CartItems.Count 件物品:</h3>
+        @if(Model.CartItems.Count>0){
             <div class="comm_btn r"><a href="javascript:void(0);" onclick="javascript:checkout(this);">下单</a></div>
         }
     </div>
@@ -25,26 +25,21 @@
             </tr>
         </thead>
         <tbody>
-            @if (Model.Products.Count > 0) {                
-                foreach (ProductItem pi in Model.Products) {
+            @if (Model.CartItems.Count > 0) {                
+                foreach (CartItem cartItem in Model.CartItems) {
                 <tr>
                     <td>
-                        <a class="l" href="/Product/Detail/@pi.Product.ProductID" title="查看该产品的详细信息">
-                            @if (pi.Product.Images != null && pi.Product.Images.Length > 1) {
-                            <img class="prodimg" src="/images/product/thumb/@pi.Product.Images[0].Url" />
-                            }
-                            else {
+                        <a class="l" href="/Product/Detail/@cartItem.Product.ProductID" title="查看该产品的详细信息">
                             <img class="prodimg" src="/images/product/no-img.png" />
-                            }
                         </a>
-                        <h3>@pi.Product.Name</h3>
+                        <h3>@cartItem.Product.ProductName</h3>
                     </td>
-                    <td>@((pi.Product.SalePrice*pi.Product.Discount/100).ToString("C2"))</td>
+                    <td>@(cartItem.UnitPrice.ToString("C2"))</td>
                     <td>
-                        <input type="text" class="prodamount" value="@pi.Amount" />
-                        <input type="hidden" value="@pi.Product.ProductID" />
+                        <input type="text" class="prodamount" value="@cartItem.Amount" />
+                        <input type="hidden" value="@cartItem.Product.ProductID" />
                     </td>
-                    <td>@((pi.Product.SalePrice*pi.Product.Discount/100*pi.Amount).ToString("C2"))</td>
+                    <td>@(cartItem.UnitPrice * cartItem.Amount).ToString("C2"))</td>
                 </tr>
                 }
             } else {

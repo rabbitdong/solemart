@@ -105,8 +105,8 @@ CREATE TABLE ProductImageItems(
 	MimeType	VARCHAR(20),
 	ImageUrl	NVARCHAR(50),
 	Description NVARCHAR(200),
-    ForLogo     INTEGER DEFAULT 1,  #是否作为LOGO图片显示（首页的图片显示）
-    ADDTIME     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	ForLogo     INTEGER DEFAULT 1,  #是否作为LOGO图片显示（首页的图片显示）
+	ADDTIME     DATETIME
 ) CHARACTER SET utf8;
 
 #商品的评价表

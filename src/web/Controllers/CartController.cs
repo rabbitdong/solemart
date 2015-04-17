@@ -9,6 +9,7 @@ using System.Configuration;
 using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
 using Solemart.SystemUtil;
+using Solemart.WebUtil;
 
 namespace Solemart.Web.Controllers
 {
@@ -18,8 +19,8 @@ namespace Solemart.Web.Controllers
         // GET: /Cart/
         public ActionResult Index()
         {
-            Cart cart = Session["cart"] as Cart;
-            return View(cart);
+            SolemartUser user = this.User as SolemartUser;
+            return View(user.Cart);
         }
 
         /// <summary>用户加入购物车操作
@@ -28,12 +29,11 @@ namespace Solemart.Web.Controllers
         /// <returns>加入购物车后的View</returns>
         public ActionResult Add(int id)
         {
-            Cart cart = Session["cart"] as Cart;
+            SolemartUser user = this.User as SolemartUser;
             SaledProductItem product = ProductManager.GetSaledProductByID(id);
-            if (cart != null)
-                cart.AddToCart(product.ProductID, 1);
+                user.Cart.AddToCart(product.ProductID, 1);
 
-            return RedirectToAction("Index", "Cart");
+            return Content(WebResult<string>.SuccessResult.ResponseString);
         }
 
         /// <summary>用户修改购物车操作
@@ -42,13 +42,11 @@ namespace Solemart.Web.Controllers
         /// <returns>修改后返回的View</returns>
         public ActionResult Modify(int id)
         {
-            Cart cart = Session["cart"] as Cart;
+            SolemartUser user = this.User as SolemartUser;
             SaledProductItem product = ProductManager.GetSaledProductByID(id);
+            user.Cart.AddToCart(product.ProductID, 1);
 
-            if (cart != null)
-                cart.AddToCart(product.ProductID, 1);
-
-            return View("Index", cart);
+            return View("Index", user.Cart);
         }
 
         /// <summary>用户请求进行结帐的处理

@@ -51,19 +51,8 @@ namespace Solemart.Web
                 {
                     login_type = LoginType.QQ;
                 }
-                string nameOrID = ticket.Name.Substring(3);
-
-                SolemartUser user = null;
-                if (login_type == LoginType.Local)
-                {
-                    user = new SolemartUser(UserManager.GetUserByName(nameOrID));
-                }
-                else if (login_type == LoginType.QQ)
-                {
-                    user = new SolemartUser(UserManager.GetUserByOpenId(nameOrID));
-                }
-
-                HttpContext.Current.User = user;
+                int userid = Convert.ToInt32(ticket.UserData);
+                HttpContext.Current.User = SolemartUserCache.GetUser(userid);
             }
             else
             {

@@ -47,8 +47,23 @@
                             <p class="no_available">缺货，只可预订</p>
                         }
                     </div>
+                    <div>
+                        <a class="comm_btn" data-pid="@product.ProductID" href="javascript:void;">Add to Cart</a>
+                    </div>
                 </li>
             }
         </ul>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        $("ul.p-list").on("click", "li a.comm_btn", function () {
+            $.post("/Cart/Add/" + $(this).data("pid"),
+                {},
+                function (result) {
+                    alert(result);
+                });
+        })
+    })
+</script>

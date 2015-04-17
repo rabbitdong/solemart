@@ -100,8 +100,9 @@
         </text>
             }else{
                 <text>
-        url = "/Manager/Product/InstockProduct/" + @Model.ProductID;
+        url = "/Manager/Product/InstockProduct";
         post_data = {
+            ProductID: @Model.ProductID,
             StockPrice: $("#price").val(),
             StockAmount: $("#amount").val(),
             VendorID: $("#vendor").val()
@@ -109,12 +110,12 @@
         </text>
             }
 
-        $.post(url, post_data,
-            function (result) {
-                if (result == "ok")
-                    window.location.href = "/Manager/Product";
-                else
-                    alert(result);
-            });
+    $.post(url, post_data,
+        function (result) {
+            if (result == "ok")
+                window.location.href = "/Manager/Product";
+            else
+                alert(result);
+        });
     }
 </script>

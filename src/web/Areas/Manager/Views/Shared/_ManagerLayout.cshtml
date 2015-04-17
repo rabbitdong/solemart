@@ -3,8 +3,9 @@
     int NewOrderCount = Solemart.BusinessLib.OrderManager.GetNewOrderCount();
 }
 
-@section header_style{
+@section managerHeader{
     <link rel="stylesheet" href="/Content/m.css" />
+    <script type="text/javascript" src="/Scripts/ajaxupload.3.5.js"></script>
 }
 
 <div id="cate">
@@ -43,13 +44,6 @@
         <ul>
             <li><a href="/Manager/Vendor">查看供应商</a></li>
             <li><a href="/Manager/Vendor/New">新供应商</a></li>
-        </ul>
-    </div>
-
-    <h2>品牌管理</h2>
-    <div class="subcls">
-        <ul>
-            <li><a href="/Manager/Brand">品牌列表</a></li>
         </ul>
     </div>
 

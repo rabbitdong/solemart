@@ -13,7 +13,7 @@
     <div id="product_list">
         <ul class="l">
             @foreach (ProductForListViewModel product in Model.ProductList) {
-            <li class="product @((i+1)%3==0?"rightmost":"" )" id="product_<%=product.ProductID %>">
+            <li class="product @((i+1)%3==0?"rightmost":"" )" data-pid="@product.ProductID" id="product_@product.ProductID">
                 <div class="product_list_shot">
                     <p>
                         <a href="/Product/Detail/@product.ProductID">
@@ -49,6 +49,9 @@
                     <p class="no_available">缺货，只可预订</p>
                     }
                 </div>
+                <div>
+                    <a class="comm_btn" data-pid="@product.ProductID" href="javascript:void;">Add to Cart</a>
+                </div>
             </li>
             }
         </ul>
@@ -57,3 +60,14 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    $(function () {
+        $("#product_list").on("click", "li a.comm_btn", function () {
+            $.post("/Cart/Add/" + $(this).data("pid"),
+                {},
+                function (result) {
+                    alert(result);
+                });
+        })
+    })
+</script>

@@ -14,6 +14,11 @@ namespace Solemart.BusinessLib
     /// </summary>
     public class SolemartUser : IPrincipal
     {
+        /// <summary>
+        /// 内部用户表示匿名用户的UserID
+        /// </summary>
+        public static int AnonymousRoleID = 0;
+
         private UserItem userItem;
         private Cart cart;
 
@@ -23,18 +28,25 @@ namespace Solemart.BusinessLib
         /// Create the user object by the userid.
         /// </summary>
         /// <param name="userid"></param>
-        public SolemartUser(int userid) 
+        /// <param name="anonymousUserID">if the user id is not exist, and create user with this id</param>
+        public SolemartUser(int userid, int anonymousUserID) 
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
                 UserItem useritem = context.UserItems.Find(userid);
-                if (useritem == null)
+                //如果useritem为空，说明不是注册用户，就返回一个匿名用户（UserID代分配）
+                if (useritem != null)
                 {
-                    throw new KeyNotFoundException("The user of the userid doesn't exist!");
+                    this.userItem = useritem;
+                    //不管是不是匿名用户，都用购物车
+                    cart = GetUserCart();
                 }
-
-                this.userItem = useritem;
-                cart = GetUserCart();
+                else
+                {
+                    string anonymousUserName = string.Format("Anonymous_{0}", anonymousUserID);
+                    this.userItem = new UserItem { UserID = anonymousUserID, Roles = Role.Anonymous.RoleID.ToString(), UserName = anonymousUserName };
+                    cart = new Cart();
+                }
             }
         }
 
@@ -47,11 +59,6 @@ namespace Solemart.BusinessLib
             this.userItem = user;
             cart = GetUserCart();
         }
-
-        /// <summary>
-        /// The system anonymous user.
-        /// </summary>
-        public static SolemartUser Anonymous = new SolemartUser { userItem = new UserItem { UserName = "Anonymous", UserID = 0, Roles = Role.Anonymous.RoleName } };
 
         public string UserName
         {
@@ -119,42 +126,6 @@ namespace Solemart.BusinessLib
         public Cart Cart
         {
             get { return cart; }
-        }
-    }
-
-    /// <summary>
-    /// 系统用户缓存类
-    /// </summary>
-    public class SolemartUserCache
-    {
-        private static List<SolemartUser> _userCache = new List<SolemartUser>();
-
-        /// <summary>
-        /// Get the user object from the cache.
-        /// </summary>
-        /// <param name="userid"></param>
-        /// <returns></returns>
-        public static SolemartUser GetUser(int userid)
-        {
-            SolemartUser user = _userCache.Find(u => u.UserID == userid);
-            if (user == null)
-            {
-                user = new SolemartUser(userid);
-                _userCache.Add(user);
-            }
-
-            return user;
-        }
-
-        /// <summary>
-        /// Drop the user object in cache by manual.
-        /// </summary>
-        /// <param name="userid"></param>
-        public static void DropUserInCache(int userid)
-        {
-            SolemartUser user = _userCache.Find(u => u.UserID == userid);
-            if (user != null)
-                _userCache.Remove(user);
         }
     }
 }

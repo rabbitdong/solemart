@@ -1,106 +1,14 @@
-﻿@using Solemart.EntityLib;
+﻿@using Solemart.DataProvider.Entity;
 @using Solemart.BusinessLib;
-@model Product
+@model ProductItem
 
 @{
     ViewBag.Title = "Modify";
     Layout = "~/Areas/Manager/Views/Shared/_ManagerLayout.cshtml";
-    List<Category> Categories = CategoryManager.Instance.Categories;
+    IList<CategoryItem> Categories = CategoryManager.Instance.Categories;
+    IList<ProductImageItem> Images = ProductManager.GetProductImage(Model.ProductID);
 }
 
-@section header_style_manager{
-    <link rel="stylesheet" href="/Content/tinyeditor.css" />
-}
-
-@section header_script_manager{
-    <script type="text/javascript" src="/Scripts/ajaxupload.3.5.js"></script>
-    <script type="text/javascript" src="/Scripts/tinyeditor/tinyeditor.js"></script>
-    <script type="text/javascript">        
-        $(function () {           
-            $("div.editable").bind("mousedown", function () {
-                var rashimg = $("<img src='/Images/common/trash64.png' title='删除本图片' />");
-                $(this).append(rashimg).unbind("mousedown");
-                rashimg.addClass("flow_tool");
-                var iid = $(this).children("img[src^='/Images/product/']").attr("alt");
-                rashimg.bind("click", function () {
-                    if (window.confirm("确实删除吗?")) {
-                        $.post("/Manager/Product/DeleteProductImage/"+$("#prod_id").val(),
-                            {
-                                "iid": iid
-                            },
-                            function (result) {
-                                alert(result);
-                                window.location.reload();
-                            });
-                    }
-                });
-            });
-
-            var btnUpload = $('#upload');
-            var status = $('#status');
-            new AjaxUpload(btnUpload, {
-                action: '/Manager/Product/AddNewProductImage/@Model.ProductID',
-                name: 'uploadfile',
-                onSubmit: function (file, ext) {
-                    if (!(ext && /^(jpg|png|jpeg|gif)$/.test(ext))) {
-                        // extension is not allowed 
-                        status.text('Only JPG, PNG or GIF files are allowed');
-                        return false;
-                    }
-                    status.text('Uploading...');
-                },
-                onComplete: function (file, response) {
-                    //On completion clear the status
-                    status.text('');
-                    //Add uploaded file to list
-                    if (response === "success") {
-                        $('<li></li>').appendTo('#files').html('<img src="/uploads/' + file + '" alt="" /><br />' + file).addClass('success');
-                        window.location.reload();
-                    } else {
-                        $('<li></li>').appendTo('#files').text(response).addClass('error');
-                    }
-
-                }
-            });
-
-            new TINY.editor.edit('editor', {
-                id: 'prod_desc',
-                width: 300,
-                height: 175,
-                cssclass: 'te',
-                controlclass: 'tecontrol',
-                rowclass: 'teheader',
-                dividerclass: 'tedivider',
-                controls: ['bold', 'italic', 'underline', 'strikethrough', '|', 'subscript', 'superscript', '|',
-                          'orderedlist', 'unorderedlist', '|', 'outdent', 'indent', '|', 'leftalign',
-                          'centeralign', 'rightalign', 'blockjustify', '|', 'unformat', '|', 'undo', 'redo', 'n',
-                          'font', 'size', 'style', '|', 'image', 'hr', 'link', 'unlink', '|', 'cut', 'copy', 'paste', 'print'],
-                footer: true,
-                fonts: ['Verdana', 'Arial', 'Georgia', 'Trebuchet MS'],
-                xhtml: true,
-                cssfile: 'style.css',
-                bodyid: 'editor',
-                footerclass: 'tefooter',
-                toggle: { text: 'source', activetext: 'wysiwyg', cssclass: 'toggle' },
-                resize: { cssclass: 'resize' }
-            });
-        });
-
-        function commit_modify() {
-            $.post("/Manager/Product/CommitModify/"+$("#prod_id").val(),
-                {
-                    pname: $("#prod_name").val(),
-                    cateid: $("#cate_id").val(),
-                    unit: $("#unit").val(),
-                    spec: $("#prod_spec").val(),
-                    desc: $("#prod_desc").val()
-                },
-                function (result) {
-                    alert(result)
-                });
-        }
-    </script>
-}
 <h1>修改商品，如修改图片、商品规格、说明信息等:</h1>
 <fieldset>
     <ol>
@@ -110,16 +18,16 @@
         </li>
         <li>
             <label for="prod_name">商品名称:</label>
-            <input name="prod_name" tabindex="1" id="prod_name" type="text" value="@Model.Name" />
+            <input name="prod_name" tabindex="1" id="prod_name" type="text" value="@Model.ProductName" />
         </li>
         <li>
             <label for="cate">所属类别:</label>
             <select id="cate_id" name="cate">
-                @foreach (Category cate in Categories) {
-                <optgroup label="@cate.CateName">
+                @foreach (CategoryItem cate in Categories) {
+                <optgroup label="@cate.CategoryName">
                     @if (cate.SubCategories != null) {
-                    foreach (Category subcate in cate.SubCategories) {
-                    <option value="@subcate.CateID" @((Model.OwnedCategory.CateID == subcate.CateID)?"selected":"")>@subcate.CateName</option>
+                    foreach (CategoryItem subcate in cate.SubCategories) {
+                    <option value="@subcate.CategoryID" @((Model.CategoryID == subcate.CategoryID)?"selected":"")>@subcate.CategoryName</option>
                     }
                     }
                 </optgroup>
@@ -136,11 +44,11 @@
         </li>
         <li>
             <label for="prod_spec">商品规格描述:</label>
-            <input name="prod_spec" tabindex="2" id="prod_spec" type="text" value="@Model.Spec" />
+            <input name="prod_spec" tabindex="2" id="prod_spec" type="text" value="@Model.Specification" />
         </li>
         <li>
             <label for="prod_desc">商品说明:</label>
-            <textarea name="prod_desc" tabindex="2" id="prod_desc" cols="30" rows="5">@Model.Desc</textarea>
+            <textarea name="prod_desc" tabindex="2" id="prod_desc" cols="30" rows="5">@Model.Description</textarea>
         </li>
         <li>
             <label onclick="postback();"><a class="comm_btn" onclick="javascript:commit_modify();" href="javascript:void(0);">提交修改</a></label>
@@ -151,12 +59,78 @@
             <p class="fNote" id="status">新的图片可以上传。目前的列出的图片可以删除</p>
             <ul id="files"></ul>
             <div id="img_list">
-                @if(Model.Images!=null){
-                foreach(ProductImage img in Model.Images){
-                <div class="editable"><img class="mainpic" src="/Images/product/normal/@img.Url" alt="@img.ImgID" /></div>
-                }
+                @if (Images != null)
+                {
+                    foreach (ProductImageItem img in Images)
+                    {
+                    <div class="editable"><img class="mainpic" src="/Images/product/normal/@img.ImageUrl" alt="@img.ImageID" /></div>
+                    }
                 }
             </div>
         </li>
     </ol>
 </fieldset>
+<script type="text/javascript">
+    $(function () {
+        $("div.editable").bind("mousedown", function () {
+            var rashimg = $("<img src='/Images/common/trash64.png' title='删除本图片' />");
+            $(this).append(rashimg).unbind("mousedown");
+            rashimg.addClass("flow_tool");
+            var iid = $(this).children("img[src^='/Images/product/']").attr("alt");
+            rashimg.bind("click", function () {
+                if (window.confirm("确实删除吗?")) {
+                    $.post("/Manager/Product/DeleteProductImage/" + $("#prod_id").val(),
+                        {
+                            imageID: iid
+                        },
+                        function (result) {
+                            alert(result);
+                            window.location.reload();
+                        });
+                }
+            });
+        });
+
+        var btnUpload = $('#upload');
+        var status = $('#status');
+        new AjaxUpload(btnUpload, {
+            action: '/Manager/Product/AddNewProductImage/@Model.ProductID',
+            name: 'uploadfile',
+            onSubmit: function (file, ext) {
+                if (!(ext && /^(jpg|png|jpeg|gif)$/.test(ext))) {
+                    // extension is not allowed
+                    status.text('Only JPG, PNG or GIF files are allowed');
+                    return false;
+                }
+                status.text('Uploading...');
+            },
+            onComplete: function (file, response) {
+                //On completion clear the status
+                status.text('');
+                //Add uploaded file to list
+                if (response === "success") {
+                    $('<li></li>').appendTo('#files').html('<img src="/uploads/' + file + '" alt="" /><br />' + file).addClass('success');
+                    window.location.reload();
+                } else {
+                    $('<li></li>').appendTo('#files').text(response).addClass('error');
+                }
+
+            }
+        });
+    });
+
+    function commit_modify() {
+        $.post("/Manager/Product/CommitModify",
+            {
+                ProductID: $("#prod_id").val(),
+                ProductName: $("#prod_name").val(),
+                CategoryID: $("#cate_id").val(),
+                Unit: $("#unit").val(),
+                Specification: $("#prod_spec").val(),
+                Description: $("#prod_desc").val()
+            },
+            function (result) {
+                alert(result)
+            });
+    }
+</script>

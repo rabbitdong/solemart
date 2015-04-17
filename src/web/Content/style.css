@@ -3,8 +3,8 @@
 .l { float: left; }
 .r { float: right; }
 li { list-style: none; }
-a:link { color: #2c5987; text-decoration: none; }
-a:visited { color: #619eda; text-decoration: none; }
+a:link {text-decoration: none; }
+a:visited {text-decoration: none; }
 .err_tip { color: red; visibility: hidden; }
 body { width: auto; max-width: 58em; font-size: 1em; text-align: center; margin: 0 auto; font-family: Verdana, Arial, sans; background-color: #bdc3c7; }
 img { border: 0px; }

@@ -77,7 +77,7 @@ namespace Solemart.BusinessLib
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                var q = from p in context.ProductItems.Include("SaledProduct")
+                var q = from p in context.ProductItems.Include("SaledProduct").Include("Category")
                         orderby p.ProductID
                         select p;
                 totalPageCount = (q.Count() - 1) / pageSize + 1;
@@ -115,7 +115,7 @@ namespace Solemart.BusinessLib
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                SaledProductItem oldSaledProductItem = context.SaledProductItems.First(spi => (spi.ProductID == newSaledProductItem.ProductID));
+                SaledProductItem oldSaledProductItem = context.SaledProductItems.FirstOrDefault(spi => (spi.ProductID == newSaledProductItem.ProductID));
                 if (oldSaledProductItem != null)
                 {
                     oldSaledProductItem.Price = newSaledProductItem.Price;
@@ -178,6 +178,7 @@ namespace Solemart.BusinessLib
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
+                image.AddTime = DateTime.Now;
                 context.ProductImageItems.Add(image);
                 return context.SaveChanges() > 0;
             }
@@ -329,12 +330,12 @@ namespace Solemart.BusinessLib
                 if (existProduct == null)
                 {
                     context.ProductItems.Add(product);
-                    InStockItem stockItem = new InStockItem { ProductID = product.ProductID, Price = price, Amount = amount, InStockTime = DateTime.Now, Remark = remark };
-                    context.InStockItems.Add(stockItem);
-                    return context.SaveChanges() > 0;
                 }
 
-                return false;
+                existProduct.StockCount += amount;
+                InStockItem stockItem = new InStockItem { ProductID = product.ProductID, Price = price, Amount = amount, InStockTime = DateTime.Now, Remark = remark };
+                context.InStockItems.Add(stockItem);
+                return context.SaveChanges() > 0;
             }
         }
 
@@ -491,7 +492,24 @@ namespace Solemart.BusinessLib
         /// <returns>是否修改成功</returns>
         public static bool ModifyProductInfo(ProductItem product)
         {
-            return false;
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                ProductItem oldProduct = context.ProductItems.Find(product.ProductID);
+                if (oldProduct == null)
+                    return false;
+
+                if(!string.IsNullOrWhiteSpace(product.ProductName))
+                    oldProduct.ProductName = product.ProductName;
+                if(!string.IsNullOrWhiteSpace(product.Unit))
+                    oldProduct.Unit = product.Unit;
+                if(!string.IsNullOrWhiteSpace(product.Specification))
+                    oldProduct.Specification = product.Specification;
+                if(!string.IsNullOrWhiteSpace(product.Description))
+                    oldProduct.Description = product.Description;
+                oldProduct.CategoryID = product.CategoryID;
+
+                return context.SaveChanges() > 0;
+            }
         }
     }
 }
