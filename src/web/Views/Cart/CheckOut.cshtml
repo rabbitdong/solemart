@@ -1,9 +1,10 @@
 ﻿@using Solemart.DataProvider.Entity;
+@using Solemart.BusinessLib;
+@using Solemart.SystemUtil;
 @model Solemart.BusinessLib.Cart
 
 @{
-    ViewBag.Title = "结账 —— 叟玛特";
-    SendAddressInfo MyAddrInfo = ViewData["address"] as SendAddressInfo;
+    SendAddressItem MyAddrInfo = (User as SolemartUser).SendAddressInfo;
 }
 
 
@@ -26,14 +27,14 @@
         </thead>
 
         <tbody>
-            @foreach (ProductItem pi in Model.Products) {
+            @foreach (CartItem item in Model.CartItems) {
             <tr>
                 <td>
-                    <h3>@pi.Product.Name</h3>
+                    <h3>@item.Product.ProductName</h3>
                 </td>
-                <td>@((pi.Product.SalePrice*pi.Product.Discount/100).ToString("C2"))</td>
-                <td>@pi.Amount @pi.Product.Unit</td>
-                <td>@((pi.Product.SalePrice*pi.Product.Discount/100*pi.Amount).ToString("C2"))</td>
+                <td>@(item.UnitPrice.ToString("C2"))</td>
+                <td>@item.Amount @item.Product.Unit</td>
+                <td>@((item.UnitPrice*item.Amount).ToString("C2"))</td>
             </tr>
             }
         </tbody>
@@ -67,8 +68,8 @@
                     <span id="sendinfo1_content">
                         <span>@(MyAddrInfo!=null?MyAddrInfo.Receiver:"")</span>&nbsp;
                         <span>@(MyAddrInfo!=null?MyAddrInfo.Address:"")</span>&nbsp;
-                        <span>@(MyAddrInfo!=null?MyAddrInfo.Post:"")</span>&nbsp;
-                        <span>@(MyAddrInfo!=null?MyAddrInfo.Phone1:"")</span>
+                        <span>@(MyAddrInfo!=null?MyAddrInfo.PostCode:"")</span>&nbsp;
+                        <span>@(MyAddrInfo!=null?MyAddrInfo.Phone:"")</span>
                     </span>
                     <ul id="sendinfo1_input">
                         <li>
@@ -83,7 +84,7 @@
                         </li>
                         <li>
                             <label for="phone">手机联系:</label>
-                            <input type="text" id="phone" name="phone" value="@(MyAddrInfo != null?MyAddrInfo.Phone1:"")" />
+                            <input type="text" id="phone" name="phone" value="@(MyAddrInfo != null?MyAddrInfo.Phone:"")" />
                             <span class="err_tip" id="err_for_phone">收货人电话号码不合法</span>
                         </li>
                     </ul>
@@ -91,10 +92,10 @@
                 <li><span class="sendinfo_caption">送货方式:</span> 送货上门</li>
                 <li>
                     <span class="sendinfo_caption">付款方式: </span>
-                    <span id="sendinfo1_content_paytype">@MyAddrInfo.Pay.GetEnumDisplay()</span>
+                    <span id="sendinfo1_content_paytype">@MyAddrInfo.PaymentType.ToDisplayStr()</span>
                     <select id="sendinfo1_paytype">
-                        <option value="0" @((MyAddrInfo.Pay== PayType.CashOnDelivery)?"selected":"")>货到付款</option>
-                        <option value="1" @((MyAddrInfo.Pay!= PayType.CashOnDelivery)?"selected":"")>支付宝支付</option>
+                        <option value="0" @((MyAddrInfo.PaymentType == PaymentType.CashOnDelivery) ? "selected" : "")>货到付款</option>
+                        <option value="1" @((MyAddrInfo.PaymentType!= PaymentType.CashOnDelivery)?"selected":"")>支付宝支付</option>
                     </select>
                 </li>
             </ul>
@@ -102,7 +103,7 @@
     </form>
     <div>
         <div class="comm_btn r">
-            <a href="javascript:void(0);" onclick="javascript:submitorder();">提交订单</a>
+            <a href="javascript:void(0);" class="comm_btn" onclick="javascript:submitorder();">提交订单</a>
         </div>
     </div>
 </div>
@@ -141,7 +142,7 @@
         });
 
         $("#phone").focusout(function () {
-            if (!validatePhone($("#phone").val()))
+            if (!Validator.ValidatePhone($("#phone").val()))
                 $("#err_for_phone").css("visibility", "visible");
         });
     });
@@ -184,7 +185,7 @@
                 $("#err_for_address").css("visibility", "visible");
                 is_validate = false;
             }
-            if (!validatePhone($("#phone").val())) {
+            if (!Validator.ValidatePhone($("#phone").val())) {
                 $("#err_for_phone").css("visibility", "visible");
                 is_validate = false;
             }
@@ -195,17 +196,19 @@
 
             $.post("/Cart/SaveAddrInfo",
                 {
-                    receiver: $("#receiver").val(),
-                    address: $("#address").val(),
-                    post: $("#post").val(),
-                    phone: $("#phone").val(),
-                    paytype: $("#sendinfo1_paytype").val()
+                    Receiver: $("#receiver").val(),
+                    Address: $("#address").val(),
+                    PostCode: $("#post").val(),
+                    Phone: $("#phone").val(),
+                    PaymentType: $("#sendinfo1_paytype").val()
                 },
                 function (result) {
-                    if (result == "ok")
+                    var webreturn = new WebReturn(result);
+                    if (webreturn.success)
                         window.location.reload();
-                    else if (result != "error")
-                        window.location.href = result;
+                    else {
+                        alert(webreturn.message);
+                    }
                 });
         }
         else {  /* 是修改的情况 */

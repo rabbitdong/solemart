@@ -384,21 +384,23 @@ namespace Solemart.BusinessLib
         /// <summary>
         /// Shipping the product
         /// </summary>
-        /// <param name="productID">要出货的商品列表</param>
+        /// <param name="productIDs">要出货的商品列表</param>
         /// <returns>出货成功返回true，否则返回false</returns>
-        public static bool ShippingProducts(int productID, int count)
+        public static bool ShippingProducts(IEnumerable<OrderDetailItem> items)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                ProductItem product = context.ProductItems.Find(productID);
-                if (product != null && product.ReserveCount >= count)
+                foreach (OrderDetailItem item in items)
                 {
-                    product.ReserveCount -= count;
-                    product.StockCount -= count;
-                    return context.SaveChanges() > 0;
+                    ProductItem product = context.ProductItems.Find(item.ProductID);
+                    if (product != null && product.ReserveCount >= item.Amount)
+                    {
+                        product.ReserveCount -= item.Amount;
+                        product.StockCount -= item.Amount;
+                    }
                 }
 
-                return false;
+                return context.SaveChanges() > 0;
             }
         }
         #endregion

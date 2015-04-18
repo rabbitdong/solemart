@@ -5,7 +5,7 @@ using System.Text;
 using System.Web;
 using System.Web.Security;
 using Solemart.BusinessLib;
-using System.Timers;
+using System.Threading;
 
 namespace Solemart.WebUtil
 {
@@ -93,13 +93,16 @@ namespace Solemart.WebUtil
         private static List<SolemartUserCacheItem> _userCache = new List<SolemartUserCacheItem>();
         private static Timer _timer;
 
-        public static SolemartUserCache()
+        static SolemartUserCache()
         {
-            _timer = new Timer(ClearTimeoutAccountItem, null, 0, 30000);
+            _timer = new Timer(ClearTimeoutUserCacheItem, null, 0, 30000);
         }
 
         private static int GetAnonymousUserID()
         {
+            if (_userCache.Count == 0)
+                return minAnonymousUserID;
+
             int maxUserID = _userCache.Select(u => u.SolemartUser.UserID).Max();
             if (maxUserID < minAnonymousUserID || maxUserID == maxAnonymousUserID)
                 return minAnonymousUserID;
@@ -117,9 +120,12 @@ namespace Solemart.WebUtil
             SolemartUserCacheItem item = _userCache.FirstOrDefault(u => u.SolemartUser.UserID == userid);
             if (item == null)
             {
-                int anonymousUserID = GetAnonymousUserID();
-                item = new SolemartUserCacheItem { SolemartUser = new SolemartUser(userid, anonymousUserID), AddTime = DateTime.Now };
-                _userCache.Add(item);
+                lock (_userCache)
+                {
+                    int anonymousUserID = GetAnonymousUserID();
+                    item = new SolemartUserCacheItem { SolemartUser = new SolemartUser(userid, anonymousUserID), AddTime = DateTime.Now };
+                    _userCache.Add(item);
+                }
             }
 
             return item.SolemartUser;
@@ -131,16 +137,19 @@ namespace Solemart.WebUtil
         /// <param name="userid"></param>
         public static void DropUserInCache(int userid)
         {
-            SolemartUserCacheItem item = _userCache.FirstOrDefault(u => u.SolemartUser.UserID == userid);
-            if (item != null)
-                _userCache.Remove(item);
+            lock (_userCache)
+            {
+                SolemartUserCacheItem item = _userCache.FirstOrDefault(u => u.SolemartUser.UserID == userid);
+                if (item != null)
+                    _userCache.Remove(item);
+            }
         }
 
         /// <summary>
         /// 清理超时的账号对象（超过20分钟的账号对象）
         /// </summary>
         /// <param name="obj">无用的参数</param>
-        private static void ClearTimeoutAccountItem(object obj)
+        private static void ClearTimeoutUserCacheItem(object obj)
         {
             lock (_userCache)
             {
@@ -148,13 +157,13 @@ namespace Solemart.WebUtil
                 if (_userCache.Count == 0)
                     return;
 
-                foreach (string token in _userCache.Keys)
+                DateTime now = DateTime.Now;
+                int count = _userCache.Count;
+                for (int idx = count - 1; idx >= 0; --idx )
                 {
-                    if (_cached_accounts[token].CreateTime < DateTime.Now.AddMinutes(-20))
+                    if (_userCache[idx].AddTime < now.AddMinutes(-20))
                     {
-                        Logger.InfoFormat("Clearing Account:[{0}, {1}]", token, _cached_accounts[token].User.UserName);
-                        _cached_accounts.Remove(token);
-                        break;
+                        _userCache.RemoveAt(idx);
                     }
                 }
             }

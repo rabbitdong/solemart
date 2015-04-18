@@ -14,3 +14,11 @@
     }
 }
 
+class Validator {
+    public static ValidatePhone(phone: string): Boolean {
+        if ((phone.length == 12 && phone.indexOf("0591") == 0)
+            || phone.length == 11)
+            return true;
+        return false;
+    }
+}

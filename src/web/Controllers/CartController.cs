@@ -30,8 +30,10 @@ namespace Solemart.Web.Controllers
         public ActionResult Add(int id)
         {
             SolemartUser user = this.User as SolemartUser;
-            SaledProductItem product = ProductManager.GetSaledProductByID(id);
-                user.Cart.AddToCart(product.ProductID, 1);
+
+            //商品添加到购物车中（购物车显示商品的信息）
+            ProductItem product = ProductManager.GetProductByID(id);
+            user.Cart.AddToCart(product, 1);
 
             return Content(WebResult<string>.SuccessResult.ResponseString);
         }
@@ -43,8 +45,8 @@ namespace Solemart.Web.Controllers
         public ActionResult Modify(int id)
         {
             SolemartUser user = this.User as SolemartUser;
-            SaledProductItem product = ProductManager.GetSaledProductByID(id);
-            user.Cart.AddToCart(product.ProductID, 1);
+            ProductItem product = ProductManager.GetProductByID(id);
+            user.Cart.AddToCart(product, 1);
 
             return View("Index", user.Cart);
         }
@@ -58,26 +60,6 @@ namespace Solemart.Web.Controllers
             if (user.Cart.CartItems == null || user.Cart.CartItems.Count == 0)
                 return RedirectToAction("", "Home");
 
-            SendAddressItem address = null;
-
-            if (user != SolemartUser.Anonymous)
-                address = UserManager.GetSendAddressInfo(user.UserID);
-            else
-            {
-                address = Session["anonymous-addrinfo"] as SendAddressItem;
-            }
-
-            if (address == null)
-            {
-                address = new SendAddressItem();
-                UserAppendInfoItem uai = UserManager.GetUserAppendInfo(user.UserID);
-                if (uai.Address != null && uai.Address != "")
-                    address.Address = uai.Address;
-                if (uai.Phone != null && uai.Phone != "")
-                    address.Address = uai.Phone;
-            }
-
-            ViewData["address"] = address;
             return View(user.Cart);
         }
 
@@ -85,70 +67,52 @@ namespace Solemart.Web.Controllers
         /// </summary>
         /// <returns>返回用户保存送货信息的结果View</returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult SaveAddrInfo()
+        public ActionResult SaveAddrInfo(SendAddressItem addrInfo)
         {
-            int pay_type = 1;
+            SolemartUser user = User as SolemartUser;
+            addrInfo.DeliverWay = DeliverWay.ByManual;
+            addrInfo.UserID = user.UserID;
 
-            if (Request["paytype"] != null && !int.TryParse(Request["paytype"], out pay_type))
-            {
-                return Content("error-paytype");
-            }
+            user.SendAddressInfo = addrInfo;
 
-            SolemartUser user = Session["user"] as SolemartUser;
-
-            SendAddressItem addr_info = new SendAddressItem();
-            addr_info.UserID = user.UserID;
-            addr_info.Receiver = Request["receiver"];
-            addr_info.Address = Request["address"];
-            addr_info.Phone = Request["phone"];
-            addr_info.PostCode = Request["post"];
-            addr_info.DeliverWay = DeliverWay.ByManual;
-            addr_info.PaymentType = (PaymentType)pay_type;
-
-            if (user == SolemartUser.Anonymous)
-            {
-                Session["anonymous-addrinfo"] = addr_info;
-                return Content("ok");
-            }
-            else if (UserManager.SaveSendAddressInfoForUser(addr_info))
-            {
-                ViewData["address"] = addr_info;
-                return Content("ok");
-            }
-            else
-            {
-                return Content("error");
-            }
+            return Content(WebResult<string>.SuccessResult.ResponseString);
         }
 
         /// <summary>用户提交订单的处理
         /// </summary>
         /// <returns>返回用户提交订单的结果</returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult CheckoutOrder()
+        public ActionResult CheckoutOrder(string remark)
         {
             SolemartUser user = User as SolemartUser;
 
             if (user.Cart.CartItems.Count == 0)
             {
-                Response.Write("error");
-                Response.End();
+                return Content(WebResult<string>.ParameterErrorResult.ResponseString);
             }
 
 
             OrderItem oi = new OrderItem();
-            //oi.Products = mycart.Products;
-            //oi.OwnedUser = user;
-            //if (user == SolemartUser.Anonymous)
-            //{
-            //    oi.AddressInfo = Session["anonymous-addrinfo"] as SendAddressItem;
-            //}
-            //else
-            //{
-            //    oi.AddressInfo = UserManager.GetSendAddressInfo(user.UserID);
-            //}
+            oi.UserID = user.UserID;
+            SendAddressItem addrInfo = user.SendAddressInfo;
+            oi.Receiver = addrInfo.Receiver;
+            oi.Phone = addrInfo.Phone;
+            oi.PaymentType = addrInfo.PaymentType;
+            oi.PostCode = addrInfo.PostCode;
+            oi.Address = addrInfo.Address;
+            oi.DeliverWay = addrInfo.DeliverWay;
             oi.TotalPrice = user.Cart.TotalPrice;
-            oi.Remark = Request["remark"];
+            oi.Remark = remark;
+
+            foreach (CartItem item in user.Cart.CartItems)
+            {
+                oi.OrderDetails.Add(new OrderDetailItem
+                {
+                    ProductID = item.ProductID,
+                    Amount = item.Amount,
+                    UnitPrice = item.UnitPrice
+                });
+            }
 
             if (!OrderManager.NewOrder(oi))
                 return Content("error");
@@ -292,14 +256,14 @@ namespace Solemart.Web.Controllers
                 }
 
                 current_order = OrderManager.GetOrderInfo(order_id);
-                if (current_user != SolemartUser.Anonymous || (current_user != null && current_order.User.UserName != current_user.UserName))
+                if (!current_user.IsAnonymous || (current_user != null && current_order.User.UserName != current_user.UserName))
                 {
                     return RedirectToAction("", "Home");
                 }
             }
 
             current_order = OrderManager.GetOrderInfo(order_id);
-            if (current_user != SolemartUser.Anonymous || (current_user != null && current_order.User.UserName != current_user.UserName))
+            if (!current_user.IsAnonymous || (current_user != null && current_order.User.UserName != current_user.UserName))
             {
                 return RedirectToAction("", "Home");
             }

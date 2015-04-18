@@ -11,4 +11,14 @@ var WebReturn = (function () {
     }
     return WebReturn;
 })();
+var Validator = (function () {
+    function Validator() {
+    }
+    Validator.ValidatePhone = function (phone) {
+        if ((phone.length == 12 && phone.indexOf("0591") == 0) || phone.length == 11)
+            return true;
+        return false;
+    };
+    return Validator;
+})();
 //# sourceMappingURL=commonutil.js.map

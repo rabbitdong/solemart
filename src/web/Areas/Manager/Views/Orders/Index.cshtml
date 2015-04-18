@@ -1,5 +1,7 @@
 ﻿@using Solemart.DataProvider.Entity;
-@model List<Solemart.Web.Areas.Manager.Models.OrderManagerViewModel>
+@using Solemart.SystemUtil;
+@model Solemart.Web.Areas.Manager.Models.OrderManagerViewModel
+
 @{
     Layout = "~/Areas/Manager/Views/Shared/_ManagerLayout.cshtml";
 }
@@ -32,11 +34,11 @@
                     </p>
                     <p>
                         <span class="order_subhead">订单状态:</span>
-                        <span>@oi.Status.GetEnumDisplay()</span>
+                        <span>@oi.Status.ToDisplayStr()</span>
                     </p>
                     <p>
                         <span class="order_subhead">送货信息:</span>
-                        <span>@oi.AddressInfo.Receiver &nbsp; @oi.AddressInfo.Address &nbsp; @oi.AddressInfo.Post &nbsp; @oi.AddressInfo.Phone1</span>
+                        <span>@oi.Receiver &nbsp; @oi.Address &nbsp; @oi.PostCode &nbsp; @oi.Phone</span>
                     </p>
                     <p>
                         <span class="order_subhead">商品备注:</span>
@@ -55,12 +57,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach(ProductItem pi in oi.Products){
+                            @foreach(OrderDetailItem item in oi.OrderDetails){
                             <tr>
-                                <td>@pi.Product.Name</td>
-                                <td>@pi.Product.SalePrice.ToString("C2")</td>
-                                <td>@pi.Amount @pi.Product.Unit</td>
-                                <td>@((pi.Product.SalePrice*pi.Amount).ToString("C2"))</td>
+                                <td>@item.Product.ProductName</td>
+                                <td>@item.UnitPrice.ToString("C2")</td>
+                                <td>@item.Amount @item.Product.Unit </td>
+                                <td>@((item.UnitPrice*item.Amount).ToString("C2"))</td>
                             </tr>
                             }
                         </tbody>

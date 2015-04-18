@@ -223,7 +223,7 @@ namespace Solemart.Web.Controllers
         public ActionResult IsAuthenticate()
         {
             SolemartUser user = Session["user"] as SolemartUser;
-            if (user != null && user != SolemartUser.Anonymous)
+            if (user != null && !user.IsAnonymous)
                 return Content("ok");
             else
                 return Content("error");

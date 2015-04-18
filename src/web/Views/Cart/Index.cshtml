@@ -39,7 +39,7 @@
                         <input type="text" class="prodamount" value="@cartItem.Amount" />
                         <input type="hidden" value="@cartItem.Product.ProductID" />
                     </td>
-                    <td>@(cartItem.UnitPrice * cartItem.Amount).ToString("C2"))</td>
+                    <td>@((cartItem.UnitPrice * cartItem.Amount).ToString("C2"))</td>
                 </tr>
                 }
             } else {

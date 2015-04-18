@@ -128,7 +128,7 @@ namespace Solemart.DataProvider
         /// <returns></returns>
         public bool ClearCartForUser(int userID)
         {
-            return this.Database.ExecuteSqlCommand("delete CartItems where UserID=@userid", new MySqlParameter("@userid", userID)) > 0;
+            return this.Database.ExecuteSqlCommand("delete from CartItems where UserID=@userid", new MySqlParameter("@userid", userID)) > 0;
         }
     }
 }

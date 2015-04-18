@@ -228,7 +228,7 @@ namespace Solemart.DataProvider.Entity
         /// <summary>
         /// The hobit of the user
         /// </summary>
-        public string Hobit { get; set; }
+        public string Hobits { get; set; }
 
         /// <summary>
         /// The country of the user from.

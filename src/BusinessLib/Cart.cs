@@ -13,12 +13,22 @@ namespace Solemart.BusinessLib
     public class Cart
     {
         /// <summary>
+        /// The cart user.
+        /// </summary>
+        public SolemartUser User { get; set; }
+
+        /// <summary>
         /// the product list in the shopping cart.
         /// </summary>
         private List<CartItem> cartItems { get; set; }
 
-        public Cart()
+        /// <summary>
+        /// The user own the cart.
+        /// </summary>
+        /// <param name="user"></param>
+        public Cart(SolemartUser user)
         {
+            this.User = user;
             cartItems = new List<CartItem>();
         }
 
@@ -48,19 +58,19 @@ namespace Solemart.BusinessLib
         /// </summary>
         /// <param name="productID">The product want to add to shopping cart</param>
         /// <param name="count">该商品的数量</param>
-        public void AddToCart(int productID, int count)
+        public void AddToCart(ProductItem product, int count)
         {
-            CartItem cartItem = cartItems.Find(p => p.ProductID == productID);
+            CartItem cartItem = cartItems.Find(p => p.ProductID == product.ProductID);
             if (cartItem != null)
             {
                 cartItem.Amount += count;
             }
             else
             {
-                SaledProductItem product = ProductManager.GetSaledProductByID(productID);
+                SaledProductItem saledProduct = ProductManager.GetSaledProductByID(product.ProductID);
                 if (product == null)
-                    throw new ArgumentException(string.Format("该ID={0}的商品不存在", productID));
-                CartItem pi = new CartItem { ProductID = product.ProductID, Amount = count, UnitPrice = product.Price * product.Discount };
+                    throw new ArgumentException(string.Format("该ID={0}的商品不存在", product.ProductID));
+                CartItem pi = new CartItem { ProductID = product.ProductID, Product = product, Amount = count, UnitPrice = saledProduct.Price * saledProduct.Discount /100 };
                 cartItems.Add(pi);
             }
         }

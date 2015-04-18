@@ -23,18 +23,6 @@
         }
     </style>
     <script src="/Scripts/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript">
-        function sendorder(oid) {
-            $.post("/Manager/Orders/Send/" + oid, {},
-                function (result) {
-                    if (result == "ok") {
-                        window.location.reload();
-                    }
-                    else
-                        alert(result);
-                });
-        }
-    </script>
 </head>
 <body>
     <header>
@@ -77,12 +65,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (ProductItem pi in Model.Products) {
+                    @foreach (OrderDetailItem item in Model.OrderDetails) {
                     <tr>
-                        <td>@pi.Product.Name</td>
-                        <td>@pi.Product.SalePrice.ToString("C2")</td>
-                        <td>@pi.Amount @pi.Product.Unit</td>
-                        <td>@((pi.Product.SalePrice*pi.Amount).ToString("C2"))</td>
+                        <td>@item.Product.ProductName</td>
+                        <td>@item.UnitPrice.ToString("C2")</td>
+                        <td>@item.Amount @item.Product.Unit</td>
+                        <td>@((item.UnitPrice*item.Amount).ToString("C2"))</td>
                     </tr>
                     }
                 </tbody>
@@ -96,5 +84,17 @@
         <h3>用心&nbsp;&nbsp;专业</h3>
         <p>Copyright&copy; 2013 www.solemart.com All Rights Reserved</p>
     </footer>
+    <script type="text/javascript">
+    function sendorder(oid) {
+        $.post("/Manager/Orders/Send/" + oid, {},
+            function (result) {
+                if (result == "ok") {
+                    window.location.reload();
+                }
+                else
+                    alert(result);
+            });
+    }
+    </script>
 </body>
 </html>

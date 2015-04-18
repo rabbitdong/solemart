@@ -9,6 +9,7 @@ using Solemart.BusinessLib;
 using Solemart.SystemUtil;
 using Com.Alipay;
 using Solemart.Web.Areas.Manager.Models;
+using Solemart.WebUtil;
 
 namespace Solemart.Web.Areas.Manager.Controllers
 {
@@ -17,7 +18,7 @@ namespace Solemart.Web.Areas.Manager.Controllers
     {
         public ActionResult Index(int? id)
         {
-            int pi = id ?? 1;  //表示页索引
+            int pi = id ?? 0;  //表示页索引
             int totalPageCount = 0;
 
             List<OrderItem> orderList = OrderManager.GetPagedOrders(OrderStatus.Ordered, pi, 10, out totalPageCount);
@@ -36,7 +37,7 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// <returns>返回用户获取新订单的结果View</returns>
         public ActionResult New(int? id)
         {
-            int pi = id ?? 1; //表示页索引
+            int pi = id ?? 0; //表示页索引
             int totalPageCount = 0;
 
             List<OrderItem> orderList = OrderManager.GetPagedOrders(OrderStatus.Ordered, pi, 10, out totalPageCount);
@@ -108,12 +109,12 @@ namespace Solemart.Web.Areas.Manager.Controllers
             OrderItem oi = OrderManager.GetOrderInfo(id);
             if (oi == null)
                 return Content("error-order no found!");
-            //if (oi.AddressInfo.Pay == PaymentType.OnLine)
-            //{
-            //    LogManager.Instance.Log(string.Format("确认发货，订单号：{0}，结果:{1}", id, ComfirmAlipay(oi)));
-            //}
-            //OrderManager.SendOrder(id);
-            //ProductManager.ShippingProducts(oi.Products);
+            if (oi.PaymentType == PaymentType.OnLine)
+            {
+                ComfirmAlipay(oi);
+            }
+            OrderManager.SendOrder(id);
+            ProductManager.ShippingProducts(oi.OrderDetails);
 
             return Content("ok");
         }

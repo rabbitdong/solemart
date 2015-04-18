@@ -23,7 +23,7 @@ CREATE TABLE UserAppendInfoItems(
 	Answer    	VARCHAR(30),
 	RealName	VARCHAR(30),
 	Sex			INTEGER,			#0未知，1表示男， 2表示女
-	HeadImage	VARCHAR(255),
+	HeadImageUrl	VARCHAR(255),
 	BirthDay	DATETIME,
 	SpaceURL	VARCHAR(300),
 	Hobits		VARCHAR(160),
@@ -186,8 +186,9 @@ CREATE TABLE SendAddressItems(
 	Address		NVARCHAR(100) NOT NULL,		#The address of delivery.
 	Phone		VARCHAR(15) NOT NULL,
 	PostCode	VARCHAR(10),
+	DeliverWay	INTEGER NOT NULL DEFAULT 1,		#送货渠道，1: 送货上门、2: 快递、3: 平邮 4: 特快
 	Channel		INTEGER NOT NULL DEFAULT 0,	#The channel of delivery	0: Home delivery	1: Express delivery		2: Normal delivery
-	PayType		INTEGER NOT NULL DEFAULT 0	#The pay type				0: cash on delivery	1: pay on line			2: pay on bank transfer.
+	PaymentType	INTEGER NOT NULL DEFAULT 0	#The pay type				0: cash on delivery	1: pay on line			2: pay on bank transfer.
 ) CHARACTER SET utf8;
 
 #记录用户的诉求和建议

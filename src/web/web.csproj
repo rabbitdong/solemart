@@ -155,6 +155,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\IPagerModel.cs" />
+    <Compile Include="Models\OrderListViewModel.cs" />
     <Compile Include="Models\PagerModel.cs" />
     <Compile Include="Models\ProductDetailViewModel.cs" />
     <Compile Include="Models\ProductForListViewModel.cs" />

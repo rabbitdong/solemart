@@ -17,10 +17,13 @@ namespace Solemart.BusinessLib
         /// <summary>
         /// 内部用户表示匿名用户的UserID
         /// </summary>
-        public static int AnonymousRoleID = 0;
+        public static int DefaultAnonymousUserID = int.MaxValue;
+
+        private SendAddressItem sendAddress;
 
         private UserItem userItem;
         private Cart cart;
+        private bool isAnonymous;
 
         public SolemartUser() { }
 
@@ -40,12 +43,14 @@ namespace Solemart.BusinessLib
                     this.userItem = useritem;
                     //不管是不是匿名用户，都用购物车
                     cart = GetUserCart();
+                    isAnonymous = false;
                 }
                 else
                 {
                     string anonymousUserName = string.Format("Anonymous_{0}", anonymousUserID);
                     this.userItem = new UserItem { UserID = anonymousUserID, Roles = Role.Anonymous.RoleID.ToString(), UserName = anonymousUserName };
-                    cart = new Cart();
+                    cart = new Cart(this);
+                    isAnonymous = true;
                 }
             }
         }
@@ -58,6 +63,7 @@ namespace Solemart.BusinessLib
         {
             this.userItem = user;
             cart = GetUserCart();
+            isAnonymous = user.Roles.Contains(Role.Anonymous.RoleID.ToString());
         }
 
         public string UserName
@@ -68,6 +74,14 @@ namespace Solemart.BusinessLib
         public int UserID
         {
             get { return userItem.UserID; }
+        }
+
+        /// <summary>
+        /// Indicate is anonymous or not.
+        /// </summary>
+        public bool IsAnonymous
+        {
+            get { return isAnonymous; }
         }
 
         public bool IsLoginQQ
@@ -106,7 +120,7 @@ namespace Solemart.BusinessLib
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                Cart cart = new Cart();
+                Cart cart = new Cart(this);
                 cart.CartItems = context.CartItems.Include("Product").Where(c => c.UserID == UserID).ToList();
                 return cart;
             }
@@ -126,6 +140,41 @@ namespace Solemart.BusinessLib
         public Cart Cart
         {
             get { return cart; }
+        }
+
+        /// <summary>
+        /// Get or set the user send address information.
+        /// </summary>
+        public SendAddressItem SendAddressInfo
+        {
+            get
+            {
+                if (sendAddress == null && !IsAnonymous)
+                {
+                    sendAddress = UserManager.GetSendAddressInfo(UserID);
+                    //如果发货地址还是为空，就使用用户的附加信息字段中的信息
+                    if (sendAddress == null)
+                    {
+                        UserAppendInfoItem uai = UserManager.GetUserAppendInfo(UserID);
+                        if (uai != null && string.IsNullOrEmpty(uai.Address))
+                            sendAddress.Address = uai.Address;
+                        if (uai != null && string.IsNullOrEmpty(uai.Phone))
+                            sendAddress.Phone = uai.Phone;
+                    }
+                }
+                
+                //最终都返回送货地址信息
+                return sendAddress;
+            }
+            set
+            {
+                //如果不是匿名用户，需要保存到数据库中
+                if (!IsAnonymous)
+                    UserManager.SaveSendAddressInfoForUser(value);
+
+                //都赋值给内存的用户对象
+                sendAddress = value;
+            }
         }
     }
 }

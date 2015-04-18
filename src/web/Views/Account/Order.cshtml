@@ -1,6 +1,7 @@
 ﻿@using Solemart.DataProvider.Entity;
+@using Solemart.SystemUtil;
 
-@model List<OrderItem>
+@model Solemart.Web.Models.OrderListViewModel
 
 <div id="orderlist">
     <div>
@@ -8,8 +9,8 @@
     </div>
     <div>
         <ul>
-            @foreach (OrderItem oi in Model) {
-            <li class="@Solemart.WebUtil.Util.GetOrderShowStyle(oi.Status)" id="orderinfo_@oi.OrderID">
+            @foreach (OrderItem oi in Model.OrderList) {
+            <li id="orderinfo_@oi.OrderID">
                 <div class="orderinfo_head">
                     <span class="order_subhead">订单号:</span><span>@oi.OrderID.ToString("000000")</span>
                     <span class="order_subhead">下单时间:</span> <span>@oi.OrderTime.ToLongDateString()</span>
@@ -34,15 +35,15 @@
                     </p>
                     <p>
                         <span class="order_subhead">订单状态:</span>
-                        <span id="order_state_@oi.OrderID">@oi.Status.GetEnumDisplay()</span>
+                        <span id="order_state_@oi.OrderID">@oi.Status.ToDisplayStr()</span>
                     </p>
                     <p class="block">
                         <span class="order_subhead">付款方式:</span>
-                        <span>@oi.AddressInfo.Pay.GetEnumDisplay()</span>
+                        <span>@oi.PaymentType.ToDisplayStr()</span>
                     </p>
                     <p class="block">
                         <span class="order_subhead">付款状态:</span>
-                        <span id="pay_status_@oi.OrderID">@(oi.IsPay?"已付款":"未付款")</span>
+                        <span id="pay_status_@oi.OrderID">@(oi.HasPay?"已付款":"未付款")</span>
                     </p>
                 </div>
             </li>

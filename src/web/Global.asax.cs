@@ -9,6 +9,7 @@ using System.Web.Security;
 using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
 using Solemart.SystemUtil;
+using Solemart.WebUtil;
 
 namespace Solemart.Web
 {
@@ -56,7 +57,8 @@ namespace Solemart.Web
             }
             else
             {
-                HttpContext.Current.User = SolemartUser.Anonymous;
+                //如果没有Cookie，说明用户是非注册用户。就用匿名用户进行登陆。
+                AccountUtil.Login(SolemartUserCache.GetUser(SolemartUser.DefaultAnonymousUserID));
             }
         }
 

@@ -12,11 +12,12 @@ using Com.Alipay;
 using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
 using Solemart.SystemUtil;
+using Solemart.Web.Models;
 
 
 namespace Solemart.Web.Controllers
 {
-    [Authorize(Roles = "su,operator,user")]
+    [Authorize(Roles = "Super,Operator,User")]
     public class AccountController : Controller
     {
         //
@@ -96,7 +97,7 @@ namespace Solemart.Web.Controllers
         {
             SolemartUser user = User as SolemartUser;
             SaledProductItem CurrentProduct = ProductManager.GetSaledProductByID(productID);
-            if (user != null && user != SolemartUser.Anonymous && CurrentProduct != null)
+            if (user != null && !user.IsAnonymous && CurrentProduct != null)
             {
                 if (UserManager.AddNewFavorite(user.UserID, CurrentProduct.ProductID))
                 {
@@ -146,9 +147,13 @@ namespace Solemart.Web.Controllers
             int pageIndex = p ?? 0;
             int totalPageCount = 0;
             List<OrderItem> MyOrders = OrderManager.GetPagedUserOrder(user.UserID, pageIndex, 10, out totalPageCount);
-            ViewData["CurrentPageIndex"] = pageIndex;
 
-            return View(MyOrders);
+            OrderListViewModel model = new OrderListViewModel();
+            model.PageIndex = pageIndex;
+            model.TotalPageCount = totalPageCount;
+            model.OrderList = MyOrders;
+
+            return View(model);
         }
 
         /// <summary>用户获取订单信息的处理

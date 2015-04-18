@@ -20,10 +20,13 @@ namespace Solemart.BusinessLib {
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
+                orderItem.OrderTime = DateTime.Now;
                 context.OrderItems.Add(orderItem);
 
                 foreach (OrderDetailItem odi in orderItem.OrderDetails)
                 {
+                    //要进行订单号关联
+                    odi.OrderID = orderItem.OrderID;
                     context.OrderDetailItems.Add(odi);
                 }
 
@@ -40,7 +43,7 @@ namespace Solemart.BusinessLib {
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                return context.OrderItems.Include("OrderDetails").FirstOrDefault(o => o.OrderID == orderID);
+                return context.OrderItems.Include("User").Include("OrderDetails").Include("OrderDetails.Product").FirstOrDefault(o => o.OrderID == orderID);
             }
         }
 
@@ -104,7 +107,7 @@ namespace Solemart.BusinessLib {
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                var q = from o in context.OrderItems.Include("OrderDetails")
+                var q = from o in context.OrderItems.Include("OrderDetails").Include("OrderDetails.Product")
                         orderby o.OrderTime descending
                         where o.Status == orderStatus
                         select o;
