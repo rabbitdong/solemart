@@ -15,9 +15,9 @@ namespace Solemart.BusinessLib
     public class SolemartUser : IPrincipal
     {
         /// <summary>
-        /// 内部用户表示匿名用户的UserID
+        /// 内部用户表示匿名用户的UserID (用1表示匿名用户ID)
         /// </summary>
-        public static int DefaultAnonymousUserID = int.MaxValue;
+        public static int DefaultAnonymousUserID = 1;
 
         private SendAddressItem sendAddress;
 
@@ -37,8 +37,9 @@ namespace Solemart.BusinessLib
             using (SolemartDBContext context = new SolemartDBContext())
             {
                 UserItem useritem = context.UserItems.Find(userid);
-                //如果useritem为空，说明不是注册用户，就返回一个匿名用户（UserID代分配）
-                if (useritem != null)
+
+                //如果useritem为空，或者非匿名用户，说明不是注册用户，就返回一个匿名用户（UserID代分配）
+                if (useritem != null && string.Compare(useritem.Roles, Role.Anonymous.RoleID.ToString()) != 0)
                 {
                     this.userItem = useritem;
                     //不管是不是匿名用户，都用购物车
@@ -87,6 +88,62 @@ namespace Solemart.BusinessLib
         public bool IsLoginQQ
         {
             get { return userItem.LoginType == LoginType.QQ; }
+        }
+
+        public string Email
+        {
+            get { return userItem.Email; }
+        }
+
+        public string Address
+        {
+            get
+            {
+                if (userItem.AppendInfo == null)
+                {
+                    LoadAppendInfo();
+                }
+
+                return "";
+            }
+        }
+
+        public string Phone
+        {
+            get
+            {
+                if (userItem.AppendInfo == null)
+                {
+                    LoadAppendInfo();
+                }
+
+                return "";
+            }
+        }
+
+        public DateTime BirthDay
+        {
+            get
+            {
+                if (userItem.AppendInfo == null)
+                {
+                    LoadAppendInfo();
+                }
+                return DateTime.Now;
+            }
+        }
+
+        public Sex Sex
+        {
+            get
+            {
+                if (userItem.AppendInfo == null)
+                {
+                    LoadAppendInfo();
+                }
+
+                return SystemUtil.Sex.Unknown;
+            }
         }
 
         public string[] RoleNames
@@ -149,6 +206,7 @@ namespace Solemart.BusinessLib
         {
             get
             {
+                //如果是非匿名用户，从用户注册信息中获取
                 if (sendAddress == null && !IsAnonymous)
                 {
                     sendAddress = UserManager.GetSendAddressInfo(UserID);
@@ -162,7 +220,11 @@ namespace Solemart.BusinessLib
                             sendAddress.Phone = uai.Phone;
                     }
                 }
-                
+
+                if (sendAddress == null)
+                {
+                    sendAddress = new SendAddressItem();
+                }
                 //最终都返回送货地址信息
                 return sendAddress;
             }
@@ -174,6 +236,18 @@ namespace Solemart.BusinessLib
 
                 //都赋值给内存的用户对象
                 sendAddress = value;
+            }
+        }
+
+        private void LoadAppendInfo()
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserAppendInfoItem appendInfo = context.UserAppendInfoItems.Find(UserID);
+                if (appendInfo != null)
+                {
+                    userItem.AppendInfo = appendInfo;
+                }
             }
         }
     }

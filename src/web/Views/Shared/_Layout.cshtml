@@ -59,22 +59,22 @@
                         <a href="/Account/Order">订单</a>
                     </li>
                     <li>
-                        <a href="/Cart">购物车</a>
-                    </li>
-                    <li>
-                        欢迎:@CurrentUser.UserName
-                        <a href="/Account">我的帐户</a>
+                        
+                        <a href="/Account">@CurrentUser.UserName</a>
                     </li>
                 }
                 else
                 {
                     <li>
-                        <a href="/Home/Login">登录或注册新帐号</a>
+                        <a href="/Home/Login">登录</a>
                     </li>
                 }
+                <li>
+                    <a href="/Cart" title="查看购物车"><img src="~/Images/common/shoppingcart_small.png" style="width:20px;height:18px;" /></a>
+                </li>
 
                 @if (CurrentUser.Identity.IsAuthenticated
-                    && (HttpContext.Current.User.IsInRole("Super") || HttpContext.Current.User.IsInRole("operator")))
+                    && (HttpContext.Current.User.IsInRole("Super") || HttpContext.Current.User.IsInRole("Operator")))
                 {
                     <li>
                         <a href="/Manager/Product">管理</a>
@@ -82,11 +82,11 @@
                 }
             </ul>
         </div>
-        @*<div class="header-bar">
-            <div id="logo-area">
-                <a href="/">
-                    <img class="logo_img" src="/Images/logo.png" />
-                </a>
+        <div class="header-bar">
+            @*<div id="logo-area">
+            <a href="/">
+                <img class="logo_img" src="/Images/logo.png" />
+            </a>
             </div>
             <div id="advise-area">
                 <p>罗源本地网购</p>
@@ -105,8 +105,8 @@
                     </ul>
                 </div>
             </div>
-        </div>
-    </div>*@
+        </div>*@
+    </div>
     <div id="main">
         @RenderBody()
     </div>

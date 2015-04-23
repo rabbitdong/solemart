@@ -15,6 +15,9 @@ CREATE TABLE UserItems(
 CREATE INDEX idx_email_users ON UserItems(Email);
 ALTER TABLE UserItems ADD CONSTRAINT uni_username UNIQUE (UserName);
 
+#匿名账户的用户ID(UserID=1固定为匿名用户)
+INSERT INTO UserItems VALUES(1, 'Anonymous', '', '', 0, '0001-01-01 00:00:00', 1, '');
+
 #User Append Info
 CREATE TABLE UserAppendInfoItems(
 	UserID 		INTEGER PRIMARY KEY REFERENCES Users(UserID),

@@ -42,13 +42,12 @@ namespace Solemart.Web.Controllers
         /// </summary>
         /// <param name="id">要修改的购物车的物品ID</param>
         /// <returns>修改后返回的View</returns>
-        public ActionResult Modify(int id)
+        public ActionResult Modify(int id, int amount)
         {
             SolemartUser user = this.User as SolemartUser;
-            ProductItem product = ProductManager.GetProductByID(id);
-            user.Cart.AddToCart(product, 1);
+            user.Cart.ModifyCartItem(id, amount);
 
-            return View("Index", user.Cart);
+            return Content(WebResult<string>.SuccessResult.ResponseString);
         }
 
         /// <summary>用户请求进行结帐的处理
@@ -93,7 +92,11 @@ namespace Solemart.Web.Controllers
 
 
             OrderItem oi = new OrderItem();
-            oi.UserID = user.UserID;
+            if (user.IsAnonymous)
+                oi.UserID = SolemartUser.DefaultAnonymousUserID;
+            else
+                oi.UserID = user.UserID;
+
             SendAddressItem addrInfo = user.SendAddressInfo;
             oi.Receiver = addrInfo.Receiver;
             oi.Phone = addrInfo.Phone;
@@ -245,6 +248,7 @@ namespace Solemart.Web.Controllers
             string trade_no = "";
             OrderItem current_order = null;
             SolemartUser current_user = User as SolemartUser;
+            //支付宝付账后的转跳
             if (Request["trade_no"] != null && Request["is_success"] != null && Request["is_success"] == "T")
             {
                 trade_no = Request["trade_no"];
@@ -261,11 +265,9 @@ namespace Solemart.Web.Controllers
                     return RedirectToAction("", "Home");
                 }
             }
-
-            current_order = OrderManager.GetOrderInfo(order_id);
-            if (!current_user.IsAnonymous || (current_user != null && current_order.User.UserName != current_user.UserName))
+            else  //非支付宝提交后的转跳
             {
-                return RedirectToAction("", "Home");
+                current_order = OrderManager.GetOrderInfo(order_id);
             }
 
             return View(current_order);

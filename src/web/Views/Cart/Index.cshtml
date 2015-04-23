@@ -84,10 +84,12 @@
                     amount: amnt
                 },
                 function (result) {
-                    if (result == "ok")
+                    var webreturn = new WebReturn(result);
+                    
+                    if (webreturn.success)
                         window.location.reload();
                     else
-                        alert("error");
+                        alert(webreturn.message);
                 });
         });
     });

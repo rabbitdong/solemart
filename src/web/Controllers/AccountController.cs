@@ -17,7 +17,7 @@ using Solemart.Web.Models;
 
 namespace Solemart.Web.Controllers
 {
-    [Authorize(Roles = "Super,Operator,User")]
+    [Authorize(Roles = "Super,Operator,NormalUser")]
     public class AccountController : Controller
     {
         //

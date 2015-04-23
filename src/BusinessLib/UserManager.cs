@@ -23,14 +23,9 @@ namespace Solemart.BusinessLib
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                UserItem user = new UserItem();
-                user.UserName = name;
-                user.Email = email;
-                user.RegTime = DateTime.Now;
-                user.LoginType = SystemUtil.LoginType.Local;
-                context.UserItems.Add(user);
-                if (context.SaveChanges() > 0)
-                    return user;
+                int userid = context.RegisterNewUser(name, email, pwd, DateTime.Now);
+                if (userid > 0)
+                    return new UserItem { UserID = userid, UserName = name, Email = email, Roles = Role.NormalUser.ToString(), LoginType = SystemUtil.LoginType.Local };
 
                 return null;
             }
@@ -45,14 +40,9 @@ namespace Solemart.BusinessLib
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                UserItem user = new UserItem();
-                user.OpenID = openid;
-                user.UserName = nickname;
-                user.RegTime = DateTime.Now;
-                user.LoginType = SystemUtil.LoginType.QQ;
-                context.UserItems.Add(user);
-                if (context.SaveChanges() > 0)
-                    return user;
+                int userid = context.RegisterNewQQUser(nickname, "", "", DateTime.Now);
+                if (userid > 0)
+                    return new UserItem { UserID = userid, UserName = nickname, Email = "", Roles = Role.NormalUser.ToString(), LoginType = SystemUtil.LoginType.QQ };
 
                 return null;
             }
@@ -68,7 +58,7 @@ namespace Solemart.BusinessLib
             using (SolemartDBContext context = new SolemartDBContext())
             {
                 UserItem user = context.UserItems.FirstOrDefault(u => u.UserName == userName);
-                return user == null;
+                return user != null;
             }
         }
 
@@ -82,7 +72,7 @@ namespace Solemart.BusinessLib
             using (SolemartDBContext context = new SolemartDBContext())
             {
                 UserItem user = context.UserItems.FirstOrDefault(u => u.Email == email);
-                return user == null;
+                return user != null;
             }
         }
 

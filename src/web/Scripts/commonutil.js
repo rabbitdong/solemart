@@ -19,6 +19,10 @@ var Validator = (function () {
             return true;
         return false;
     };
+    Validator.ValidateEmail = function (email) {
+        var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+        return re.test(email);
+    };
     return Validator;
 })();
 //# sourceMappingURL=commonutil.js.map

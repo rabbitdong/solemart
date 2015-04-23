@@ -1,5 +1,6 @@
 ﻿@using Solemart.DataProvider.Entity;
-@model   UserItem
+@using Solemart.SystemUtil;
+@model   Solemart.BusinessLib.SolemartUser
 
 @{
     ViewBag.Title = "我的账户 —— 叟玛特";
@@ -12,8 +13,8 @@
         <ul>
             <li>
                 <span class="ur_title">用户名:</span>
-                <span class="ur_value">@Model.Name</span>
-                @if(Model.LoginType== LoginType.QQ){
+                <span class="ur_value">@Model.UserName</span>
+                @if(Model.IsLoginQQ){
                 <img src="/images/common/edit.png" id="uname" title="修改用户名" />
                 <span class="err_tip" id="err_for_uname">用户名已经被占用，不能使用!</span>
                 }
@@ -37,23 +38,23 @@
         <ul>
             <li>
                 <span class="ur_title">住址:</span>
-                <span class="ur_value">@((Model.AppendInfo == null) ? "" : Model.AppendInfo.Address)</span>
+                <span class="ur_value">@(Model.Address)</span>
                 <img src="/images/common/edit.png" id="address" title="编辑" />
             </li>
             <li>
                 <span class="ur_title">电话号码:</span>
-                <span class="ur_value">@((Model.AppendInfo == null) ? "" : Model.AppendInfo.Phone1)</span>
+                <span class="ur_value">@Model.Phone</span>
                 <img src="/images/common/edit.png" id="phone1" title="编辑" />
                 <p class="err_tip" id="err_for_phone1">电话号码不符合规范</p>
             </li>
             <li>
                 <span class="ur_title">出生日期:</span>
-                <span class="ur_value">@((Model.AppendInfo == null) ? "" : Model.AppendInfo.BirthDate.ToLongDateString())</span>
+                <span class="ur_value">@Model.BirthDay.ToLongDateString()</span>
                 <img src="/images/common/edit.png" id="birthday" title="编辑" />
             </li>
             <li>
                 <span class="ur_title">性别:</span>
-                <span class="ur_value">@((Model.AppendInfo == null) ? "" : Model.AppendInfo.Sex.GetEnumDisplay())</span>
+                <span class="ur_value">@Model.Sex.ToDisplayStr()</span>
                 <img src="/images/common/edit.png" id="sex" title="编辑" />
             </li>
         </ul>

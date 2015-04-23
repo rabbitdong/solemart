@@ -80,39 +80,35 @@ namespace Solemart.Web.Controllers
         /// <returns>返回注销结果</returns>
         public ActionResult Logout()
         {
-            return Content("ok");
+            AccountUtil.Logout();
+            return Content(WebResult<string>.SuccessResult.ResponseString);
         }
 
         /// <summary>用户注册一个新帐号的处理
         /// </summary>
         /// <returns>注册新帐号的处理结果</returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult RegisterNew()
+        public ActionResult RegisterNew(string userName, string password, string email)
         {
-            string uname = Request["name"];
-            string pwd = Request["pwd"];
-            string email = Request["email"];
-            bool is_subscript = Request["subscript"] != null && Request["subscript"] == "true";
-
-            if (UserManager.IsUserNameDuplicate(uname))
+            if (UserManager.IsUserNameDuplicate(userName))
             {
-                return Content("error-name duplicate");
+                return Content(new WebResult<string> { ResultCode = WebResultCode.DuplicatedField, ResultData="username", ResultMessage = "用户名已经被使用" }.ResponseString);
             }
 
             if (UserManager.IsEmailDuplicate(email))
             {
-                return Content("error-email duplicate");
+                return Content(new WebResult<string> { ResultCode = WebResultCode.DuplicatedField, ResultData="email", ResultMessage = "Email已经被使用" }.ResponseString);
             }
 
-            UserItem user = UserManager.AddNewUser(uname, pwd, email);
+            UserItem user = UserManager.AddNewUser(userName, password, email);
             if (user != null)
             {
-                Solemart.WebUtil.AccountUtil.Login(user.UserName, pwd, false);
-                return Content("ok");
+                Solemart.WebUtil.AccountUtil.Login(user.UserName, password, false);
+                return Content(WebResult<string>.SuccessResult.ResponseString);
             }
             else
             {
-                return Content("error");
+                return Content(WebResult<string>.NormalErrorResult.ResponseString);
             }
         }
 

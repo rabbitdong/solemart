@@ -46,12 +46,6 @@ namespace Solemart.Web
             if (cookie != null && cookie.Value != "")
             {
                 FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
-                LoginType login_type = LoginType.Local;
-                string type_str = ticket.Name.Substring(0, 2);
-                if (type_str == "QQ")
-                {
-                    login_type = LoginType.QQ;
-                }
                 int userid = Convert.ToInt32(ticket.UserData);
                 HttpContext.Current.User = SolemartUserCache.GetUser(userid);
             }
