@@ -51,9 +51,9 @@ namespace Solemart.BusinessLib {
         /// Get the paged orders of the user
         /// </summary>
         /// <param name="userID">要获取订单的用户</param>
-        /// <param name="page_size">分页的大小，页索引从0开始</param>
+        /// <param name="pageSize">分页的大小，页索引从0开始</param>
         /// <returns>订单列表</returns>
-        public static List<OrderItem> GetPagedUserOrder(int userID, int pageIndex, int pageSize, out int totalPageCount) 
+        public static List<OrderItem> GetPagedUserOrder(int userID, int pageIndex, int pageSize, out int totalCount) 
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -61,7 +61,7 @@ namespace Solemart.BusinessLib {
                         orderby o.OrderTime descending
                         where o.UserID == userID
                         select o;
-                totalPageCount = (q.Count() - 1) / pageSize + 1;
+                totalCount = q.Count();
                 return q.Skip(pageIndex * pageSize).Take(pageSize).ToList();
             }
         }
@@ -103,7 +103,7 @@ namespace Solemart.BusinessLib {
         /// <param name="pageIndex">获取订单的页索引(从0开始)</param>
         /// <param name="pageSize">分页的大小</param>
         /// <returns>获取到的订单列表(按时间倒序排列)</returns>
-        public static List<OrderItem> GetPagedOrders(OrderStatus orderStatus, int pageIndex, int pageSize, out int totalPageCount) 
+        public static List<OrderItem> GetPagedOrders(OrderStatus orderStatus, int pageIndex, int pageSize, out int totalCount) 
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
@@ -111,7 +111,7 @@ namespace Solemart.BusinessLib {
                         orderby o.OrderTime descending
                         where o.Status == orderStatus
                         select o;
-                totalPageCount = (q.Count() - 1) / pageSize + 1;
+                totalCount = q.Count();
                 return q.Skip(pageIndex * pageSize).Take(pageSize).ToList();
             }
         }

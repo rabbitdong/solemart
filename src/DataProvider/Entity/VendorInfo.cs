@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
@@ -10,7 +11,11 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 供应商信息的对象
     /// </summary>
-    public class VendorItem {
+#if TEST 
+    [Table("TestVendorItems")]
+#endif
+    public class VendorItem
+    {
         /// <summary>
         /// 获取或设置供应商的ID
         /// </summary>

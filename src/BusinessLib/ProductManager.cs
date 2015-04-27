@@ -212,6 +212,11 @@ namespace Solemart.BusinessLib
         /// <remarks>图像名称定为 pid_+编号.xxx</remarks>
         public static string GenerateProductImageFileName(int productID, string extName)
         {
+#if TEST            
+            string pathFmt = "test{0}_{1}.{2}";
+#else
+            string pathFmt = "{0}_{1}.{2}";
+#endif
             using (SolemartDBContext context = new SolemartDBContext())
             {
                 ProductItem product = context.ProductItems.Find(productID);
@@ -224,7 +229,7 @@ namespace Solemart.BusinessLib
 
                 List<ProductImageItem> imageList = context.ProductImageItems.Where(i => (i.ProductID == productID)).ToList();
                 if (imageList == null || imageList.Count == 0)
-                    return string.Format("{0}_{1}.{2}", product.ProductID, 0, extName);
+                    return string.Format(pathFmt, product.ProductID, 0, extName);
 
                 int[] imgSequence = new int[imageList.Count];
 
@@ -245,7 +250,7 @@ namespace Solemart.BusinessLib
                         break;
                 }
 
-                return string.Format("{0}_{1}.{2}", product.ProductID, seq, extName);
+                return string.Format(pathFmt, product.ProductID, seq, extName);
             }
 
         }
@@ -329,10 +334,15 @@ namespace Solemart.BusinessLib
                 ProductItem existProduct = context.ProductItems.Find(product.ProductID);
                 if (existProduct == null)
                 {
+                    //the count of product's stock is the amount for the first time in stock.
+                    product.StockCount = amount;
                     context.ProductItems.Add(product);
                 }
+                else
+                {
+                    existProduct.StockCount += amount;
+                }
 
-                existProduct.StockCount += amount;
                 InStockItem stockItem = new InStockItem { ProductID = product.ProductID, Price = price, Amount = amount, InStockTime = DateTime.Now, Remark = remark };
                 context.InStockItems.Add(stockItem);
                 return context.SaveChanges() > 0;

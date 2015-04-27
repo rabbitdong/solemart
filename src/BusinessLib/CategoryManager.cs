@@ -39,7 +39,8 @@ namespace Solemart.BusinessLib
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                if (context.CategoryItems.FirstOrDefault(c => c.CategoryName == newCategory.CategoryName) != null)
+                //Not allow the same name of the same parent category.
+                if (context.CategoryItems.FirstOrDefault(c => (c.CategoryName == newCategory.CategoryName && c.ParentCategoryID == newCategory.ParentCategoryID)) != null)
                     return Result<string>.DuplicatedField;
 
                 context.CategoryItems.Add(newCategory);
@@ -122,15 +123,17 @@ namespace Solemart.BusinessLib
                     {
                         categoryList.Add(category);    //只添加顶级的类别到列表中
                     }
-                    else
-                    {
-                        CategoryItem parentCategory = GetCategoryInList(nostackCategoryList, category.ParentCategoryID);
-                        if (parentCategory.SubCategories == null)
-                        {
-                            parentCategory.SubCategories = new List<CategoryItem>();
-                        }
-                        parentCategory.SubCategories.Add(category);
-                    }
+                    
+                    //The subcategory auto include.
+                    //else
+                    //{
+                    //    CategoryItem parentCategory = GetCategoryInList(nostackCategoryList, category.ParentCategoryID);
+                    //    if (parentCategory.SubCategories == null)
+                    //    {
+                    //        parentCategory.SubCategories = new List<CategoryItem>();
+                    //    }
+                    //    parentCategory.SubCategories.Add(category);
+                    //}
                 }
             }
         }

@@ -129,7 +129,11 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 系统中的用户信息对象，它表示基本信息
     /// </summary>
-    public class UserItem {
+#if TEST 
+    [Table("TestUserItems")]
+#endif
+    public class UserItem
+    {
         /// <summary>获取或设置用户的ID
         /// </summary>
         [Key]
@@ -176,7 +180,11 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 用户的附加信息，通常系统在运行是不获取，除非用户修改或获取这些信息时才获取
     /// </summary>
-    public class UserAppendInfoItem {
+#if TEST 
+    [Table("TestUserAppendInfoItems")]
+#endif
+    public class UserAppendInfoItem
+    {
         /// <summary>
         /// UserID for the user.
         /// </summary>
@@ -266,7 +274,11 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// User favorite item
     /// </summary>
-    public class FavoriteItem {
+#if TEST 
+    [Table("TestFavoriteItems")]
+#endif
+    public class FavoriteItem
+    {
         /// <summary>
         /// 用户的ID
         /// </summary>

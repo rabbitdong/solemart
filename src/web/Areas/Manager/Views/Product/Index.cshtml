@@ -108,6 +108,8 @@
 
 <script type="text/javascript">
     function puttosaling(pid) {
+        $("#edit_putto_saling").toggle();
+        $("#putto_sale_pid").val(pid);
         $.post("/Manager/Product/GetLastStockPrice/" + pid, {},
             function (result) {
                 $("#edit_putto_saling").css("display", "block");
@@ -136,17 +138,19 @@
     }
 
     function puttosaleok() {
-        $.post("/Manager/Product/PutToSaling/" + $("#putto_sale_pid").val(),
+        $.post("/Manager/Product/PutToSaling",
             {
-                discount: $("#putto_sale_discount").val(),
-                price: $("#putto_sale_price").val(),
-                isspec: $("#putto_sale_specprice").is(":checked")
+                ProductID: $("#putto_sale_pid").val(),
+                Discount: $("#putto_sale_discount").val(),
+                Price: $("#putto_sale_price").val(),
+                SpecialFlag: $("#putto_sale_specprice").is(":checked")
             },
             function (result) {
-                if (result == "ok")
+                var ret = new WebReturn(result);
+                if (ret.success)
                     window.location.reload();
                 else
-                    alert(result);
+                    alert(ret.message);
             });
     }
 </script>

@@ -12,7 +12,10 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 产品的评价项实体
     /// </summary>
-    public class ProductCommentItem 
+#if TEST 
+    [Table("TestProductCommentItems")]
+#endif
+    public class ProductCommentItem
     {
         [Key]
         public int CommentID { get; set; }
@@ -54,6 +57,9 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 商品类别项实体
     /// </summary>
+#if TEST 
+    [Table("TestCategoryItems")]
+#endif
     public class CategoryItem
     {
         [Key]
@@ -86,7 +92,10 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 商品的品牌项实体
     /// </summary>
-    public class BrandItem 
+#if TEST 
+    [Table("TestBrandItems")]
+#endif
+    public class BrandItem
     {
         /// <summary>
         /// 品牌的ID
@@ -130,7 +139,10 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 商品的图片项实体
     /// </summary>
-    public class ProductImageItem 
+#if TEST 
+    [Table("TestProductImageItems")] 
+#endif
+    public class ProductImageItem
     {
         public static ProductImageItem NoImgProductImage = new ProductImageItem() { ImageID = -1, MimeType = "image/png", ImageUrl = "no-img.png" };
 
@@ -173,7 +185,11 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 商品项对象
     /// </summary>
-    public class ProductItem {
+#if TEST 
+    [Table("TestProductItems")] 
+#endif
+    public class ProductItem
+    {
         /// <summary>
         /// 货品的ID
         /// </summary>
@@ -266,6 +282,9 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 销售产品项
     /// </summary>
+#if TEST 
+    [Table("TestSaledProductItems")]
+#endif
     public class SaledProductItem
     {
         /// <summary>
@@ -297,6 +316,9 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 商品的价格历史项 
     /// </summary>
+#if TEST 
+    [Table("TestPriceHistoryItems")]
+#endif
     public class PriceHistoryItem
     {
         [Key]
@@ -319,6 +341,9 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// The product instock item
     /// </summary>
+#if TEST 
+    [Table("TestInStockItems")]
+#endif
     public class InStockItem
     {
         [Key]

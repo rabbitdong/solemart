@@ -38,7 +38,11 @@ namespace UserTool
         {
             MySqlConnection connection = new MySqlConnection(ConnectionString);
 
+#if TEST
+            string createUserSql = "insert into TestUserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '4')";
+#else
             string createUserSql = "insert into UserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '4')";
+#endif
             MySqlParameter[] parameters = new MySqlParameter[4];
             parameters[0] = new MySqlParameter("@UserName", username);
             parameters[1] = new MySqlParameter("@Email", email);
@@ -68,8 +72,11 @@ namespace UserTool
         private static void ShowAdminAccount()
         {
             MySqlConnection connection = new MySqlConnection(ConnectionString);
-
+#if TEST
+            string queryUserSql = "select * from TestUserItems where Roles='4'";
+#else
             string queryUserSql = "select * from UserItems where Roles='4'";
+#endif
             try
             {
                 connection.Open();

@@ -98,7 +98,7 @@ namespace Solemart.Web.Areas.Manager.Controllers
 
             /* 生成小图标 */
             TransformedBitmap thumb_img = new TransformedBitmap(decoder.Frames[0], new System.Windows.Media.ScaleTransform(0.2, 0.2));
-            BitmapEncoder encoder = BitmapEncoder.Create(decoder.CodecInfo.ContainerFormat);
+            BitmapEncoder encoder = BitmapEncoder.Create(decoder.CodecInfo.ContainerFormat);            
             using (FileStream thumb_file = new FileStream(HttpContext.Server.MapPath("~/images/product/thumb/" + file_name), FileMode.Create))
             {
                 encoder.Frames.Add(BitmapFrame.Create(thumb_img));
@@ -111,6 +111,9 @@ namespace Solemart.Web.Areas.Manager.Controllers
             item.ImageUrl = file_name;
             item.MimeType = file.ContentType;
             item.Description = "";
+            //the first image is default to logo.
+            if (file_name.Contains("_0."))
+                item.ForLogo = true;
 
             if (ProductManager.AddNewImageToProduct(item))
             {

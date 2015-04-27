@@ -54,7 +54,12 @@ namespace Solemart.DataProvider
         public bool ValidateUserPassword(string username, string password)
         {
             password = EncryptUtil.GetHashPwd(password);
-            var q = this.Database.SqlQuery<int>("select count(1) from UserItems where username=@un and PASSWORD=@pwd",
+#if TEST
+            string sql = "select count(1) from TestUserItems where username=@un and PASSWORD=@pwd";
+#else
+            string sql = "select count(1) from UserItems where username=@un and PASSWORD=@pwd";
+#endif
+            var q = this.Database.SqlQuery<int>(sql,
                 new MySqlParameter("@un", username), new MySqlParameter("@pwd", password));
             return q.FirstOrDefault() > 0;
         }
@@ -69,7 +74,12 @@ namespace Solemart.DataProvider
         public int RegisterNewUser(string username, string email, string password, DateTime regTime)
         {
             password = EncryptUtil.GetHashPwd(password);
-            var q = this.Database.SqlQuery<int>("insert into UserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();",
+#if TEST
+            string sql = "insert into TestUserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();";
+#else
+            string sql = "insert into UserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();";
+#endif
+            var q = this.Database.SqlQuery<int>(sql,
                 new MySqlParameter("@UserName", username),
                 new MySqlParameter("@Email", email), new MySqlParameter("@Password", password),
                 new MySqlParameter("@RegTime", regTime));
@@ -86,7 +96,12 @@ namespace Solemart.DataProvider
         public int RegisterNewUser(string email, string password, DateTime regTime)
         {
             password = EncryptUtil.GetHashPwd(password);
-            var q = this.Database.SqlQuery<int>("insert into UserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@Email, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();",
+#if TEST
+            string sql="insert into TestUserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@Email, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();";
+#else
+            string sql="insert into UserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@Email, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();";
+#endif
+            var q = this.Database.SqlQuery<int>(sql,
                 new MySqlParameter("@Email", email), new MySqlParameter("@Password", password),
                 new MySqlParameter("@RegTime", regTime));
             return q.FirstOrDefault();
@@ -102,7 +117,12 @@ namespace Solemart.DataProvider
         public int RegisterNewQQUser(string username, string qqemail, string password, DateTime regTime)
         {
             password = EncryptUtil.GetHashPwd(password);
-            var q = this.Database.SqlQuery<int>("insert into UserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();",
+#if TEST
+            string sql="insert into TestUserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();";
+#else
+            string sql="insert into UserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();";
+#endif
+            var q = this.Database.SqlQuery<int>(sql,
                 new MySqlParameter("@UserName", username),
                 new MySqlParameter("@Email", qqemail), new MySqlParameter("@Password", password),
                 new MySqlParameter("@RegTime", regTime));
@@ -118,7 +138,12 @@ namespace Solemart.DataProvider
         public bool UpdateUserPassword(int userID, string newPassword)
         {
             newPassword = EncryptUtil.GetHashPwd(newPassword);
-            return this.Database.ExecuteSqlCommand("update UserItems set PASSWORD=@pwd where userid=@userid",
+#if TEST
+            string sql = "update UserItems set PASSWORD=@pwd where userid=@userid";
+#else
+            string sql = "update UserItems set PASSWORD=@pwd where userid=@userid";
+#endif
+            return this.Database.ExecuteSqlCommand(sql,
                 new MySqlParameter("@pwd", newPassword), new MySqlParameter("@userid", userID)) > 0;
         }
 
@@ -129,7 +154,12 @@ namespace Solemart.DataProvider
         /// <returns></returns>
         public bool ClearCartForUser(int userID)
         {
-            return this.Database.ExecuteSqlCommand("delete from CartItems where UserID=@userid", new MySqlParameter("@userid", userID)) > 0;
+#if TEST
+            string sql="delete from CartItems where UserID=@userid";
+#else
+            string sql="delete from TestCartItems where UserID=@userid";
+#endif
+            return this.Database.ExecuteSqlCommand(sql, new MySqlParameter("@userid", userID)) > 0;
         }
     }
 }

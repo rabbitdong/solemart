@@ -11,10 +11,12 @@
                 <li id="product_@product.ProductID">
                     <div class="p-list-shot">
                         <p>
-                            <a href="/Product/Detail/@product.ProductImageUrl"></a>
+                            <a href="">
+                                <img src="/Images/product/normal/@product.ProductImageUrl" />
+                            </a>
                             @if (product.IsSpecial || product.Discount != 100)
                             {
-                                <img class="spec_price" src="/images/spec-price.png" />
+                                <img class="spec_price" src="/Images/spec-price.png" />
                                 if (product.IsSpecial)
                                 {
                                     <span class="spec_price attention">特价</span>

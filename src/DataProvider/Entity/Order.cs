@@ -12,7 +12,10 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 订单项实体
     /// </summary>
-    public class OrderItem 
+#if TEST    
+    [Table("TestOrderItems")] 
+#endif
+    public class OrderItem
     {
         public OrderItem()
         {
@@ -126,6 +129,9 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// The order detail item
     /// </summary>
+#if TEST 
+    [Table("TestOrderDetailItems")]
+#endif
     public class OrderDetailItem
     {
         /// <summary>
@@ -166,7 +172,10 @@ namespace Solemart.DataProvider.Entity
     #region 送货地址项实体 SendAddressItem
     /// <summary>送货地址项实体
     /// </summary>
-    public class SendAddressItem 
+#if TEST 
+    [Table("TestSendAddressItems")] 
+#endif
+    public class SendAddressItem
     {
         /// <summary>
         /// 送货地址信息中的用户ID
@@ -211,7 +220,10 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 订单或购物车中的商品项对象
     /// </summary>
-    public class CartItem 
+#if TEST 
+    [Table("TestCartItems")] 
+#endif
+    public class CartItem
     {
         /// <summary>
         /// the user id of the cart

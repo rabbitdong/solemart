@@ -11,7 +11,11 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 用户建议项的实体
     /// </summary>
-    public class AdviserItem {
+#if TEST 
+    [Table("TestAdviserItems")]
+#endif
+    public class AdviserItem
+    {
         /// <summary>
         /// The advise unique id.
         /// </summary>
@@ -46,7 +50,11 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 系统的公告项的实体
     /// </summary>
-    public class BulletinItem {
+#if TEST 
+    [Table("TestBulletinItems")] 
+#endif
+    public class BulletinItem
+    {
         /// <summary>
         /// 公告ID
         /// </summary>
