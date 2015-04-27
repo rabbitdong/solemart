@@ -107,7 +107,7 @@ namespace Solemart.BusinessLib {
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                var q = from o in context.OrderItems.Include("OrderDetails").Include("OrderDetails.Product")
+                var q = from o in context.OrderItems.Include("OrderDetails").Include("OrderDetails.Product").Include("User")
                         orderby o.OrderTime descending
                         where o.Status == orderStatus
                         select o;

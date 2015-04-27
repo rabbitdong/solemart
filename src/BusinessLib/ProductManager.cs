@@ -71,16 +71,16 @@ namespace Solemart.BusinessLib
         /// </summary>
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
-        /// <param name="totalPageCount"></param>
+        /// <param name="totalCount"></param>
         /// <returns></returns>
-        public static List<ProductItem> GetPagedAllProducts(int pageIndex, int pageSize, out int totalPageCount)
+        public static List<ProductItem> GetPagedAllProducts(int pageIndex, int pageSize, out int totalCount)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
                 var q = from p in context.ProductItems.Include("SaledProduct").Include("Category")
                         orderby p.ProductID
                         select p;
-                totalPageCount = (q.Count() - 1) / pageSize + 1;
+                totalCount = q.Count();
                 return q.Skip(pageIndex * pageSize).Take(pageSize).ToList();
             }
         }
@@ -90,16 +90,16 @@ namespace Solemart.BusinessLib
         /// </summary>
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
-        /// <param name="totalPageCount"></param>
+        /// <param name="totalCount"></param>
         /// <returns></returns>
-        public static List<SaledProductItem> GetPagedSaledProducts(int pageIndex, int pageSize, out int totalPageCount)
+        public static List<SaledProductItem> GetPagedSaledProducts(int pageIndex, int pageSize, out int totalCount)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
                 var q = from p in context.SaledProductItems.Include("Product")
                         orderby p.ProductID
                         select p;
-                totalPageCount = (q.Count() - 1) / pageSize + 1;
+                totalCount = q.Count();
                 return q.Skip(pageIndex * pageSize).Take(pageSize).ToList();
             }
         }
@@ -446,18 +446,18 @@ namespace Solemart.BusinessLib
         /// <param name="productID">要获取评论的产品对象</param>
         /// <param name="pageIndex">The page index of comment list, index is from 0</param>
         /// <param name="pageSize">获取的每页评论的数量</param>
-        /// <param name="totalPageCount">The total page count of the comments</param>
+        /// <param name="totalCount">The total page count of the comments</param>
         /// <returns>获取的评论的列表, 按时间倒序排列</returns>
-        public static IList<ProductCommentItem> GetProductComment(int productID, int pageIndex, int pageSize, out int totalPageCount)
+        public static IList<ProductCommentItem> GetProductComment(int productID, int pageIndex, int pageSize, out int totalCount)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                totalPageCount = 0;
+                totalCount = 0;
                 var query = from pc in context.ProductCommentItems
                             where pc.ProductID == productID
                             orderby pc.CommentTime descending
                             select pc;
-                totalPageCount = (query.Count() + 1) / pageSize;
+                totalCount = query.Count();
                 return query.Skip(pageIndex * pageSize).Take(pageSize).ToList();
             }
         }
@@ -481,18 +481,18 @@ namespace Solemart.BusinessLib
         /// <param name="categoryID">要获取的产品的类别</param>
         /// <param name="pageIndex">要获取的产品的页索引</param>
         /// <param name="pageSize">每页的产品数量</param>
-        /// <param name="totalPageCount"></param>
+        /// <param name="totalCount"></param>
         /// <returns>获取到的产品的列表</returns>
-        public static IList<ProductItem> GetPagedProductsByCategory(int categoryID, int pageIndex, int pageSize, out int totalPageCount)
+        public static IList<ProductItem> GetPagedProductsByCategory(int categoryID, int pageIndex, int pageSize, out int totalCount)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                totalPageCount = 0;
+                totalCount = 0;
                 var query = from p in context.ProductItems
                             where p.CategoryID == categoryID
                             orderby p.ProductID descending
                             select p;
-                totalPageCount = (query.Count() - 1) / pageSize + 1;
+                totalCount = query.Count();
                 return query.Skip(pageIndex * pageSize).Take(pageSize).ToList();
             }
         }

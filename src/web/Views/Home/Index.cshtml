@@ -5,16 +5,14 @@
 
 <div class="section">
     <div class="p-section">
-        <ul class="p-list">
+        <ul class="p_list">
             @foreach (ProductForListViewModel product in Model.ProductList)
             {
                 <li id="product_@product.ProductID">
-                    <div class="p-list-shot">
+                    <div class="p_list_shot">
                         <p>
-                            <a href="">
-                                <img src="/Images/product/normal/@product.ProductImageUrl" />
-                            </a>
-                            @if (product.IsSpecial || product.Discount != 100)
+                            <img class="p_img" src="/Images/product/normal/@product.ProductImageUrl" />
+                            @*@if (product.IsSpecial || product.Discount != 100)
                             {
                                 <img class="spec_price" src="/Images/spec-price.png" />
                                 if (product.IsSpecial)
@@ -25,14 +23,15 @@
                                 {
                                     <span class="spec_price attention">@(product.Discount / 10)折</span>
                                 }
-                            }
+                            }*@
+                            <a class="add_to_cart" data-pid="@product.ProductID" href="javascript:void;"><img src="~/Images/common/add_to_shopping_cart_small.png" title="购买" /></a>
                         </p>
                     </div>
                     <div class="p-list-info">
                         <p class="prod-title">
                             <span class="ellipsis" title="@product.ProductName">@product.ProductName</span>
                         </p>
-                        <span>
+                        @*<span>
                             @if (product.Discount != 100)
                             {
                                 <span class="past_price">@product.Price.ToString("C2")</span>
@@ -43,14 +42,11 @@
                                 <span>@product.Price.ToString("C2")</span>
                             }
                             /@product.Unit
-                        </span>
+                        </span>*@
                         @if (product.IsOutOfStock)
                         {
                             <p class="no_available">缺货，只可预订</p>
                         }
-                    </div>
-                    <div>
-                        <a class="comm_btn" data-pid="@product.ProductID" href="javascript:void;">Add to Cart</a>
                     </div>
                 </li>
             }
@@ -60,11 +56,15 @@
 
 <script type="text/javascript">
     $(function () {
-        $("ul.p-list").on("click", "li a.comm_btn", function () {
+        $("ul.p_list").on("click", "li a.add_to_cart", function () {
             $.post("/Cart/Add/" + $(this).data("pid"),
                 {},
                 function (result) {
-                    alert(result);
+                    var ret = WebReturn(result);
+                    if (ret.success)
+                        window.location.reload();
+                    else
+                        alert(ret.message);
                 });
         })
     })

@@ -65,16 +65,17 @@ div#advise-section { position:relative; width:100%; height:15em; }
     div#advise-section div.notice-section{ position:absolute; right:0px; bottom:-18px; width:285px; height:76px; padding-left:55px; background:url(/Images/common/notice_bg.png) repeat-y; z-index:100;  }
 
 /* 产品的样式 */
-ul.p-list { }
+ul.p_list { }
 
-    ul.p-list li { display: inline-block; width: 13em; border: 1px solid #bfbfbf; border-radius: 4px; margin: 0.5em; background-color:#f8f8ff; }
+    ul.p_list li { display: inline-block; width: 13em; border: 1px solid #bfbfbf; border-radius: 4px; margin: 0.5em; background-color:#f8f8ff; }
 
-    ul.p-list div.p-list-shot { position: relative; text-align: center; }
-        ul.p-list div.p-list-shot img { width: 170px; height: 140px; margin: 5px; border: none; }
-        ul.p-list div.p-list-shot .spec_price { position: absolute; top: 0px; left: 0px; width: auto; height: auto; }
-        ul.p-list div.p-list-shot .attention { font-size: 1.5em; color: #f00; font-weight: bold; padding: 5px 0px 0px 7px; }
-    ul.p-list div.p-list-info { background-color: #e1e8f5; padding: 3px 5px; border-top: 1px solid #bfbfbf; }
-        ul.p-list div.p-list-info p.prod-title { text-align: center; font-size:0.9em; margin-bottom:0.5em;}
+    ul.p_list div.p_list_shot { position: relative; text-align: center; }
+        ul.p_list div.p_list_shot img.p_img { width: 170px; height: 140px; margin: 5px; border: none; }
+        ul.p_list div.p_list_shot .spec_price { position: absolute; top: 0px; left: 0px; width: auto; height: auto; }
+        ul.p_list div.p_list_shot .attention { font-size: 1.5em; color: #f00; font-weight: bold; padding: 5px 0px 0px 7px; }
+    ul.p_list div.p-list-info { background-color: #e1e8f5; padding: 3px 5px; border-top: 1px solid #bfbfbf; }
+        ul.p_list div.p-list-info p.prod-title { text-align: center; font-size:0.9em; margin-bottom:0.5em;}
+    ul.p_list div.p_list_shot a.add_to_cart { position: absolute; right: 0px; bottom: 0px; width:32px; height:32px; }
 
 /* 边栏的样式，应用于产品类别列表和管理的菜单 */
 div#cate { width: 20%; display: inline-block; vertical-align: top; }
