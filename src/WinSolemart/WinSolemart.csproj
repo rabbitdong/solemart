@@ -87,11 +87,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="OrderList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\OrderListViewModel.cs" />
     <Compile Include="OrderDetail.xaml.cs">
       <DependentUpon>OrderDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OrderList.xaml.cs">
+      <DependentUpon>OrderList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

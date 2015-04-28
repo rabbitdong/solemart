@@ -1,31 +1,6 @@
-﻿<Window x:Class="WinSolemart.MainWindow"
+﻿<NavigationWindow x:Class="WinSolemart.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="GladTao" Height="600" Width="900">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="30" />
-        </Grid.RowDefinitions>
-        
-        <Button Grid.Row="0" Name="btnOrder">新订单</Button>
-        <DataGrid Grid.Row="1" Name="dgOrder"  IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" >
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="订单号" Binding="{Binding OrderID}"/>
-                <DataGridTextColumn Header="用户名" Binding="{Binding UserName}" />
-                <DataGridTextColumn Header="收货人姓名" Binding="{Binding Receiver}" />
-                <DataGridTextColumn Header="联系电话" Binding="{Binding ReceiverPhone}" />
-                <DataGridTextColumn Header="送货地址" Binding="{Binding Address}" />
-                <DataGridHyperlinkColumn Header="查看" Binding="{Binding OrderID}" ContentBinding="{Binding ActionViewString}">
-                    <DataGridHyperlinkColumn.ElementStyle>
-                        <Style>
-                            <EventSetter Event="Hyperlink.Click" Handler="DG_Hyperlink_Click"/>
-                        </Style>
-                    </DataGridHyperlinkColumn.ElementStyle>
-                </DataGridHyperlinkColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        <Button Grid.Row="2" Name="btnNextPage">下一页</Button>
-    </Grid>
-</Window>
+
+</NavigationWindow>

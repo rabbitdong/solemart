@@ -21,23 +21,8 @@ namespace WinSolemart
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : NavigationWindow
     {
-        public MainWindow()
-        {
-            InitializeComponent();
 
-            int totalCount = 0;
-            List<OrderItem> orders = OrderManager.GetPagedOrders(OrderStatus.Ordered, 0, 10, out totalCount);
-            IEnumerable<OrderListViewModel> model = orders.Select(o => new OrderListViewModel { OrderID = o.OrderID.ToString(), UserName = o.User.UserName, Address = o.Address, Receiver = o.Receiver, ReceiverPhone = o.Phone, TotalAmount = o.TotalPrice });
-            dgOrder.ItemsSource = model;
-        }
-
-        private void DG_Hyperlink_Click(object sender, RoutedEventArgs e)
-        {
-            Hyperlink link = (Hyperlink)e.OriginalSource;
-            OrderListViewModel model = link.DataContext as OrderListViewModel;
-            MessageBox.Show(model.OrderID.ToString());
-        }
     }
 }
