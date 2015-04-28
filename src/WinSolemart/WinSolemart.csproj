@@ -54,6 +54,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -83,22 +84,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="OrderDetail.xaml">
+    <Page Include="OrderDetailPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="OrderList.xaml">
+    <Page Include="OrderListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\OrderListViewModel.cs" />
-    <Compile Include="OrderDetail.xaml.cs">
-      <DependentUpon>OrderDetail.xaml</DependentUpon>
+    <Compile Include="OrderDetail.cs" />
+    <Compile Include="OrderDetailPage.xaml.cs">
+      <DependentUpon>OrderDetailPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="OrderList.xaml.cs">
-      <DependentUpon>OrderList.xaml</DependentUpon>
+    <Compile Include="OrderListPage.xaml.cs">
+      <DependentUpon>OrderListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

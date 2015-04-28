@@ -23,6 +23,9 @@ namespace WinSolemart
     /// </summary>
     public partial class MainWindow : NavigationWindow
     {
-
+        public MainWindow()
+        {
+            
+        }
     }
 }

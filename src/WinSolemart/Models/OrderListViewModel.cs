@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Solemart.DataProvider.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,7 @@ namespace WinSolemart.Models
         public string ActionViewString { 
             get { return "查看"; } 
         }
+
+        public ICollection<OrderDetailItem> OrderDetails { get; set; }
     }
 }

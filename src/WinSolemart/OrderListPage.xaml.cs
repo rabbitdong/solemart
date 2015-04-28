@@ -21,15 +21,15 @@ namespace WinSolemart
     /// <summary>
     /// Interaction logic for OrderList.xaml
     /// </summary>
-    public partial class OrderList : Page
+    public partial class OrderListPage : Page
     {
-        public OrderList()
+        public OrderListPage()
         {
             InitializeComponent();
 
             int totalCount = 0;
             List<OrderItem> orders = OrderManager.GetPagedOrders(OrderStatus.Ordered, 0, 10, out totalCount);
-            IEnumerable<OrderListViewModel> model = orders.Select(o => new OrderListViewModel { OrderID = o.OrderID.ToString(), UserName = o.User.UserName, Address = o.Address, Receiver = o.Receiver, ReceiverPhone = o.Phone, TotalAmount = o.TotalPrice });
+            IEnumerable<OrderListViewModel> model = orders.Select(o => new OrderListViewModel { OrderID = o.OrderID.ToString(), UserName = o.User.UserName, Address = o.Address, Receiver = o.Receiver, ReceiverPhone = o.Phone, TotalAmount = o.TotalPrice, OrderDetails=o.OrderDetails });
             dgOrder.ItemsSource = model;
         }
 
@@ -37,7 +37,8 @@ namespace WinSolemart
         {
             Hyperlink link = (Hyperlink)e.OriginalSource;
             OrderListViewModel model = link.DataContext as OrderListViewModel;
-            MessageBox.Show(model.OrderID.ToString());
+            
+            NavigationService.Navigate(new OrderDetailPage(model));
         }
     }
 }
