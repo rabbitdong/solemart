@@ -95,7 +95,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\OrderListViewModel.cs" />
-    <Compile Include="OrderDetail.cs" />
     <Compile Include="OrderDetailPage.xaml.cs">
       <DependentUpon>OrderDetailPage.xaml</DependentUpon>
     </Compile>

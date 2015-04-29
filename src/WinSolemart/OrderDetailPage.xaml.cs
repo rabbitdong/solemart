@@ -26,67 +26,49 @@ namespace WinSolemart
         {
             InitializeComponent();
 
-            TableRowGroup rowGroup = new TableRowGroup();
-            foreach (OrderDetailItem item in model.OrderDetails)
+            OrderDetailViewModel detailModel = new OrderDetailViewModel();
+            detailModel.OrderID = model.OrderID;
+            detailModel.Receiver = model.Receiver;
+            detailModel.ReceiverPhone = model.ReceiverPhone;
+            detailModel.UserName = model.UserName;
+            detailModel.TotalPrice = model.TotalAmount;
+            detailModel.Address = model.Address;
+            detailModel.DetailItems = new List<OrderDetailItemViewModel>();
+
+            foreach (OrderDetailItem orderDetail in model.OrderDetails)
             {
-                TableRow tr = new TableRow();
-                TableCell tcProductName = new TableCell(new Paragraph(new Run(item.Product.ProductName)));
-                TableCell tcAmount = new TableCell(new Paragraph(new Run(item.Amount.ToString())));
-                TableCell tcUnitPrice = new TableCell(new Paragraph(new Run(item.UnitPrice.ToString())));
-                TableCell tcTotalAmount = new TableCell(new Paragraph(new Run((item.UnitPrice * item.Amount).ToString())));
-                tr.Cells.Add(tcProductName);
-                tr.Cells.Add(tcAmount);
-                tr.Cells.Add(tcUnitPrice);
-                tr.Cells.Add(tcTotalAmount);
-                rowGroup.Rows.Add(tr);
+                detailModel.DetailItems.Add(new OrderDetailItemViewModel
+                {
+                    ProductName = orderDetail.Product.ProductName,
+                    AmountString = string.Format("{0}({1})", orderDetail.Amount, orderDetail.Product.Unit),
+                    UnitPrice = orderDetail.UnitPrice,
+                    TotalPrice = orderDetail.UnitPrice * orderDetail.Amount
+                });
             }
 
-            tblOrderDetail.RowGroups.Add(rowGroup);
+            tbOrderDetail.ItemsSource = detailModel.DetailItems;
+
+            txtUserInfo.Text = string.Format("用户：{0}", detailModel.Receiver);
+            txtSendAddress.Text = string.Format("送货地址：{0} 电话：{1}", detailModel.Address, detailModel.ReceiverPhone);
+            txtTotalPrice.Text = string.Format("总金额：{0}", detailModel.TotalPrice);
         }
 
         /// <summary>
-        /// Print the flowdocument
+        /// Print the order detail.
         /// </summary>
-        /// <param name="document"></param>
-        private void DoThePrint(FlowDocument document)
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PrintBtn_Click(object sender, RoutedEventArgs e)
         {
-            // Clone the source document's content into a new FlowDocument.
-            // This is because the pagination for the printer needs to be
-            // done differently than the pagination for the displayed page.
-            // We print the copy, rather that the original FlowDocument.
-            System.IO.MemoryStream s = new System.IO.MemoryStream();
-            TextRange source = new TextRange(document.ContentStart, document.ContentEnd);
-            source.Save(s, DataFormats.Xaml);
-            FlowDocument copy = new FlowDocument();
-            TextRange dest = new TextRange(copy.ContentStart, copy.ContentEnd);
-            dest.Load(s, DataFormats.Xaml);
-
-            // Create a XpsDocumentWriter object, implicitly opening a Windows common print dialog,
-            // and allowing the user to select a printer.
-
-            // get information about the dimensions of the seleted printer+media.
-            PrintDocumentImageableArea ia = null;
-            System.Windows.Xps.XpsDocumentWriter docWriter = PrintQueue.CreateXpsDocumentWriter(ref ia);
-
-            if (docWriter != null && ia != null)
+            PrintDialog printDialog = new PrintDialog();
+            if (printDialog.ShowDialog() == true)
             {
-                DocumentPaginator paginator = ((IDocumentPaginatorSource)copy).DocumentPaginator;
-
-                // Change the PageSize and PagePadding for the document to match the CanvasSize for the printer device.
-                paginator.PageSize = new Size(ia.MediaSizeWidth, ia.MediaSizeHeight);
-                Thickness t = new Thickness(72);  // copy.PagePadding;
-                copy.PagePadding = new Thickness(
-                                 Math.Max(ia.OriginWidth, t.Left),
-                                   Math.Max(ia.OriginHeight, t.Top),
-                                   Math.Max(ia.MediaSizeWidth - (ia.OriginWidth + ia.ExtentWidth), t.Right),
-                                   Math.Max(ia.MediaSizeHeight - (ia.OriginHeight + ia.ExtentHeight), t.Bottom));
-
-                copy.ColumnWidth = double.PositiveInfinity;
-                //copy.PageWidth = 528; // allow the page to be the natural with of the output device
-
-                // Send content to the printer.
-                docWriter.Write(paginator);
+                printDialog.PrintVisual(gdOrerDetailContent, "乐道订单");
             }
+        }
+
+        private void btnSendOrder_Click(object sender, RoutedEventArgs e)
+        {
 
         }
     }

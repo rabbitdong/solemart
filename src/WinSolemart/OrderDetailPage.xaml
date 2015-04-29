@@ -4,37 +4,70 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="900"
+      d:DesignHeight="600" d:DesignWidth="900" MinWidth="600"
 	Title="订单明细">
-    <FlowDocumentReader>
-        <FlowDocument ColumnWidth="500">
-            <Paragraph FontSize="32" TextAlignment="Center">乐道水果订单</Paragraph>
-            <Table CellSpacing="0" Name="tblOrderDetail">
-                <Table.Columns>
-                    <TableColumn Width="150" />
-                    <TableColumn Width="120" />
-                    <TableColumn Width="80"/>
-                    <TableColumn Width="120" />
-                </Table.Columns>
-                <Table.RowGroups>
-                    <TableRowGroup>
-                        <TableRow>
-                            <TableCell LineHeight="30" TextAlignment="Center" BorderThickness="1" BorderBrush="Black">
-                                <Paragraph>水果名称</Paragraph>
-                            </TableCell>
-                            <TableCell BorderThickness="1">
-                                <Paragraph>数量(单位)</Paragraph>
-                            </TableCell>
-                            <TableCell BorderThickness="1">
-                                <Paragraph>单价(元)</Paragraph>
-                            </TableCell>
-                            <TableCell BorderThickness="1" TextAlignment="Right">
-                                <Paragraph>总价(元)</Paragraph>
-                            </TableCell>
-                        </TableRow>
-                    </TableRowGroup>
-                </Table.RowGroups>
-            </Table>
-        </FlowDocument>
-    </FlowDocumentReader>
+    <Grid Name="gdOrerDetailContent" Margin="10">
+        <Grid.Resources>
+            <Style TargetType="Border">
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush" Value="Black" />
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
+            <Button Name="btnPrint" Content="打印订单" Click="PrintBtn_Click" />
+            <Button Name="btnSendOrder" Content="发货" Click="btnSendOrder_Click" />            
+        </StackPanel>
+        <TextBlock Grid.Row="1" TextAlignment="Center" FontSize="32">乐道水果订单</TextBlock>
+        <DockPanel Grid.Row="2">
+            <TextBlock Name="txtUserInfo" DockPanel.Dock="Left" />
+            <TextBlock Name="txtSendAddress" TextAlignment="Right" />
+        </DockPanel>
+        <DockPanel Grid.Row="3">
+            <StackPanel>
+                <ItemsControl Name="tbOrderTitle">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="150">
+                            <TextBlock>水果名称</TextBlock>
+                        </Border>
+                        <Border Width="120">
+                            <TextBlock TextAlignment="Right">数量(单位)</TextBlock>
+                        </Border>
+                        <Border Width="100">
+                            <TextBlock TextAlignment="Right">单价(元)</TextBlock>
+                        </Border>
+                        <Border Width="100">
+                            <TextBlock TextAlignment="Right">总价(元)</TextBlock>
+                        </Border>
+                    </StackPanel>
+                </ItemsControl>
+                <ItemsControl Name="tbOrderDetail">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="150" BorderThickness="1" BorderBrush="Black">
+                                    <TextBlock Text="{Binding ProductName}" />
+                                </Border>
+                                <Border Width="120" BorderThickness="1" BorderBrush="Black">
+                                    <TextBlock Text="{Binding AmountString}" TextAlignment="Right"/>
+                                </Border>
+                                <Border Width="100" BorderThickness="1" BorderBrush="Black">
+                                    <TextBlock Text="{Binding UnitPrice}" TextAlignment="Right"/>
+                                </Border>
+                                <Border Width="100" BorderThickness="1" BorderBrush="Black">
+                                    <TextBlock Text="{Binding TotalPrice}" TextAlignment="Right"/>
+                                </Border>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock TextAlignment="Right" FontSize="24" Name="txtTotalPrice"></TextBlock>
+            </StackPanel>
+        </DockPanel>
+    </Grid>
 </Page>
