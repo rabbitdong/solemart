@@ -133,10 +133,13 @@ namespace Solemart.BusinessLib
         /// <param name="productID">要修改的购物车中的商品项的商品ID</param>
         /// <param name="amount">商品的最后数量</param>
         /// <returns>修改成功返回true，否则返回false</returns>
-        public bool ModifyCartItem(int productID, int amount)
+        public bool ModifyCartItem(int productID, decimal amount)
         {
             CartItem cartItem = cartItems.Find(p => p.ProductID == productID);
             if (cartItem == null)
+                return false;
+
+            if ((cartItem.Product.Unit == "个" || cartItem.Product.Unit == "粒") && decimal.Round(amount) != amount)
                 return false;
 
             if (amount <= 0)

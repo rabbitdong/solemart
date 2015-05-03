@@ -129,6 +129,7 @@ namespace Solemart.BusinessLib {
                 if (order == null || order.Status != OrderStatus.Ordered)
                     return false;
                 order.Status = OrderStatus.Sending;
+                order.SendTime = DateTime.Now;
                 return context.SaveChanges() > 0;
             }
         }
@@ -147,7 +148,7 @@ namespace Solemart.BusinessLib {
                     return false;
 
                 order.HasPay = true;
-                order.TradeNo = tradeNo;
+                order.TradeNo = tradeNo;                
                 return context.SaveChanges() > 0;
             }
         }

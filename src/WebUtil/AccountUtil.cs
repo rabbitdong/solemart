@@ -61,12 +61,13 @@ namespace Solemart.WebUtil
             SolemartUser user = HttpContext.Current.User as SolemartUser;
             if (user != null)
             {
-                FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, user.UserName,
-                    DateTime.Now, DateTime.Now.AddDays(-1), false, user.UserID.ToString());
-                string encTicket = FormsAuthentication.Encrypt(ticket);
-                HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket);
-                authCookie.Expires = DateTime.Now;
-                HttpContext.Current.Response.Cookies.Add(authCookie);
+                HttpCookie authCookie = HttpContext.Current.Request.Cookies.Get(FormsAuthentication.FormsCookieName);
+                if (authCookie != null)
+                {
+                    authCookie.Expires = DateTime.Now.AddYears(-1);
+                    HttpContext.Current.Response.Cookies.Add(authCookie);
+                }
+                HttpContext.Current.Session.Abandon();
                 FormsAuthentication.SignOut();
             }
         }

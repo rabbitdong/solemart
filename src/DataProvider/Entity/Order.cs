@@ -155,7 +155,7 @@ namespace Solemart.DataProvider.Entity
         /// <summary>
         /// The amount of the product
         /// </summary>
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
 
         /// <summary>
         /// The unit price of the product
@@ -246,7 +246,7 @@ namespace Solemart.DataProvider.Entity
         /// <summary>
         /// 该商品的数量
         /// </summary>
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
 
         /// <summary>
         /// 该商品的单价信息

@@ -42,10 +42,11 @@ namespace Solemart.Web.Controllers
         /// </summary>
         /// <param name="id">要修改的购物车的物品ID</param>
         /// <returns>修改后返回的View</returns>
-        public ActionResult Modify(int id, int amount)
+        public ActionResult Modify(int id, decimal amount)
         {
             SolemartUser user = this.User as SolemartUser;
-            user.Cart.ModifyCartItem(id, amount);
+            if (!user.Cart.ModifyCartItem(id, amount))
+                return Content(WebResult<string>.ParameterErrorResult.ResponseString);
 
             return Content(WebResult<string>.SuccessResult.ResponseString);
         }
@@ -81,15 +82,21 @@ namespace Solemart.Web.Controllers
         /// </summary>
         /// <returns>返回用户提交订单的结果</returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult CheckoutOrder(string remark)
+        public ActionResult CheckoutOrder(SendAddressItem addrInfo, string remark)
         {
             SolemartUser user = User as SolemartUser;
 
+            if(string.IsNullOrWhiteSpace(addrInfo.Address) || string.IsNullOrWhiteSpace(addrInfo.Phone))
+                return Content(WebResult<string>.SuccessResult.ResponseString);
+
+            addrInfo.DeliverWay = DeliverWay.ByManual;
+            addrInfo.UserID = user.UserID;
+
+            user.SendAddressInfo = addrInfo;
             if (user.Cart.CartItems.Count == 0)
             {
                 return Content(WebResult<string>.ParameterErrorResult.ResponseString);
             }
-
 
             OrderItem oi = new OrderItem();
             if (user.IsAnonymous)
@@ -97,7 +104,6 @@ namespace Solemart.Web.Controllers
             else
                 oi.UserID = user.UserID;
 
-            SendAddressItem addrInfo = user.SendAddressInfo;
             oi.Receiver = addrInfo.Receiver;
             oi.Phone = addrInfo.Phone;
             oi.PaymentType = addrInfo.PaymentType;
@@ -120,6 +126,8 @@ namespace Solemart.Web.Controllers
             if (!OrderManager.NewOrder(oi))
                 return Content("error");
 
+            //Clear the user's cart.
+            user.ClearCart();
             //新订单产生后，刷新最受欢迎的产品列表
             //ProductManager.RefleshMostPopularProducts();
 

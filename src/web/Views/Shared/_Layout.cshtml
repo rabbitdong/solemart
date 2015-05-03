@@ -6,15 +6,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@(ViewBag.Title == null ? "Project" : ViewBag.Title)</title>
+    <meta name="author" content="www.51bdg.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <title>@(ViewBag.Title == null ? "乐道" : ViewBag.Title)</title>
     <link rel="stylesheet" href="/Content/style.css" />
-    <link rel="stylesheet" href="/Content/header.css" />
     @RenderSection("managerHeader", false)
     <script src="/Scripts/jquery-1.10.2.min.js"></script>
     <script scr="/Scripts/jquery.validate.min.js"></script>
     <script src="/Scripts/iscroll.js"></script>
     <script src="/Scripts/commonutil.js"></script>
-    <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101023556" data-redirecturi="http://www.solemart.com/Home/Login" charset="utf-8"></script>
+    @*<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101023556" data-redirecturi="http://www.solemart.com/Home/Login" charset="utf-8"></script>*@
     <script type="text/javascript">
         function search_product() {
             var key = $("#txtSearch").val();
@@ -22,98 +29,50 @@
         }
 
         function logout() {
-            @if(CurrentUser.IsLoginQQ){
+            @*@if(CurrentUser.IsLoginQQ){
                 <text>
                 QC.Login.signOut();
                 </text>
-            }
+            }*@
             $.post("/Home/Logout",
                 {},
                 function (result) {
-                    window.location.reload();
+                    var ret = new WebReturn(result);
+                    if (ret.success)
+                        window.location.reload();
+                    else
+                        alert(ret.message);
                 });
         }
     </script>
 </head>
 <body>
-    <div class="header">
-        <div class="g-actions">
-            <ul id="help-actions">
-                @*<li>
-                    <strong>[12/7]客服18065911899</strong>
-                </li>
-                <li>
-                    <a href="/Help">帮助和建议</a>
-                </li>*@
-            </ul>
-            <ul id="account-actions">
-                @if (CurrentUser.Identity.IsAuthenticated && !CurrentUser.IsAnonymous)
-                {
-                    <li>
-                        <a href="javascript:void;" onclick="javascript:logout();">注销</a>
-                    </li>
-                    <li>
-                        <a href="/Account/Favorite">收藏</a>
-                    </li>
-                    <li>
-                        <a href="/Account/Order">订单</a>
-                    </li>
-                    <li>
-                        
-                        <a href="/Account">@CurrentUser.UserName</a>
-                    </li>
-                }
-                else
-                {
-                    <li>
-                        <a href="/Home/Login">登录</a>
-                    </li>
-                }
-                <li>
-                    <a href="/Cart" title="查看购物车"><img src="~/Images/common/shoppingcart_small.png" style="width:20px;height:18px;" /></a>
-                </li>
-
-                @if (CurrentUser.Identity.IsAuthenticated
-                    && (HttpContext.Current.User.IsInRole("Super") || HttpContext.Current.User.IsInRole("Operator")))
-                {
-                    <li>
-                        <a href="/Manager/Product">管理</a>
-                    </li>
-                }
-            </ul>
+    <div class="viewport">
+        <div class="appNav">
+            <div class="wrapper">
+                <a href="/Cart" title="查看购物车" class="appLink shoppingCart">购物车</a>
+                <div class="seperateLine"></div>
+                <a href="/Account" title="我的订单、消费等" class="appLink myAccount">我的</a>
+            </div>
         </div>
-        <div class="header-bar">
-            @*<div id="logo-area">
-            <a href="/">
-                <img class="logo_img" src="/Images/logo.png" />
-            </a>
+        <div class="searchBar">
+            <div class="logoArea">
+                <a href="/"><img class="logo_img" src="/Images/ledao64.png" /></a>
             </div>
-            <div id="advise-area">
-                <p>罗源本地网购</p>
-                <p>&nbsp;&nbsp;同城送货上门</p>
+            <div class="searchBox">
+                <input type="text" placeholder="产品名称" id="txtSearch" />
+                <input type="button" class="comm_btn" onclick="javascript: search_product();" title="search" value="搜索" />
             </div>
-            <div id="search-nav">
-                <div class="search">
-                    <input type="text" placeholder="产品名称，类别等" id="txtSearch" value='@ViewData["SearchKey"]' />
-                    <input type="button" class="comm_btn" onclick="javascript: search_product();" title="search" value="搜索" />
-                </div>
-                <div class="nav">
-                    <ul>
-                        <li><a href="/Product" title="销售产品的分类列表">产品</a></li>
-                        <li><a href="/Acknowledge/EBooks" title="可获得的资源，包括各个方面知识">资源</a></li>
-                        <li><a href="/Help/About" title="公司的简介">公司</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>*@
+        </div>
+        <div id="main">
+            @RenderBody()
+        </div>
+        <footer>
+            <h3>顶级水果盛宴</h3>
+            <p>罗源乐道贸易有限公司 版权所有&copy;2015</p>
+            <p>订购热线：400-899-0918  0591-26980918</p>
+        </footer>
     </div>
-    <div id="main">
-        @RenderBody()
-    </div>
-    <footer>
-        @*<h3>用心&nbsp;&nbsp;专业</h3>
-        <p>Copyright&copy; 2014 www.solemart.com All Rights Reserved</p>*@
-    </footer>
     @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -26,7 +26,7 @@ namespace Solemart.DataProvider.Entity
 
         public string Remark { get; set; }
 
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
     }
 
     /// <summary>
@@ -49,6 +49,6 @@ namespace Solemart.DataProvider.Entity
         [ForeignKey("ProductID")]
 
         public ProductItem ProductItem { get; set; }
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
     }
 }

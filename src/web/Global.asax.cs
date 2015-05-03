@@ -53,6 +53,7 @@ namespace Solemart.Web
             {
                 //如果没有Cookie，说明用户是非注册用户。就用匿名用户进行登陆。
                 AccountUtil.Login(SolemartUserCache.GetUser(SolemartUser.DefaultAnonymousUserID));
+
             }
         }
 
@@ -73,10 +74,7 @@ namespace Solemart.Web
             if (user.Cart.CartItems.Count > 0)
                 user.SaveCart();
 
-            this.Session.Abandon();
-            FormsAuthentication.SignOut();
-            HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, "");
-            Response.Cookies.Add(cookie);
+            AccountUtil.Logout();
         }
     }
 }

@@ -36,6 +36,11 @@ namespace Solemart.Web.Areas.Manager.Models
         public string Specification { get; set; }
 
         /// <summary>
+        /// The area the product reproduct.
+        /// </summary>
+        public string ProducingArea { get; set; }
+
+        /// <summary>
         /// 商品的单位
         /// </summary>
         public string Unit { get; set; }

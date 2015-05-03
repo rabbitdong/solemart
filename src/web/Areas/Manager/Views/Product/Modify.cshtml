@@ -21,6 +21,10 @@
             <input name="prod_name" tabindex="1" id="prod_name" type="text" value="@Model.ProductName" />
         </li>
         <li>
+            <label for="prodArea">产地:</label>
+            <input name="prodArea" tabindex="1" id="prodArea" type="text" value="@Model.ProducingArea" />
+        </li>
+        <li>
             <label for="cate">所属类别:</label>
             <select id="cate_id" name="cate">
                 @foreach (CategoryItem cate in Categories) {
@@ -124,6 +128,7 @@
             {
                 ProductID: $("#prod_id").val(),
                 ProductName: $("#prod_name").val(),
+                ProducingArea:$("#prodArea").val(),
                 CategoryID: $("#cate_id").val(),
                 Unit: $("#unit").val(),
                 Specification: $("#prod_spec").val(),

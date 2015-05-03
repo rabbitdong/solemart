@@ -29,7 +29,19 @@ namespace WinSolemart
 
             int totalCount = 0;
             List<OrderItem> orders = OrderManager.GetPagedOrders(OrderStatus.Ordered, 0, 10, out totalCount);
-            IEnumerable<OrderListViewModel> model = orders.Select(o => new OrderListViewModel { OrderID = o.OrderID.ToString(), UserName = o.User.UserName, Address = o.Address, Receiver = o.Receiver, ReceiverPhone = o.Phone, TotalAmount = o.TotalPrice, OrderDetails=o.OrderDetails });
+            IEnumerable<OrderListViewModel> model = orders.Select(o => new OrderListViewModel
+            {
+                OrderID = o.OrderID,
+                UserName = o.User.UserName,
+                Address = o.Address,
+                Receiver = o.Receiver,
+                OrderTime = o.OrderTime,
+                ReceiverPhone = o.Phone,
+                TotalAmount = o.TotalPrice,
+                OrderDetails = o.OrderDetails
+            }
+                );
+
             dgOrder.ItemsSource = model;
         }
 

@@ -226,12 +226,12 @@ namespace Solemart.DataProvider.Entity
         /// <summary>
         /// 商品的库存数量
         /// </summary>
-        public int StockCount { get; set; }
+        public decimal StockCount { get; set; }
 
         /// <summary>
         /// 商品的预留数量（表示被订购，但还没发货的数量）
         /// </summary>
-        public int ReserveCount { get; set; }
+        public decimal ReserveCount { get; set; }
 
         /// <summary>
         /// 商品的品牌ID信息
@@ -253,6 +253,11 @@ namespace Solemart.DataProvider.Entity
 
         [ForeignKey("VendorID")]
         public virtual VendorItem Vendor { get; set; }
+
+        /// <summary>
+        /// The producting area of the product.
+        /// </summary>
+        public string ProducingArea { get; set; }
 
         /// <summary>
         /// The size of the product
@@ -356,7 +361,7 @@ namespace Solemart.DataProvider.Entity
 
         public DateTime InStockTime { get; set; }
 
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
 
         public decimal Price { get; set; }
 

@@ -6,68 +6,88 @@
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="900" MinWidth="600"
 	Title="订单明细">
-    <Grid Name="gdOrerDetailContent" Margin="10">
-        <Grid.Resources>
-            <Style TargetType="Border">
-                <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="BorderBrush" Value="Black" />
-            </Style>
-        </Grid.Resources>
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="100" />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
-            <Button Name="btnPrint" Content="打印订单" Click="PrintBtn_Click" />
-            <Button Name="btnSendOrder" Content="发货" Click="btnSendOrder_Click" />            
+            <Button Name="btnPrint" Content="打印订单" Click="btnPrint_Click" Margin="5,10,5,10" Padding="10,2,10,2"/>
+            <Button Name="btnSendOrder" Content="发货" Click="btnSendOrder_Click" Margin="5,10,5,10" Padding="10,2,10,2"/>
         </StackPanel>
-        <TextBlock Grid.Row="1" TextAlignment="Center" FontSize="32">乐道水果订单</TextBlock>
-        <DockPanel Grid.Row="2">
-            <TextBlock Name="txtUserInfo" DockPanel.Dock="Left" />
-            <TextBlock Name="txtSendAddress" TextAlignment="Right" />
-        </DockPanel>
-        <DockPanel Grid.Row="3">
-            <StackPanel>
-                <ItemsControl Name="tbOrderTitle">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Width="150">
-                            <TextBlock>水果名称</TextBlock>
-                        </Border>
-                        <Border Width="120">
-                            <TextBlock TextAlignment="Right">数量(单位)</TextBlock>
-                        </Border>
-                        <Border Width="100">
-                            <TextBlock TextAlignment="Right">单价(元)</TextBlock>
-                        </Border>
-                        <Border Width="100">
-                            <TextBlock TextAlignment="Right">总价(元)</TextBlock>
-                        </Border>
-                    </StackPanel>
-                </ItemsControl>
-                <ItemsControl Name="tbOrderDetail">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Border Width="150" BorderThickness="1" BorderBrush="Black">
-                                    <TextBlock Text="{Binding ProductName}" />
-                                </Border>
-                                <Border Width="120" BorderThickness="1" BorderBrush="Black">
-                                    <TextBlock Text="{Binding AmountString}" TextAlignment="Right"/>
-                                </Border>
-                                <Border Width="100" BorderThickness="1" BorderBrush="Black">
-                                    <TextBlock Text="{Binding UnitPrice}" TextAlignment="Right"/>
-                                </Border>
-                                <Border Width="100" BorderThickness="1" BorderBrush="Black">
-                                    <TextBlock Text="{Binding TotalPrice}" TextAlignment="Right"/>
-                                </Border>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <TextBlock TextAlignment="Right" FontSize="24" Name="txtTotalPrice"></TextBlock>
-            </StackPanel>
-        </DockPanel>
+        <Grid Name="gdOrerDetailContent" Margin="10" Width="600" Height="352" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="42" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" TextAlignment="Center" VerticalAlignment="Top" FontSize="24">乐道(水果君)水果订单</TextBlock>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Name="txtOrderID" />
+                    <TextBlock Name="txtUserInfo" DockPanel.Dock="Left" />
+                </StackPanel>     
+                <StackPanel Grid.Column="1">
+                    <TextBlock Name="txtReceiver" />
+                    <TextBlock Name="txtSendAddress" />
+                    <TextBlock Name="txtOrderDate" />
+                </StackPanel>
+            </Grid>
+            <DockPanel Grid.Row="2">
+                <StackPanel>
+                    <ItemsControl Name="tbOrderTitle">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="160" BorderThickness="1" BorderBrush="Black">
+                                <TextBlock FontSize="15" Margin="5">水果名称</TextBlock>
+                            </Border>
+                            <Border Width="80" BorderBrush="Black" BorderThickness="0,1,1,1">
+                                <TextBlock FontSize="15" Margin="5">产地</TextBlock>
+                            </Border>
+                            <Border Width="100" BorderBrush="Black" BorderThickness="0,1,1,1">
+                                <TextBlock TextAlignment="Right" FontSize="15" Margin="5">数量(单位)</TextBlock>
+                            </Border>
+                            <Border Width="100" BorderBrush="Black" BorderThickness="0,1,1,1">
+                                <TextBlock TextAlignment="Right" FontSize="15" Margin="5">单价(元)</TextBlock>
+                            </Border>
+                            <Border Width="120" BorderBrush="Black" BorderThickness="0,1,1,1">
+                                <TextBlock TextAlignment="Right" FontSize="15" Margin="5">总价(元)</TextBlock>
+                            </Border>
+                        </StackPanel>
+                    </ItemsControl>
+                    <ItemsControl Name="tbOrderDetail">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Width="160" BorderThickness="1,0,1,1" BorderBrush="Black">
+                                        <TextBlock Margin="5" FontSize="14" Text="{Binding ProductName}" />
+                                    </Border>
+                                    <Border Width="80" BorderThickness="0,0,1,1" BorderBrush="Black">
+                                        <TextBlock Margin="5" FontSize="14" Text="{Binding ProductArea}" />
+                                    </Border>
+                                    <Border Width="100" BorderThickness="0,0,1,1" BorderBrush="Black">
+                                        <TextBlock Margin="5" FontSize="14" Text="{Binding AmountString}" TextAlignment="Right"/>
+                                    </Border>
+                                    <Border Width="100" BorderThickness="0,0,1,1" BorderBrush="Black">
+                                        <TextBlock Margin="5" FontSize="14" Text="{Binding UnitPrice}" TextAlignment="Right"/>
+                                    </Border>
+                                    <Border Width="120" BorderThickness="0,0,1,1" BorderBrush="Black">
+                                        <TextBlock Margin="5" FontSize="14" Text="{Binding TotalPrice}" TextAlignment="Right"/>
+                                    </Border>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock TextAlignment="Right" FontSize="20" Name="txtTotalPrice" Margin="5,10,10,0"></TextBlock>
+                </StackPanel>
+            </DockPanel>
+            <TextBlock TextAlignment="Center" Grid.Row="3">罗源乐道贸易有限公司. 400-899-0918</TextBlock>
+        </Grid>    
+        <TextBlock Name="txtMsg" Grid.Row="2" />        
     </Grid>
 </Page>

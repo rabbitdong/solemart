@@ -3,67 +3,40 @@
 @using Solemart.Web.Models;
 @model ProductListViewModel
 
-<div class="section">
-    <div class="p-section">
-        <ul class="p_list">
-            @foreach (ProductForListViewModel product in Model.ProductList)
-            {
-                <li id="product_@product.ProductID">
-                    <div class="p_list_shot">
-                        <p>
-                            <img class="p_img" src="/Images/product/normal/@product.ProductImageUrl" />
-                            @*@if (product.IsSpecial || product.Discount != 100)
-                            {
-                                <img class="spec_price" src="/Images/spec-price.png" />
-                                if (product.IsSpecial)
-                                {
-                                    <span class="spec_price attention">特价</span>
-                                }
-                                if (product.Discount != 100)
-                                {
-                                    <span class="spec_price attention">@(product.Discount / 10)折</span>
-                                }
-                            }*@
-                            <a class="add_to_cart" data-pid="@product.ProductID" href="javascript:void;"><img src="~/Images/common/add_to_shopping_cart_small.png" title="购买" /></a>
-                        </p>
-                    </div>
-                    <div class="p-list-info">
-                        <p class="prod-title">
-                            <span class="ellipsis" title="@product.ProductName">@product.ProductName</span>
-                        </p>
-                        @*<span>
-                            @if (product.Discount != 100)
-                            {
-                                <span class="past_price">@product.Price.ToString("C2")</span>
-                                <span>@((product.Price * product.Discount / 100).ToString("C2"))</span>
-                            }
-                            else
-                            {
-                                <span>@product.Price.ToString("C2")</span>
-                            }
-                            /@product.Unit
-                        </span>*@
-                        @if (product.IsOutOfStock)
-                        {
-                            <p class="no_available">缺货，只可预订</p>
-                        }
-                    </div>
-                </li>
-            }
-        </ul>
-    </div>
+<div class="productListWrapper">
+    <ul class="productList">
+        @foreach (ProductForListViewModel product in Model.ProductList)
+        {
+            <li id="product_@product.ProductID" class="productItem">
+                <div class="productImage">
+                    <img class="productImg" style="width:90%;" src="/Images/product/normal/@product.ProductImageUrl" />
+                    <a class="addToCart" data-pid="@product.ProductID" href="javascript:void;"><img src="~/Images/common/add_to_shopping_cart_small.png" title="购买" /></a>
+                </div>
+                <div class="productInfo">
+                    <p class="productTitle">
+                        <span class="ellipsis" title="@product.ProductName">@product.ProductName</span>
+                    </p>
+                    <p class="productPrice">
+                        <span>@product.Price.ToString("C2")</span>/@product.Unit
+                    </p>
+                    @if (product.IsOutOfStock)
+                    {
+                        <p class="no_available">缺货，只可预订</p>
+                    }
+                </div>
+            </li>
+        }
+    </ul>
 </div>
 
 <script type="text/javascript">
     $(function () {
-        $("ul.p_list").on("click", "li a.add_to_cart", function () {
+        $("ul.productList").on("click", "li a.addToCart", function () {
             $.post("/Cart/Add/" + $(this).data("pid"),
                 {},
                 function (result) {
-                    var ret = WebReturn(result);
-                    if (ret.success)
-                        window.location.reload();
-                    else
+                    var ret = new WebReturn(result);
+                    if (!ret.success)
                         alert(ret.message);
                 });
         })

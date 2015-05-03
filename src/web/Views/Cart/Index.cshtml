@@ -29,9 +29,7 @@
                 foreach (CartItem cartItem in Model.CartItems) {
                 <tr>
                     <td>
-                        <a class="l" href="/Product/Detail/@cartItem.Product.ProductID" title="查看该产品的详细信息">
-                            <img class="prodimg" src="/images/product/no-img.png" />
-                        </a>
+                        @*<img class="prodimg" src="/images/product/no-img.png" />*@
                         <h3>@cartItem.Product.ProductName</h3>
                     </td>
                     <td>@(cartItem.UnitPrice.ToString("C2"))</td>
@@ -72,7 +70,7 @@
 <script type="text/javascript">
     $(function () {
         $("input.prodamount").focusout(function () {
-            var amnt = parseInt($(this).val());
+            var amnt = parseFloat($(this).val());
             var prod_id = $(this).next().val();
             if (amnt < 0) {
                 alert("数量不能小于0，等于0是删除该商品");

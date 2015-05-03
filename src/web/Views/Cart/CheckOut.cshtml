@@ -7,7 +7,6 @@
     SendAddressItem MyAddrInfo = (User as SolemartUser).SendAddressInfo;
 }
 
-
 <div class="cart_content">
     <div class="cart_head">
         <div class="comm_btn l">
@@ -55,52 +54,50 @@
             </tr>
         </tfoot>
     </table>
-    <form method="post">
-        <div class="sendinfo">
-            <div class="info_head">
-                <span class="info_caption">收货信息:</span>
-                <button type="button" id="save_send_info" onclick="javascript:save_info();" class="comm_btn" value="保存送货信息"></button>
-                <span class="err_tip" id="err_for_noinfo">请填写下面的送货信息</span>
-            </div>
-            <ul>
-                <li>
-                    <span class="sendinfo_caption">送货地址:</span>
-                    <span id="sendinfo1_content">
-                        <span>@(MyAddrInfo!=null?MyAddrInfo.Receiver:"")</span>&nbsp;
-                        <span>@(MyAddrInfo!=null?MyAddrInfo.Address:"")</span>&nbsp;
-                        <span>@(MyAddrInfo!=null?MyAddrInfo.PostCode:"")</span>&nbsp;
-                        <span>@(MyAddrInfo!=null?MyAddrInfo.Phone:"")</span>
-                    </span>
-                    <ul id="sendinfo1_input">
-                        <li>
-                            <label for="receiver">收货人:</label>
-                            <input type="text" id="receiver" name="receiver" value="@((MyAddrInfo!=null||MyAddrInfo.Receiver==null)?MyAddrInfo.Receiver:"")" />
-                            <span class="err_tip" id="err_for_receiver">收货人姓名不能为空</span>
-                        </li>
-                        <li>
-                            <label for="address">收货地址:</label>
-                            <input type="text" id="address" name="address" value="@((MyAddrInfo!=null&&MyAddrInfo.Address!=null&&MyAddrInfo.Address!="")?MyAddrInfo.Address:"罗源县")" />
-                            <span class="err_tip" id="err_for_address">收货人地址不合法，目前只能送达罗源城关区域</span>
-                        </li>
-                        <li>
-                            <label for="phone">手机联系:</label>
-                            <input type="text" id="phone" name="phone" value="@(MyAddrInfo != null?MyAddrInfo.Phone:"")" />
-                            <span class="err_tip" id="err_for_phone">收货人电话号码不合法</span>
-                        </li>
-                    </ul>
-                </li>
-                <li><span class="sendinfo_caption">送货方式:</span> 送货上门</li>
-                <li>
-                    <span class="sendinfo_caption">付款方式: </span>
-                    <span id="sendinfo1_content_paytype">@MyAddrInfo.PaymentType.ToDisplayStr()</span>
-                    <select id="sendinfo1_paytype">
-                        <option value="0" @((MyAddrInfo.PaymentType == PaymentType.CashOnDelivery) ? "selected" : "")>货到付款</option>
-                        <option value="1" @((MyAddrInfo.PaymentType!= PaymentType.CashOnDelivery)?"selected":"")>支付宝支付</option>
-                    </select>
-                </li>
-            </ul>
+    <div class="sendinfo">
+        <div class="info_head">
+            <span class="caption">收货信息:</span>
+            <a href="javascript:void;" id="modifyAddress">修改</a>
+            <span class="err_tip" id="err_for_noinfo">请填写下面的送货信息</span>
         </div>
-    </form>
+        <ul>
+            <li>
+                <span class="subCaption">送货地址:</span>
+                <span id="addressContent">
+                    <span>@(MyAddrInfo!=null?MyAddrInfo.Receiver:"")</span>&nbsp;
+                    <span>@(MyAddrInfo!=null?MyAddrInfo.Address:"")</span>&nbsp;
+                    <span>@(MyAddrInfo!=null?MyAddrInfo.PostCode:"")</span>&nbsp;
+                    <span>@(MyAddrInfo!=null?MyAddrInfo.Phone:"")</span>
+                </span>
+                <ul id="addressInput">
+                    <li>
+                        <label for="receiver">收货人:</label>
+                        <input type="text" id="receiver" name="receiver" value="@((MyAddrInfo!=null||MyAddrInfo.Receiver==null)?MyAddrInfo.Receiver:"")" />
+                        <span class="err_tip" id="err_for_receiver">收货人姓名不能为空</span>
+                    </li>
+                    <li>
+                        <label for="address">收货地址:</label>
+                        <input type="text" id="address" name="address" value="@((MyAddrInfo!=null&&MyAddrInfo.Address!=null&&MyAddrInfo.Address!="")?MyAddrInfo.Address:"罗源县")" />
+                        <span class="err_tip" id="err_for_address">收货人地址不合法，目前只能送达罗源城关区域</span>
+                    </li>
+                    <li>
+                        <label for="phone">手机联系:</label>
+                        <input type="text" id="phone" name="phone" value="@(MyAddrInfo != null?MyAddrInfo.Phone:"")" />
+                        <span class="err_tip" id="err_for_phone">收货人电话号码不合法</span>
+                    </li>
+                </ul>
+            </li>
+            <li><span class="subCaption">送货方式:</span> 送货上门</li>
+            <li>
+                <span class="subCaption">付款方式: </span>
+                <span id="sendinfo1_content_paytype">@MyAddrInfo.PaymentType.ToDisplayStr()</span>
+                <select id="sendinfo1_paytype">
+                    <option value="0" selected>货到付款</option>
+                    @*<option value="1" @((MyAddrInfo.PaymentType!= PaymentType.CashOnDelivery)?"selected":"")>支付宝支付</option>*@
+                </select>
+            </li>
+        </ul>
+    </div>
     <div>
         <div class="comm_btn r">
             <a href="javascript:void(0);" class="comm_btn" onclick="javascript:submitorder();">提交订单</a>
@@ -112,15 +109,14 @@
     $(function () {
         @if (MyAddrInfo != null && MyAddrInfo.Receiver != null && MyAddrInfo.Receiver != "") {
             <text>
-        $("#sendinfo1_input").css("display", "none");
-            $("#sendinfo1_paytype").css("display", "none");
-            $("#save_send_info").html("修改");
+            $("#addressInput").hide();
+            $("#sendinfo1_paytype").hide();
             </text>
         } else {
             <text>
-        $("#sendinfo1_content").css("display", "none");
+            $("#addressContent").hide();
             $("#sendinfo1_content_paytype").css("display", "none");
-            $("#save_send_info").html("填写送货信息");
+            $("#modifyAddress").css("display", "none");
             </text>
         }
     });
@@ -145,16 +141,45 @@
             if (!Validator.ValidatePhone($("#phone").val()))
                 $("#err_for_phone").css("visibility", "visible");
         });
+
+        $('#modifyAddress').bind("click", function () {
+            $("#addressContent").hide();
+            $("#addressInput").show();
+            $("#modifyAddress").hide();
+        });
     });
 
+    function isCompleteAddress() {
+        var is_validate = true;
+        if ($.trim($("#receiver").val()) == "") {
+            $("#err_for_receiver").show();
+            is_validate = false;
+        }
+        if ($("#address").val().indexOf("罗源县") == -1) {
+            $("#err_for_address").show();
+            is_validate = false;
+        }
+        if (!Validator.ValidatePhone($("#phone").val())) {
+            $("#err_for_phone").show();
+            is_validate = false;
+        }
+
+        return is_validate;
+    }
+
     function submitorder() {
-        if ($("#sendinfo1_input").css("display") != "none") {
+        if (!isCompleteAddress()) {
             $("#err_for_noinfo").css("visibility", "visible");
             return false;
         }
 
         $.post("/Cart/CheckoutOrder",
             {
+                Receiver: $("#receiver").val(),
+                Address: $("#address").val(),
+                PostCode: $("#post").val(),
+                Phone: $("#phone").val(),
+                PaymentType: $("#sendinfo1_paytype").val(),
                 remark: $("#order_remark").val(),
                 paytype: $("#paytype").val()
             },
@@ -172,50 +197,5 @@
                 }
             }
         );
-    }
-
-    function save_info() {
-        if ($("#save_send_info").html() == "填写送货信息") {
-            var is_validate = true;
-            if ($.trim($("#receiver").val()) == "") {
-                $("#err_for_receiver").css('visibility', 'visible');
-                is_validate = false;
-            }
-            if ($("#address").val().indexOf("罗源县") == -1) {
-                $("#err_for_address").css("visibility", "visible");
-                is_validate = false;
-            }
-            if (!Validator.ValidatePhone($("#phone").val())) {
-                $("#err_for_phone").css("visibility", "visible");
-                is_validate = false;
-            }
-
-            if (!is_validate) {
-                return false;
-            }
-
-            $.post("/Cart/SaveAddrInfo",
-                {
-                    Receiver: $("#receiver").val(),
-                    Address: $("#address").val(),
-                    PostCode: $("#post").val(),
-                    Phone: $("#phone").val(),
-                    PaymentType: $("#sendinfo1_paytype").val()
-                },
-                function (result) {
-                    var webreturn = new WebReturn(result);
-                    if (webreturn.success)
-                        window.location.reload();
-                    else {
-                        alert(webreturn.message);
-                    }
-                });
-        }
-        else {  /* 是修改的情况 */
-            $("#sendinfo1_input").css("display", "block");
-            $("#sendinfo1_paytype").css("display", "inline");
-            $("#sendinfo1_content_paytype").css("display", "none");
-            $("#save_send_info").html("填写送货信息");
-        }
     }
 </script>

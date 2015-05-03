@@ -192,6 +192,23 @@ namespace Solemart.BusinessLib
         }
 
         /// <summary>
+        /// Clear the user's shopping cart.
+        /// </summary>
+        public void ClearCart()
+        {
+            cart.CartItems.Clear();
+        }
+
+        /// <summary>
+        /// Set the cart to User. it happen the user login.
+        /// </summary>
+        /// <param name="cart">the new cart</param>
+        public void SetCart(Cart cart)
+        {
+            this.cart = cart;            
+        }
+
+        /// <summary>
         /// Get the user's cart
         /// </summary>
         public Cart Cart

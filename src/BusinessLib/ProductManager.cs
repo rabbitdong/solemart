@@ -518,6 +518,8 @@ namespace Solemart.BusinessLib
                     oldProduct.Specification = product.Specification;
                 if(!string.IsNullOrWhiteSpace(product.Description))
                     oldProduct.Description = product.Description;
+                if (!string.IsNullOrWhiteSpace(product.ProducingArea))
+                    oldProduct.ProducingArea = product.ProducingArea;
                 oldProduct.CategoryID = product.CategoryID;
 
                 return context.SaveChanges() > 0;

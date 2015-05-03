@@ -163,7 +163,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\ebooks.css" />
-    <Content Include="Content\header.css" />
     <Content Include="Content\jquery-ui-1.10.3.custom.min.css" />
     <Content Include="Content\m.css" />
     <Content Include="Content\mobile.css" />
@@ -226,7 +225,6 @@
     <Content Include="Content\tinyeditor.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Areas\Manager\Views\Acknowledge\EBooks.cshtml" />
     <Content Include="Areas\Manager\Views\Advise\Index.cshtml" />
     <Content Include="Areas\Manager\Views\BillBoard\Index.cshtml" />
     <Content Include="Areas\Manager\Views\Brand\Index.cshtml" />

@@ -18,12 +18,12 @@ namespace Solemart.Web.Areas.Manager.Controllers
         public ActionResult Index(int? p)
         {
             int pi = p ?? 0; //表示页索引
-            int totalPageCount = 0;
+            int totalCount = 0;
 
             ProductManagerViewModel model = new ProductManagerViewModel();
-            model.ProductList = ProductManager.GetPagedAllProducts(pi, 10, out totalPageCount);
+            model.ProductList = ProductManager.GetPagedAllProducts(pi, 10, out totalCount);
             model.PageIndex = pi;
-            model.TotalPageCount = totalPageCount;
+            model.TotalPageCount = (totalCount + 9) / 10;
 
             return View(model);
         }
@@ -85,7 +85,7 @@ namespace Solemart.Web.Areas.Manager.Controllers
             }
 
             HttpPostedFileBase file = Request.Files[0];
-            if (!file.ContentType.Contains("image") || file.ContentLength > 65535)
+            if (!file.ContentType.Contains("image") || file.ContentLength > 262144)
             {
                 return Content(WebResult<string>.FileTooLongResult.ResponseString);
             }
@@ -191,7 +191,7 @@ namespace Solemart.Web.Areas.Manager.Controllers
         public ActionResult InstockNewProduct(ProductInStockViewModel model)
         {
             ProductItem product = new ProductItem { ProductName=model.ProductName, CategoryID = model.CategoryID, BrandID = model.BrandID, 
-                 Description = model.Description, Specification = model.Specification, VendorID=model.VendorID, Unit=model.Unit};
+                 Description = model.Description, Specification = model.Specification, ProducingArea=model.ProducingArea, VendorID=model.VendorID, Unit=model.Unit};
             if (ProductManager.InStockProduct(product, model.StockPrice, model.StockAmount, model.Remark))
             {
                 return Content(WebResult<string>.SuccessResult.ResponseString);
