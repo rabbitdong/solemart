@@ -281,6 +281,26 @@ namespace Solemart.Web.Controllers
             return View(current_order);
         }
 
+        /// <summary>用户取消订单的处理
+        /// </summary>
+        /// <param name="id">用户要取消的订单ID</param>
+        /// <returns>用户取消订单的结果View</returns>
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult CancelOrder(int id)
+        {
+            int order_id = id;
+
+            SolemartUser user = User as SolemartUser;
+
+            OrderItem order = OrderManager.GetOrderInfo(order_id);
+            if (order.UserID != SolemartUser.DefaultAnonymousUserID && user.UserID != order.UserID)
+                return Content(WebResult<string>.NormalErrorResult.ResponseString);
+
+            if (OrderManager.CancelOrder(order_id))
+                return Content(WebResult<string>.SuccessResult.ResponseString);
+            return Content(WebResult<string>.NormalErrorResult.ResponseString);
+        }
+
         #region 支付宝处理
         /// <summary>获取支付宝GET过来通知消息，并以“参数名=参数值”的形式组成数组
         /// </summary>

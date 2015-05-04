@@ -57,12 +57,12 @@
 
 <script type="text/javascript">
     function createtable(oitems) {
-        var oitems = eval(oitems);
+        //var oitems = (JSON && JSON.parse(orderItem)) || $.parseJSON(orderItem);
         var th = "<table class='m'><thead><tr><td>商品名称</td><td>单价(￥)</td><td>数量</td><td>总价</td></tr></thead>"
         var tbody = "<tbody>";
         for (var i = 0; i < oitems.length; ++i) {
-            tbody += "<tr><td><a href='/Product/Detail/" + oitems[i].Product.ProductID + "' title='" + oitems[i].Product.Name + "' target='_blank'>"
-                + oitems[i].Product.Name + "</a></td><td>" + oitems[i].UnitPrice + "</td><td>" + oitems[i].Amount + "</td><td>" + oitems[i].UnitPrice * oitems[i].Amount + "</td></tr>";
+            tbody += "<tr><td><a href='/Product/Detail/" + oitems[i].ProductID + "' title='" + oitems[i].Name + "' target='_blank'>"
+                + oitems[i].Name + "</a></td><td>" + oitems[i].UnitPrice + "</td><td>" + oitems[i].Amount + "</td><td>" + oitems[i].UnitPrice * oitems[i].Amount + "</td></tr>";
         }
         tbody += "</tbody>";
 
@@ -107,9 +107,10 @@
             return false;
         }
 
-        $.post("/Account/CancelOrder/" + oid, {},
+        $.post("/Cart/CancelOrder/" + oid, {},
             function (result) {
-                if (result == "ok") {
+                var ret=new WebReturn(result);
+                if (ret.success) {
                     $("#order_state_" + oid).html("已取消");
                     $("#orderinfo_" + oid).addClass("cancel");
                     $("#orderinfo_" + oid).removeClass("unsend");

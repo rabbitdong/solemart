@@ -5,7 +5,10 @@ var HomeLogin = (function () {
         this.persistCheckBox = document.getElementById("persist");
         this.createAccountAnchor = document.getElementById("createAccount");
         this.loginButton = document.getElementById("loginButton");
-        this.returnUrl = window.location.href.substring(window.location.href.indexOf("ReturnUrl"), window.location.href.length);
+        if (window.location.href.indexOf("ReturnUrl=") != -1)
+            this.returnUrl = window.location.href.substring(window.location.href.indexOf("ReturnUrl") + 10, window.location.href.length);
+        else
+            this.returnUrl = null;
         this.postUrl = "/Home/OnLogin";
         this.loginButton.onclick = this.onloginClick.bind(this);
     }
@@ -13,7 +16,8 @@ var HomeLogin = (function () {
         $.post(this.postUrl, {
             username: this.usernameInput.value,
             password: this.passwordInput.value,
-            isPersist: this.persistCheckBox.checked
+            isPersist: this.persistCheckBox.checked,
+            returnUrl: this.returnUrl
         }, function (result) {
             var webreturn = new WebReturn(result);
             if (webreturn.success)

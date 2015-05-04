@@ -24,6 +24,7 @@ namespace WinSolemart
     public partial class OrderDetailPage : Page
     {
         private OrderDetailViewModel detailModel;
+        private int numberRowOfOnePage;
 
         public OrderDetailPage(OrderListViewModel model)
         {
@@ -46,19 +47,23 @@ namespace WinSolemart
                     ProductName = orderDetail.Product.ProductName,
                     ProductArea = orderDetail.Product.ProducingArea,
                     AmountString = string.Format("{0}({1})", orderDetail.Amount, orderDetail.Product.Unit),
-                    UnitPrice = orderDetail.UnitPrice,
-                    TotalPrice = orderDetail.UnitPrice * orderDetail.Amount
+                    UnitPrice = orderDetail.UnitPrice.ToString(),
+                    TotalPrice = (orderDetail.UnitPrice * orderDetail.Amount).ToString()
                 });
             }
 
-            tbOrderDetail.ItemsSource = detailModel.DetailItems;
-            if (detailModel.DetailItems.Count < 10)
+            numberRowOfOnePage = 9;
+            int addCount = numberRowOfOnePage - detailModel.DetailItems.Count;
+            if (addCount < numberRowOfOnePage)
             {
-                for (int i = 0; i < 10 - detailModel.DetailItems.Count; ++i)
+                for (int i = 0; i < addCount; ++i)
                 {
-
+                    detailModel.DetailItems.Add(new OrderDetailItemViewModel { ProductName = "", ProductArea = "", AmountString = "", TotalPrice = "", UnitPrice = "" });
                 }
             }
+
+
+            tbOrderDetail.ItemsSource = detailModel.DetailItems;
 
             txtOrderID.Text = string.Format("订单号：{0:00000000}", detailModel.OrderID);
             txtUserInfo.Text = string.Format("客   户：{0}", detailModel.Receiver);

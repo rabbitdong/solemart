@@ -132,7 +132,7 @@ namespace Solemart.Web.Controllers
         /// <summary>用户进行登录的处理
         /// </summary>
         /// <returns>返回用户登录的结果</returns>
-        public ActionResult OnLogin(string username, string password, bool isPersist, string ReturnUrl)
+        public ActionResult OnLogin(string username, string password, bool isPersist, string returnUrl)
         {
             if (Solemart.WebUtil.AccountUtil.Login(username, password, isPersist))
             {
@@ -140,7 +140,8 @@ namespace Solemart.Web.Controllers
                 if (redirect_url == null || redirect_url == "")
                     redirect_url = "/";
 
-                return Content(new WebResult<string> { ResultCode = WebResultCode.Success, ResultData = redirect_url }.ResponseString);
+                returnUrl = string.Format("/{0}", returnUrl);
+                return Content(new WebResult<string> { ResultCode = WebResultCode.Success, ResultData = returnUrl }.ResponseString);
             }
             else
                 return Content(WebResult<string>.UserNameOrPasswordErrorResult.ResponseString);

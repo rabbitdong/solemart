@@ -68,10 +68,11 @@
             return false;
         }
 
-        $.post("/Account/CancelOrder/"+oid,
+        $.post("/Cart/CancelOrder/"+oid,
             { },
             function (result) {
-                if (result == "ok") {
+                var ret = new WebReturn(result);
+                if (ret.success) {
                     $("#order_title").html("订单已取消");
                     $(btn).remove();
                 }

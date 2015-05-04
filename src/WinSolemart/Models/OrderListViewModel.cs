@@ -27,8 +27,8 @@ namespace WinSolemart.Models
         public string ProductName { get; set; }
         public string ProductArea { get; set; }
         public string AmountString { get; set; }
-        public decimal UnitPrice { get; set; }
-        public decimal TotalPrice { get; set; }
+        public string UnitPrice { get; set; }
+        public string TotalPrice { get; set; }
     }
 
     public class OrderDetailViewModel

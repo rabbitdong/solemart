@@ -184,11 +184,20 @@ namespace Solemart.BusinessLib {
         /// <summary>
         /// The user cancel the order
         /// </summary>
-        /// <param name="orderID">要取消的订单ID</param>
-        /// <returns>是否取消成功</returns>
+        /// <param name="orderID">The order id</param>
+        /// <returns>Indicate the operation successful or not</returns>
         public static bool CancelOrder(int orderID) 
-        {
-            return true;
+        {   
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                OrderItem order = context.OrderItems.Find(orderID);
+                if (order == null || order.Status != OrderStatus.Ordered)
+                    return false;
+
+                order.Status = OrderStatus.Cancel;
+                order.CancelTime = DateTime.Now;
+                return context.SaveChanges() > 0;
+            }
         }
     }
 }

@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using WinSolemart.Models;
 
 namespace WinSolemart
@@ -23,13 +24,16 @@ namespace WinSolemart
     /// </summary>
     public partial class OrderListPage : Page
     {
+        private DispatcherTimer timer;
+        IEnumerable<OrderListViewModel> model = null;
+
         public OrderListPage()
         {
             InitializeComponent();
 
             int totalCount = 0;
             List<OrderItem> orders = OrderManager.GetPagedOrders(OrderStatus.Ordered, 0, 10, out totalCount);
-            IEnumerable<OrderListViewModel> model = orders.Select(o => new OrderListViewModel
+            model = orders.Select(o => new OrderListViewModel
             {
                 OrderID = o.OrderID,
                 UserName = o.User.UserName,
@@ -39,10 +43,14 @@ namespace WinSolemart
                 ReceiverPhone = o.Phone,
                 TotalAmount = o.TotalPrice,
                 OrderDetails = o.OrderDetails
-            }
-                );
+            });
 
             dgOrder.ItemsSource = model;
+
+            timer = new DispatcherTimer();
+            timer.Tick += dispatcherTimer_Tick;
+            timer.Interval = new TimeSpan(0,0,5);
+            timer.Start();
         }
 
         private void DG_Hyperlink_Click(object sender, RoutedEventArgs e)
@@ -51,6 +59,25 @@ namespace WinSolemart
             OrderListViewModel model = link.DataContext as OrderListViewModel;
             
             NavigationService.Navigate(new OrderDetailPage(model));
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            int totalCount = 0;
+            List<OrderItem> orders = OrderManager.GetPagedOrders(OrderStatus.Ordered, 0, 10, out totalCount);
+            model = orders.Select(o => new OrderListViewModel
+            {
+                OrderID = o.OrderID,
+                UserName = o.User.UserName,
+                Address = o.Address,
+                Receiver = o.Receiver,
+                OrderTime = o.OrderTime,
+                ReceiverPhone = o.Phone,
+                TotalAmount = o.TotalPrice,
+                OrderDetails = o.OrderDetails
+            });
+
+            dgOrder.Items.Refresh();
         }
     }
 }

@@ -145,12 +145,12 @@ namespace Solemart.Web.Controllers
             SolemartUser user = User as SolemartUser;
 
             int pageIndex = p ?? 0;
-            int totalPageCount = 0;
-            List<OrderItem> MyOrders = OrderManager.GetPagedUserOrder(user.UserID, pageIndex, 10, out totalPageCount);
+            int totalCount = 0;
+            List<OrderItem> MyOrders = OrderManager.GetPagedUserOrder(user.UserID, pageIndex, 10, out totalCount);
 
             OrderListViewModel model = new OrderListViewModel();
             model.PageIndex = pageIndex;
-            model.TotalPageCount = totalPageCount;
+            model.TotalPageCount = (totalCount + 9) / 10;
             model.OrderList = MyOrders;
 
             return View(model);
@@ -178,26 +178,7 @@ namespace Solemart.Web.Controllers
                             UnitPrice = p.UnitPrice
                         };
 
-            return Json(products);
-        }
-
-        /// <summary>用户取消订单的处理
-        /// </summary>
-        /// <param name="id">用户要取消的订单ID</param>
-        /// <returns>用户取消订单的结果View</returns>
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult CancelOrder(int id)
-        {
-            int order_id = id;
-
-            if (OrderManager.CancelOrder(order_id))
-            {
-                return Content("ok");
-            }
-            else
-            {
-                return Content("error");
-            }
+            return Json(items);
         }
 
         /// <summary>用户确认订单的操作处理

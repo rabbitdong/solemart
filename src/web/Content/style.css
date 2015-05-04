@@ -6,10 +6,11 @@ body { background: #f5f5f5; font-family: "Microsoft YaHei",Arial,Helvetica,sans-
 /*  
 导航栏的UI
 */
-.appNav { position:fixed; width:100%; right:0px; left:0px; top:0px; z-index:3000; background-color:#cfcfcf; }
-    .appNav .seperateLine { width: 1px; height: 28px; background: #dadada; right: -1px; top: 12px; }
-.appLink { width: 50%; border-bottom: 1px solid #7f7f7f; float: left; height: 1.4em; font-size: 1.2em; text-decoration: none; color: #7f7f7f; text-align: center; }
-.shoppingCart { margin-right: -1px; border-right: 1px solid #7f7f7f; }
+.appNav { position:fixed; margin-left:10%; width:80%; top:0px; z-index:3000; background-color:rgba(233,233,233,100); max-width:512px;  }
+    .appNav .seperateLine { float:left; width: 1px; height: 1.2em; background: #7f7f7f; margin-top: 0.1em; }
+.appNav .appLink { width: 50%; border-bottom: 1px solid #7f7f7f; float: left; height: 1.4em; font-size: 1.2em; text-decoration: none; color: #7f7f7f; text-align: center; }
+.appNav .shoppingCart { margin-right: -2px; border-left:1px solid #7f7f7f; }
+.appNav .myAccount{margin-left:-1px; border-right:1px solid #7f7f7f;}
 
 /* 微信上还不是很好支持这个
 .shoppingCart::before, .myAccount::before { margin: 0 auto; background: url(/Images/home-icons.png) no-repeat; background-size: 100%; width: 28px; height: 32px; display: block; content: ""; }
@@ -18,7 +19,7 @@ body { background: #f5f5f5; font-family: "Microsoft YaHei",Arial,Helvetica,sans-
 .shoppingCart::after, .myAccount::after { content: ""; display: block; width: 1px; height: 28px; background: #dadada; position: absolute; right: -1px; top: 12px; }
 */
 /* 搜索栏区 */
-.searchBar { min-height: 44px; margin-top:1.4em; }
+.searchBar { min-height: 44px; margin-top:30px; }
     .searchBar .logoArea { float: left; }
     .searchBar .searchBox { text-align: right; }
 input#txtSearch { margin-left: 0px; border: 1px solid #ddd; width: 12em; background-color: #ddd; padding: 1px 2px; }
