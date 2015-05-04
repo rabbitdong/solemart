@@ -1,7 +1,8 @@
 ﻿div.edit_area { text-align: left; width: 70%; margin-left: 10px; display: inline-block; }
+    div.edit_area h1{font-size:18px;}
     div.edit_area h3 { margin: 15px 0px 0px 0px; padding: 12px 10px; clear: both; background-color: rgb(85, 138, 190); }
     div.edit_area li { margin: 30px 0px 0px 0px; list-style: none; }
-    div.edit_area label { padding: 4px 10px 2px 0px; float: left; clear: left; width: 200px; text-align: right; }
+    div.edit_area label { padding: 4px 10px 2px 0px; float: left; clear: left; width: 100px; text-align: right; }
     div.edit_area a.pwTip { background-color: rgb(221, 221, 221); border-radius: 7px; display: inline-block; width: 16px; text-align: center; font-weight: bold; }
     div.edit_area input { margin: 0px 5px 0px 0px; width: 240px; height: 20px; }
     div.edit_area span.fOption label { float: none; }

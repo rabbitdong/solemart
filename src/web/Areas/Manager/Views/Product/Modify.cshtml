@@ -3,7 +3,7 @@
 @model ProductItem
 
 @{
-    ViewBag.Title = "Modify";
+    ViewBag.Title = "修改商品信息";
     Layout = "~/Areas/Manager/Views/Shared/_ManagerLayout.cshtml";
     IList<CategoryItem> Categories = CategoryManager.Instance.Categories;
     IList<ProductImageItem> Images = ProductManager.GetProductImage(Model.ProductID);
@@ -51,8 +51,8 @@
             <input name="prod_spec" tabindex="2" id="prod_spec" type="text" value="@Model.Specification" />
         </li>
         <li>
-            <label for="prod_desc">商品说明:</label>
-            <textarea name="prod_desc" tabindex="2" id="prod_desc" cols="30" rows="5">@Model.Description</textarea>
+            <p for="prod_desc">商品说明:</p>
+            <textarea name="prod_desc" tabindex="2" id="prod_desc">@Model.Description</textarea>
         </li>
         <li>
             <label onclick="postback();"><a class="comm_btn" onclick="javascript:commit_modify();" href="javascript:void(0);">提交修改</a></label>
@@ -76,6 +76,28 @@
 </fieldset>
 <script type="text/javascript">
     $(function () {
+        var editor = new TINY.editor.edit('editor', {
+            id: 'prod_desc',
+            width: 520,
+            height: 210,
+            cssclass: 'tinyeditor',
+            controlclass: 'tinyeditor-control',
+            rowclass: 'tinyeditor-header',
+            dividerclass: 'tinyeditor-divider',
+            controls: ['bold', 'italic', 'underline', 'strikethrough', '|', 'subscript', 'superscript', '|',
+                'orderedlist', 'unorderedlist', '|', 'outdent', 'indent', '|', 'leftalign',
+                'centeralign', 'rightalign', 'blockjustify', '|', 'unformat', '|', 'undo', 'redo', 'n',
+                'font', 'size', 'style', '|', 'image', 'link', 'unlink'],
+            footer: true,
+            fonts: ['Verdana', 'Arial', 'Georgia', 'Trebuchet MS'],
+            xhtml: true,
+            cssfile: 'custom.css',
+            bodyid: 'editor',
+            footerclass: 'tinyeditor-footer',
+            toggle: { text: 'source', activetext: 'wysiwyg', cssclass: 'toggle' },
+            resize: { cssclass: 'resize' }
+        });
+
         $("div.editable").bind("mousedown", function () {
             var rashimg = $("<img src='/Images/common/trash64.png' title='删除本图片' />");
             $(this).append(rashimg).unbind("mousedown");

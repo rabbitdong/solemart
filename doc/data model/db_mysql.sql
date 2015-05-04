@@ -83,8 +83,8 @@ CREATE TABLE ProductItems(
 	ProducingArea 	NVARCHAR(30),		#产地
 	Specification	NVARCHAR(30),
 	Unit			NVARCHAR(5) DEFAULT N'件',	#单位，如斤、件、套等
-	StockCount	 	DECIMAL DEFAULT 0.0, 		#表示库存数量
-	ReserveCount	DECIMAL  DEFAULT 0.0,	#商品保留的数量(如果用户订购了该商品，订购数量就是保留的数量)
+	StockCount	 	DECIMAL(10,2) DEFAULT 0.0, 		#表示库存数量
+	ReserveCount	DECIMAL(10,2)  DEFAULT 0.0,	#商品保留的数量(如果用户订购了该商品，订购数量就是保留的数量)
 	BrandID			INTEGER REFERENCES BrandItems(BrandID),
 	FirstInStockTime  	DATETIME,		#第一次进货的时间
 	VendorID		INTEGER REFERENCES VendorItems(VendorID),
@@ -101,14 +101,14 @@ CREATE TABLE PackageItems(
 	StartTime		DATETIME,				#开始销售日期
 	Remark 			NVARCHAR(2000),				#套餐说明
 	EndTime			DATETIME,				#销售终止日期
-	Amount 			DECIMAL DEFAULT 0			#套餐的数量	
+	Amount 			DECIMAL(10,2) DEFAULT 0			#套餐的数量	
 )
 
 #套餐详细信息表
 CREATE TABLE PackageDetailItems(
 	PackageID 		INTEGER REFERENCES PackageItems(PackageID),
 	ProductID		INTEGER REFERENCES ProductItems(ProductID),
-	Amount 			DECIMAL DEFAULT 0,
+	Amount 			DECIMAL(10,2) DEFAULT 0,
 	CONSTRAINT PK_PackageDetailItems PRIMARY KEY (PackageID, ProductID)	
 )
 
@@ -163,7 +163,7 @@ CREATE TABLE InStockItems(
 CREATE TABLE CartItems(
 	UserID		INTEGER REFERENCES UserItems(UserID),
 	ProductID	INTEGER REFERENCES ProductItems(ProductID),
-	Amount		DECIMAL	NOT NULL DEFAULT 0,
+	Amount		DECIMAL(10,2) NOT NULL DEFAULT 0,
 	UnitPrice	DECIMAL(10,2) DEFAULT 0.0,
 	Description NVARCHAR(100) DEFAULT '',
 	CONSTRAINT pk_TempOrders PRIMARY KEY(UserID, ProductID)
@@ -195,7 +195,7 @@ CREATE TABLE OrderItems(
 CREATE TABLE OrderDetailItems(
 	OrderID		INTEGER REFERENCES OrderItems(OrderID),
 	ProductID	INTEGER REFERENCES ProductItems(ProductID),
-	Amount		DECIMAL NOT NULL,
+	Amount		DECIMAL(10,2) NOT NULL,
 	UnitPrice	DECIMAL(10,2) NOT NULL,		#商品的单价信息
 	Remark		NVARCHAR(100) DEFAULT '',  # Remark of the product item.
 	CONSTRAINT pk_OrderDetails PRIMARY KEY(OrderID, ProductID)

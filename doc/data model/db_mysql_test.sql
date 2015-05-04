@@ -83,8 +83,8 @@ CREATE TABLE TestProductItems(
 	Specification	NVARCHAR(30),
 	ProducingArea	NVARCHAR(30),	#产地
 	Unit			NVARCHAR(5) DEFAULT N'件',	#单位，如斤、件、套等
-	StockCount	 	INTEGER DEFAULT 0, 		#表示库存数量
-	ReserveCount	INTEGER  DEFAULT 0,	#商品保留的数量(如果用户订购了该商品，订购数量就是保留的数量)
+	StockCount	 	DECIMAL(10,2) DEFAULT 0.0, 		#表示库存数量
+	ReserveCount	DECIMAL(10,2)  DEFAULT 0.0,	#商品保留的数量(如果用户订购了该商品，订购数量就是保留的数量)
 	BrandID			INTEGER REFERENCES TestBrandItems(BrandID),
 	FirstInStockTime  	DATETIME,		#第一次进货的时间
 	VendorID		INTEGER REFERENCES TestVendorItems(VendorID),
@@ -101,14 +101,14 @@ CREATE TABLE TestPackageItems(
 	StartTime		DATETIME,				#开始销售日期
 	Remark 			NVARCHAR(2000),				#套餐说明
 	EndTime			DATETIME,				#销售终止日期
-	Amount 			DECIMAL DEFAULT 0.0			#套餐的数量	
+	Amount 			DECIMAL(10,2) DEFAULT 0.0			#套餐的数量	
 )
 
 #套餐详细信息表
 CREATE TABLE TestPackageDetailItems(
 	PackageID 		INTEGER REFERENCES TestPackageItems(PackageID),
 	ProductID		INTEGER REFERENCES TestProductItems(ProductID),
-	Amount 			DECIMAL DEFAULT 0.0,
+	Amount 			DECIMAL(10,2) DEFAULT 0.0,
 	CONSTRAINT PK_TestPackageDetailItems PRIMARY KEY (PackageID, ProductID)	
 )
 
@@ -154,7 +154,7 @@ CREATE TABLE TestInStockItems(
 	InStockID	INTEGER AUTO_INCREMENT PRIMARY KEY,
 	ProductID	INTEGER REFERENCES TestProductItems(ProductID),
 	InStockTime	DATETIME,	#商品入库的时间
-	Amount		DECIMAL NOT NULL DEFAULT 0,			#商品的库存数量
+	Amount		DECIMAL(10,2) NOT NULL DEFAULT 0,			#商品的库存数量
 	Price		DECIMAL(10,2) NOT NULL DEFAULT 0.0,		#商品的入库价格
 	Remark		NVARCHAR(200)
 )CHARACTER SET utf8;
@@ -163,7 +163,7 @@ CREATE TABLE TestInStockItems(
 CREATE TABLE TestCartItems(
 	UserID		INTEGER REFERENCES TestUserItems(UserID),
 	ProductID	INTEGER REFERENCES TestProductItems(ProductID),
-	Amount		DECIMAL	NOT NULL DEFAULT 0,
+	Amount		DECIMAL(10,2)	NOT NULL DEFAULT 0,
 	UnitPrice	DECIMAL(10,2) DEFAULT 0.0,
 	Description NVARCHAR(100) DEFAULT '',
 	CONSTRAINT pk_TestTempOrders PRIMARY KEY(UserID, ProductID)
@@ -195,7 +195,7 @@ CREATE TABLE TestOrderItems(
 CREATE TABLE TestOrderDetailItems(
 	OrderID		INTEGER REFERENCES TestOrderItems(OrderID),
 	ProductID	INTEGER REFERENCES TestProductItems(ProductID),
-	Amount		DECIMAL NOT NULL,
+	Amount		DECIMAL(10,2) NOT NULL,
 	UnitPrice	DECIMAL(10,2) NOT NULL,		#商品的单价信息
 	Remark		NVARCHAR(100) DEFAULT '',  # Remark of the product item.
 	CONSTRAINT pk_TestOrderDetails PRIMARY KEY(OrderID, ProductID)
