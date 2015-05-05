@@ -3,13 +3,14 @@
 @using Solemart.Web.Models;
 @model ProductListViewModel
 
+@Html.Partial("TopAppNav")
 <div class="productListWrapper">
     <ul class="productList">
         @foreach (ProductForListViewModel product in Model.ProductList)
         {
             <li id="product_@product.ProductID" class="productItem">
                 <div class="productImage">
-                    <img class="productImg" style="width:90%;" src="/Images/product/normal/@product.ProductImageUrl" />
+                    <a href="/Product/Detail/@product.ProductID" title="查看水果详情"><img class="productImg" style="width:90%;" src="/Images/product/normal/@product.ProductImageUrl" /></a>
                     <a class="addToCart" data-pid="@product.ProductID" href="javascript:void;"><img src="~/Images/common/add_to_shopping_cart_small.png" title="购买" /></a>
                 </div>
                 <div class="productInfo">

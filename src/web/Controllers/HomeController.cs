@@ -42,7 +42,10 @@ namespace Solemart.Web.Controllers
                 pmodel.Unit = product.Product.Unit;
                 pmodel.IsOutOfStock = (product.Product.StockCount - product.Product.ReserveCount) == 0;
                 pmodel.ProductImageName = productItem.ProductName;
-                pmodel.ProductImageUrl = imageItem.ImageUrl;
+                if (imageItem != null)
+                    pmodel.ProductImageUrl = imageItem.ImageUrl;
+                else
+                    pmodel.ProductImageUrl = "no-img.png";
                 model.ProductList.Add(pmodel);
             }
 

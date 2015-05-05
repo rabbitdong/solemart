@@ -225,21 +225,21 @@ namespace Solemart.BusinessLib
 
                 int startIndex = 0;
                 int endIndex = 0;
-                int count = 0;
 
                 List<ProductImageItem> imageList = context.ProductImageItems.Where(i => (i.ProductID == productID)).ToList();
                 if (imageList == null || imageList.Count == 0)
                     return string.Format(pathFmt, product.ProductID, 0, extName);
 
-                int[] imgSequence = new int[imageList.Count];
+                int count = imageList.Count;
+                int[] imgSequence = new int[count];
 
-                for (int idx = 0; idx < count; ++idx)
+                for (int idx = 0; idx < imageList.Count; ++idx)
                 {
                     string url = imageList[idx].ImageUrl;
                     startIndex = url.IndexOf('_') + 1;
                     endIndex = url.LastIndexOf('.');
                     if (!int.TryParse(url.Substring(startIndex, endIndex - startIndex), out imgSequence[idx]))
-                        break;
+                        continue;
                 }
 
                 Array.Sort<int>(imgSequence);

@@ -11,7 +11,7 @@
     @Html.Partial("_CateList")
 
     <div id="product_list">
-        <ul class="l">
+        @*<ul class="l">
             @foreach (ProductForListViewModel product in Model.ProductList) {
             <li class="product @((i+1)%3==0?"rightmost":"" )" data-pid="@product.ProductID" id="product_@product.ProductID">
                 <div class="product_list_shot">
@@ -54,7 +54,7 @@
                 </div>
             </li>
             }
-        </ul>
+        </ul>*@
 
         @Html.Partial("_Pager")
     </div>

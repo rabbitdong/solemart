@@ -52,10 +52,10 @@
         </li>
         <li>
             <p for="prod_desc">商品说明:</p>
-            <textarea name="prod_desc" tabindex="2" id="prod_desc">@Model.Description</textarea>
+            <textarea name="productDesc" tabindex="2" id="productDesc">@Model.Description</textarea>
         </li>
         <li>
-            <label onclick="postback();"><a class="comm_btn" onclick="javascript:commit_modify();" href="javascript:void(0);">提交修改</a></label>
+            <a class="comm_btn" onclick="javascript:commit_modify();" href="javascript:void(0);">提交修改</a>
         </li>
         <li class="newline">
             <label for="files">商品图片编辑:</label>                
@@ -75,9 +75,19 @@
     </ol>
 </fieldset>
 <script type="text/javascript">
+    function htmlEncode(value) {
+        //create a in-memory div, set it's inner text(which jQuery automatically encodes)
+        //then grab the encoded contents back out.  The div never exists on the page.
+        return $('<div/>').text(value).html();
+    }
+
+    function htmlDecode(value) {
+        return $('<div/>').html(value).text();
+    }
+
     $(function () {
-        var editor = new TINY.editor.edit('editor', {
-            id: 'prod_desc',
+        var description = new TINY.editor.edit('description', {
+            id: 'productDesc',
             width: 520,
             height: 210,
             cssclass: 'tinyeditor',
@@ -146,15 +156,16 @@
     });
 
     function commit_modify() {
+        description.post();
         $.post("/Manager/Product/CommitModify",
             {
                 ProductID: $("#prod_id").val(),
                 ProductName: $("#prod_name").val(),
-                ProducingArea:$("#prodArea").val(),
+                ProducingArea: $("#prodArea").val(),
                 CategoryID: $("#cate_id").val(),
                 Unit: $("#unit").val(),
                 Specification: $("#prod_spec").val(),
-                Description: $("#prod_desc").val()
+                Description: htmlEncode(description.t.value)
             },
             function (result) {
                 alert(result)

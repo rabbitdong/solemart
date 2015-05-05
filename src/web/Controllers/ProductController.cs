@@ -56,7 +56,7 @@ namespace Solemart.Web.Controllers
         public ActionResult Detail(int id)
         {
             SaledProductItem saleInfo = ProductManager.GetSaledProductByID(id);
-            ProductItem product = ProductManager.GetProductByID(id);
+            ProductItem product = ProductManager.GetProductWithBrandByID(id);
             List<ProductImageItem> images = ProductManager.GetProductImage(id);
             int commentCount = ProductManager.GetProductCommentCount(id);
 

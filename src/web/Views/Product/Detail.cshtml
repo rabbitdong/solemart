@@ -5,60 +5,36 @@
 
 @{
     ViewBag.Title = Model.ProductName;    
-    Layout = "~/Views/Shared/_Layout.cshtml";
     int AverageLevel = 5;
-    int TotalPageCount = 0;
-    IList<ProductCommentItem> Comments = ProductManager.GetProductComment(Model.ProductID, 0, 10, out TotalPageCount);
+    int TotalCount = 0;
+    IList<ProductCommentItem> Comments = ProductManager.GetProductComment(Model.ProductID, 0, 10, out TotalCount);
 }
 
-<div class="product_detail">
+@Html.Partial("TopAppNav")
+<div class="productDetail">
+    <h2>@Model.ProductName </h2>
 
-    <div class="center_stage l">
-        <h2>@Model.ProductName </h2>
+    @*<div class="vote_area">
+        <span class="comment_star" title="@AverageLevel 星">
+            <a href="javascript:;" class="star_@AverageLevel"></a>
+            <a href="javascript:;" class="no_star"></a>
+        </span>
+        <a href="#">@Model.CommentCount 个评论</a>
+    </div>*@
 
-        <div class="vote_area">
-            <span class="comment_star" title="@AverageLevel 星">
-                <a href="javascript:;" class="star_@AverageLevel"></a>
-                <a href="javascript:;" class="no_star"></a>
-            </span>
-            <a href="#">@Model.CommentCount 个评论</a>
-        </div>
-
-        <div class="imageWrapper">
-            <div id="scroller">
-                @foreach(ProductImageItem img in Model.Images){
-                    <img id="main_img" src="/images/product/normal/@img.ImageUrl " />
-                }
-            </div>
-        </div>
-
-        <div class="product_info">@Model.ProductDescription</div>
-    </div>
-
-    <div class="shopcart_area r">
-        <h2>
-            @if(Model.Discount!=100){ 
-            <span  class="past_price">@Model.Price.ToString("C2") </span>
-            <span>@((Model.Price*Model.Discount/100).ToString("C2")) </span>
-            }else{ 
-            <span>@Model.Price.ToString("C2") </span>
-            } 
-        </h2>
-        <p>
-            <span>剩余数量:</span>
-            <span>@Model.RemainAmount</span>
-        </p>
-
-        <div class="add_to_cart">
-            <a href="/Cart/Add/@Model.ProductID" title="把一件本商品放入购物车">放入购物车</a>
-        </div>
-
-        <div class="add_to_cart">
-            <a href="javascript:;" onclick="addtofavorite(@Model.ProductID)">收藏</a>
+    <div class="imageWrapper" id="imageWrapper">
+        <div class="scroller">
+            @foreach(ProductImageItem img in Model.Images){
+                <img class="mainImg" src="/images/product/normal/@img.ImageUrl " />
+            }
         </div>
     </div>
 
-    <div class="customer_comment" id="customer_comments">
+    <div class="product_info" id="productDescription">
+        @Html.Raw(@Model.ProductDescription)
+    </div>
+
+    @*<div class="customer_comment" id="customer_comments">
         <h2 class="subTitle">客户评价：</h2>
         <div class="review_head r">
             <div class="comm_btn" onclick="javascript:write_comment_fun(this);">
@@ -80,7 +56,7 @@
             @foreach(ProductCommentItem comment in Comments){ 
             <div class="review_item">
                 <h3>
-                    <em>@(comment.UserItem.UserName</em><span>先生:</span>
+                    <em>@(comment.UserItem.UserName)</em><span>先生:</span>
                     <span class="comment_star" title="@((int)(comment.Grade))  星">
                         <a href="javascript:;" class="star_@((int)(comment.Grade)) "></a>
                         <a href="javascript:;" class="no_star"></a>
@@ -91,10 +67,23 @@
             </div>
             } 
         </div>
-    </div>
+    </div>*@
 
     <div style="clear:both;"></div>
     
+</div>
+<div class="bottomShoppingCart">
+    <h2>
+        <span>@Model.Price.ToString("C2") </span>
+    </h2>
+    <p>
+        <span>剩余数量:</span>
+        <span>@Model.RemainAmount</span>
+    </p>
+
+    <div class="addToCart">
+        <a class="comm_btn" href="javascript:void;" title="把一件本商品放入购物车">放入购物车</a>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -109,28 +98,38 @@
             scrollbars: false
         });
 
-        $("#write_comment").hide();
-
-        $("#write_comment .comment_star a").mouseenter(function () {
-            $(this).nextAll().css("background-position", "left bottom");
-            $(this).prevAll().css("background-position", "left top");
-            $(this).css("background-position", "left top");
+        $(".addToCart a").bind("click", function(){
+            $.post("/Cart/Add/" + @Model.ProductID, 
+                {},
+                function (result) {
+                    var ret = new WebReturn(result);
+                    if (!ret.success)
+                        alert(ret.message);
+                });
         });
+        //$("#write_comment").hide();
 
-        $("#write_comment .comment_star a").click(function () {
-            star_level = this.className.substring(5, 6);
-        });
+        //$("#write_comment .comment_star a").mouseenter(function () {
+        //    $(this).nextAll().css("background-position", "left bottom");
+        //    $(this).prevAll().css("background-position", "left top");
+        //    $(this).css("background-position", "left top");
+        //});
 
-        $("div.review_item .comment_star").children(function () {
-            var grade = $(this).attr("title").substr(0, 1);
-            var star = $(this).children(".star_" + grade);
-            star.nextAll().css("background-position", "left bottom");
-            star.prevAll().css("background-position", "left top");
-            star.css("background-position", "left top");
-        });
+        //$("#write_comment .comment_star a").click(function () {
+        //    star_level = this.className.substring(5, 6);
+        //});
+
+        //$("div.review_item .comment_star").children(function () {
+        //    var grade = $(this).attr("title").substr(0, 1);
+        //    var star = $(this).children(".star_" + grade);
+        //    star.nextAll().css("background-position", "left bottom");
+        //    star.prevAll().css("background-position", "left top");
+        //    star.css("background-position", "left top");
+        //});
     });
 
 
+    /*
     function show_image(url, src) {
         $("#main_img").attr("src", '/images/product/normal/' + url);
         $("div.thumb_area a.active").removeClass("active");
@@ -164,7 +163,7 @@
                         html += "<span class='comment_star' title='" + comment.Level + " 星'>";
                         html += "<a href='javascript:;' class='star_" + comment.Level + "'></a>";
                         html += "<a href='javascript:;' class='no_star'></a></span></h3>";
-                        html += "<p class='r'>@" + comment.Time + "</p>";
+                        html += "<p class='r'>" + comment.Time + "</p>";
                         html += "<p class='content'>" + comment.Content + "</p></div>";
 
                         $(html).insertBefore($("div#comments-list").children().first());
@@ -178,17 +177,9 @@
             $("#write_comment").hide();
         }
     }
+    */
 
-    function puttocart(pid) {
-        $.post("/Cart/Add/" + pid, {},
-            function (result) {
-                if (result == "ok")
-                    window.location.href = "/Cart";
-                else
-                    alert("error");
-            });
-    }
-
+    /*
     function addtofavorite(pid) {
         var is_authenticate = false;
         $.post("/Home/IsAuthenticate", {},
@@ -210,4 +201,5 @@
                     });
             });
     }
+    */
 </script>

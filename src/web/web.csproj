@@ -242,9 +242,7 @@
     <Content Include="Areas\Manager\Views\Vendor\New.cshtml" />
     <Content Include="Areas\Manager\Views\Web.config" />
     <Content Include="home.html" />
-    <Content Include="Images\accent.png" />
     <Content Include="Images\bg-title01.jpg" />
-    <Content Include="Images\bullet.png" />
     <Content Include="Images\common\adobe-pdf-logo-16.png" />
     <Content Include="Images\common\Download.png" />
     <Content Include="Images\common\edit.png" />
@@ -259,7 +257,6 @@
     <Content Include="Images\help\step02.jpg" />
     <Content Include="Images\help\step03.jpg" />
     <Content Include="Images\help\step04.jpg" />
-    <Content Include="Images\heroAccent.png" />
     <Content Include="Images\jquery-ui\animated-overlay.gif" />
     <Content Include="Images\jquery-ui\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Images\jquery-ui\ui-bg_flat_75_ffffff_40x100.png" />
@@ -274,17 +271,10 @@
     <Content Include="Images\jquery-ui\ui-icons_454545_256x240.png" />
     <Content Include="Images\jquery-ui\ui-icons_888888_256x240.png" />
     <Content Include="Images\jquery-ui\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Images\ledao64.png" />
+    <Content Include="Images\ledao_icons.png" />
+    <Content Include="Images\ledao_icons_small.png" />
     <Content Include="Images\logo.png" />
-    <Content Include="Images\orderedList0.png" />
-    <Content Include="Images\orderedList1.png" />
-    <Content Include="Images\orderedList2.png" />
-    <Content Include="Images\orderedList3.png" />
-    <Content Include="Images\orderedList4.png" />
-    <Content Include="Images\orderedList5.png" />
-    <Content Include="Images\orderedList6.png" />
-    <Content Include="Images\orderedList7.png" />
-    <Content Include="Images\orderedList8.png" />
-    <Content Include="Images\orderedList9.png" />
     <Content Include="Images\product\no-img.png" />
     <Content Include="Images\slides\bluetooth02.jpg" />
     <Content Include="Images\slides\bluetooth03.jpg" />
@@ -309,6 +299,7 @@
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\qc_loader.js" />
+    <Content Include="Scripts\tiny.editor.packed.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -340,6 +331,7 @@
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Product\_CateList.cshtml" />
     <Content Include="Views\Shared\_Pager.cshtml" />
+    <Content Include="Views\Shared\TopAppNav.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

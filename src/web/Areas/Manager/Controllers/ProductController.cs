@@ -9,6 +9,7 @@ using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
 using Solemart.Web.Areas.Manager.Models;
 using Solemart.WebUtil;
+using System.Net;
 
 namespace Solemart.Web.Areas.Manager.Controllers
 {
@@ -46,6 +47,8 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// <returns>返回修改的结果View</returns>
         public ActionResult CommitModify(ProductItem product)
         {
+            //decode the text before save.
+            product.Description = WebUtility.HtmlDecode(product.Description);
             if (ProductManager.ModifyProductInfo(product))
                 return Content(WebResult<string>.SuccessResult.ResponseString);
 
