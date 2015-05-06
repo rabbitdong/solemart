@@ -7,11 +7,12 @@ footer { text-align: center; margin-bottom: 100px; }
 /*  
 导航栏的UI
 */
-.appNav { position: fixed; margin-left: 10%; width: 80%; top: 0px; z-index: 3000; background-color: rgba(233,233,233,100); max-width: 512px; }
+.appNav { position: fixed; margin-left: 10%; width: 80%; top: 0px; z-index: 3000; background-color: rgba(233,233,233,100); max-width: 512px; vertical-align:middle; }
     .appNav .seperateLine { float: left; width: 1px; height: 1.2em; background: #7f7f7f; margin-top: 0.1em; }
     .appNav .appLink { width: 50%; border-bottom: 1px solid #7f7f7f; float: left; height: 1.4em; font-size: 1.2em; text-decoration: none; color: #7f7f7f; text-align: center; }
-    .appNav .shoppingCart { margin-right: -2px; border-left: 1px solid #7f7f7f; background: url(/Images/ledao_icons_small.png) no-repeat; background-position: 0px -58px; }
-        .appNav .shoppingCart .roundIndicator { background-color: #c0392b; border-radius: 10px; font-size: 12px; display: inline; width: 20px; height: 20px; float: left; color: #ddd; }
+    .appNav .shoppingCart { margin-right: -2px; border-left: 1px solid #7f7f7f; }
+    .appNav .shoppingCart:before { margin: 0 auto; content:url(/Images/shoppingCart02.png); margin-right:1px; vertical-align:top; }
+        .appNav .shoppingCart .roundIndicator { background-color: #c0392b; border-radius: 10px; font-size: 12px; display: inline-block; width: 20px; height: 20px; color: #ddd; }
     .appNav .myAccount { margin-left: -1px; border-right: 1px solid #7f7f7f; }
 
 /* 微信上还不是很好支持这个

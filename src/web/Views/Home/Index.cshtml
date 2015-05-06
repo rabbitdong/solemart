@@ -4,6 +4,16 @@
 @model ProductListViewModel
 
 @Html.Partial("TopAppNav")
+<div class="searchBar">
+    <div class="logoArea">
+        <a href="/"><img class="logo_img" src="/Images/ledao64.png" /></a>
+    </div>
+    <div class="searchBox">
+        <input type="text" placeholder="产品名称" id="txtSearch" />
+        <input type="button" class="comm_btn" onclick="javascript: search_product();" title="search" value="搜索" />
+    </div>
+</div>
+
 <div class="productListWrapper">
     <ul class="productList">
         @foreach (ProductForListViewModel product in Model.ProductList)
