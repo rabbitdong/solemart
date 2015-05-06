@@ -3,7 +3,8 @@
 @model   Solemart.BusinessLib.SolemartUser
 
 @{
-    ViewBag.Title = "我的账户 —— 乐道";
+    ViewBag.Title = "我的账户 —— 叟玛特";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="account">
@@ -108,8 +109,8 @@
 
         $("#pwd_dialog").dialog({
             autoOpen: false,
-            height: 380,
-            width: 300,
+            height: 300,
+            width: 400,
             modal: true,
 
             create: function (event, ui) {
@@ -185,7 +186,7 @@
             }
             else {
                 var val = inv.children("input").val();
-                if (Validator.ValidateEmail(val)) {
+                if (validateEmail(val)) {
                     post_change(val, "uname");
                     inv.html(val);
                 }
@@ -211,7 +212,7 @@
 
                 $("#email_val").focusout(function () {
                     var newval = inv.children("input").val();
-                    if (!Validator.ValidateEmail(newval)) {
+                    if (!validateEmail(newval)) {
                         $('#err_for_email').css('visibility', 'visible');
                     }
                     else {
@@ -222,7 +223,7 @@
             }
             else {
                 var val = inv.children("input").val();
-                if (Validator.ValidateEmail(val)) {
+                if (validateEmail(val)) {
                     post_change(val, "email");
                     inv.html(val);
                 }
@@ -283,7 +284,7 @@
             }
             else {
                 var val = inv.children("input").val();
-                if (Validator.ValidatePhone(val)) {
+                if (validatePhone(val)) {
                     post_change(val, "phone1");
                     inv.html(val);
                 }
