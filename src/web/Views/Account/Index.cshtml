@@ -80,16 +80,11 @@
 
         $.post("/Account/Modify/" + type,
             {
-                "val": newval
+                "newVal": newval
             },
             function (result) {
-                if (result != "ok") {
-                    alert(result);
-                    result = false;
-                }
-                else {
-                    result = true;
-                }
+                var ret = new WebReturn(result);
+                result = ret.success;
             });
 
         return result;
@@ -137,7 +132,8 @@
                                 newpwd: $("#newpwd").val()
                             },
                             function (result) {
-                                if (result == "wrong pwd") {
+                                var ret = new WebReturn(result);
+                                if (ret.success) {
                                     updateTips();
                                     return;
                                 }
@@ -173,7 +169,7 @@
                         $('#err_for_uname').css('visibility', 'visible');
                     }
                     else {
-                        if (!post_change(newval, "uname")) {
+                        if (!post_change(newval, "UserName")) {
                             $('#err_for_uname').html("用户名已经被使用，不能用该用户名!");
                             $('#err_for_uname').css('visibility', 'visible');
                         }
@@ -186,7 +182,7 @@
             else {
                 var val = inv.children("input").val();
                 if (Validator.ValidateEmail(val)) {
-                    post_change(val, "uname");
+                    post_change(val, "UserName");
                     inv.html(val);
                 }
                 else {
@@ -215,7 +211,7 @@
                         $('#err_for_email').css('visibility', 'visible');
                     }
                     else {
-                        post_change(newval, "email");
+                        post_change(newval, "Email");
                         inv.html(newval);
                     }
                 });
@@ -223,7 +219,7 @@
             else {
                 var val = inv.children("input").val();
                 if (Validator.ValidateEmail(val)) {
-                    post_change(val, "email");
+                    post_change(val, "Email");
                     inv.html(val);
                 }
                 else
@@ -243,7 +239,7 @@
                     $("#female").prop("checked", true);
                 inv.children("input[type=radio]").focusout(function () {
                     var new_val = inv.children("input[type=radio]:checked").val();
-                    post_change(new_val, "sex");
+                    post_change(new_val, "Sex");
                     if (new_val == 1)
                         inv.html("男");
                     else if (new_val == 2)
@@ -252,7 +248,7 @@
             }
             else {
                 var new_val = inv.children("input[type=radio]:checked").val();
-                post_change(new_val, "sex");
+                post_change(new_val, "Sex");
                 if (new_val == 1)
                     inv.html("男");
                 else if (new_val == 2)
@@ -272,11 +268,11 @@
 
                 $("#phone_val").focusout(function () {
                     var newval = inv.children("input").val();
-                    if (!validatePhone(newval)) {
+                    if (!Validator.ValidatePhone(newval)) {
                         $('#err_for_phone1').css('visibility', 'visible');
                     }
                     else {
-                        post_change(newval, "phone1");
+                        post_change(newval, "Phone");
                         inv.html(newval);
                     }
                 });
@@ -284,7 +280,7 @@
             else {
                 var val = inv.children("input").val();
                 if (Validator.ValidatePhone(val)) {
-                    post_change(val, "phone1");
+                    post_change(val, "Phone");
                     inv.html(val);
                 }
                 else
@@ -300,13 +296,13 @@
                 inv.children("input").focus();
                 inv.children("input").focusout(function () {
                     var newval = inv.children("input").val();
-                    post_change(newval, "address");
+                    post_change(newval, "Address");
                     inv.html(newval);
                 });
             }
             else {
                 var newval = inv.children("input").val();
-                post_change(newval, "address");
+                post_change(newval, "Address");
                 inv.html(newval);
             }
         });
@@ -325,7 +321,16 @@
             }
             else {
                 var newval = $("#datepicker").val();
-                post_change(newval, "birthday");
+
+                $.post("/Account/ModifyBirthDay",
+                    {
+                        "birthDay": newval
+                    },
+                    function (result) {
+                        var ret = new WebReturn(result);
+                        if (!ret.success)
+                            alert(ret.message);
+                    });
                 inv.html(newval);
             }
         });

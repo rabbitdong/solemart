@@ -25,7 +25,10 @@ namespace Solemart.BusinessLib
             {
                 int userid = context.RegisterNewUser(name, email, pwd, DateTime.Now);
                 if (userid > 0)
+                {
+                    context.UserAppendInfoItems.Add(new UserAppendInfoItem { UserID = userid });
                     return new UserItem { UserID = userid, UserName = name, Email = email, Roles = Role.NormalUser.ToString(), LoginType = SystemUtil.LoginType.Local };
+                }
 
                 return null;
             }
@@ -42,7 +45,10 @@ namespace Solemart.BusinessLib
             {
                 int userid = context.RegisterNewQQUser(nickname, "", "", DateTime.Now);
                 if (userid > 0)
+                {
+                    context.UserAppendInfoItems.Add(new UserAppendInfoItem { UserID = userid });
                     return new UserItem { UserID = userid, UserName = nickname, Email = "", Roles = Role.NormalUser.ToString(), LoginType = SystemUtil.LoginType.QQ };
+                }
 
                 return null;
             }

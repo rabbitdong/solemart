@@ -24,7 +24,7 @@ namespace Solemart.Web.Controllers
         {
             int pi = p ?? 0; //表示页索引
             int totalPageCount = 0;
-            List<SaledProductItem> products = ProductManager.GetPagedSaledProducts(pi, 10, out totalPageCount);
+            List<SaledProductItem> products = ProductManager.GetPagedSaledProducts(pi, 50, out totalPageCount);
 
             ProductListViewModel model = new ProductListViewModel();
             model.PageIndex = pi;

@@ -40,15 +40,42 @@ namespace Solemart.Web.Controllers
         public ActionResult Modify(string id, string newVal)
         {
             SolemartUser user = User as SolemartUser;
+            switch (id)
+            {
+                case "UserName":
+                    user.SetUserName(newVal);
+                    break;
+                case "Sex":
+                    int sex = int.Parse(newVal);
+                    user.SetSex((Sex)sex);
+                    break;
+                case "Phone":
+                    user.SetPhone(newVal);
+                    break;
+                case "Email":
+                    user.SetEmail(newVal);
+                    break;
+                case "Address":
+                    user.SetAddress(newVal);
+                    break;
+            }
+            return Content(WebResult<string>.SuccessResult.ResponseString);
+        }
 
-            return Content("ok");
+        public ActionResult ModifyBirthDay(DateTime birthDay)
+        {
+            SolemartUser user = User as SolemartUser;
+            user.SetBirthDay(birthDay);
+            return Content(WebResult<string>.SuccessResult.ResponseString);
         }
 
         /// <summary>用户修改密码操作
         /// </summary>
-        private ActionResult ModifyPassword()
+        private ActionResult ModifyPassword(string oldpwd, string newpwd)
         {
-            return Content("ok");
+            SolemartUser user = User as SolemartUser;
+            user.ChangePassword(newpwd, oldpwd);
+            return Content(WebResult<string>.SuccessResult.ResponseString);
         }
 
         /// <summary>用于修改用户名(对于外部网站注册的用户)

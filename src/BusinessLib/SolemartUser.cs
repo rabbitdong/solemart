@@ -72,6 +72,157 @@ namespace Solemart.BusinessLib
             get { return userItem.UserName; }
         }
 
+        /// <summary>
+        /// Set the username
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public bool SetUserName(string username)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserItem tempUserItem = context.UserItems.Find(userItem.UserID);
+                if(tempUserItem != null)
+                    tempUserItem.UserName = username;
+
+                if (context.SaveChanges() > 0)
+                {
+                    userItem.UserName = username;
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Set the username
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public bool SetEmail(string email)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserItem tempUserItem = context.UserItems.Find(userItem.UserID);
+                if (tempUserItem != null)
+                    tempUserItem.Email = email;
+
+                if (context.SaveChanges() > 0)
+                {
+                    userItem.Email = email;
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        public bool SetBirthDay(DateTime birthDay)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserAppendInfoItem tempUserItem = context.UserAppendInfoItems.FirstOrDefault(u=>u.UserID == userItem.UserID);
+                if (tempUserItem != null)
+                    tempUserItem.BirthDay = birthDay;
+
+                if (context.SaveChanges() > 0)
+                {
+                    userItem.AppendInfo.BirthDay = birthDay;
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Change the user's password
+        /// </summary>
+        /// <param name="newPassword">the new password</param>
+        /// <param name="oldPassword">the old password</param>
+        /// <returns></returns>
+        public bool ChangePassword(string newPassword, string oldPassword)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                if (context.ValidateUserPassword(userItem.UserName, oldPassword))
+                {
+                    return context.UpdateUserPassword(userItem.UserID, newPassword);
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Set the user's new address
+        /// </summary>
+        /// <param name="phone"></param>
+        /// <returns></returns>
+        public bool SetAddress(string address)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserAppendInfoItem tempUserItem = context.UserAppendInfoItems.FirstOrDefault(u => u.UserID == userItem.UserID);
+                if (tempUserItem != null)
+                    tempUserItem.Address = address;
+
+                if (context.SaveChanges() > 0)
+                {
+                    userItem.AppendInfo.Address = address;
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Set the user's phone
+        /// </summary>
+        /// <param name="phone"></param>
+        /// <returns></returns>
+        public bool SetPhone(string phone)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserAppendInfoItem tempUserItem = context.UserAppendInfoItems.FirstOrDefault(u => u.UserID == userItem.UserID);
+                if (tempUserItem != null)
+                    tempUserItem.Phone = phone;
+
+                if (context.SaveChanges() > 0)
+                {
+                    userItem.AppendInfo.Phone = phone;
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Set the user's new address
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public bool SetSex(Sex sex)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserAppendInfoItem tempUserItem = context.UserAppendInfoItems.FirstOrDefault(u => u.UserID == userItem.UserID);
+                if (tempUserItem != null)
+                    tempUserItem.Sex = sex;
+
+                if (context.SaveChanges() > 0)
+                {
+                    userItem.AppendInfo.Sex = sex;
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
         public int UserID
         {
             get { return userItem.UserID; }
@@ -104,7 +255,7 @@ namespace Solemart.BusinessLib
                     LoadAppendInfo();
                 }
 
-                return "";
+                return userItem.AppendInfo.Address;
             }
         }
 
@@ -117,7 +268,7 @@ namespace Solemart.BusinessLib
                     LoadAppendInfo();
                 }
 
-                return "";
+                return userItem.AppendInfo.Phone;
             }
         }
 
@@ -129,7 +280,8 @@ namespace Solemart.BusinessLib
                 {
                     LoadAppendInfo();
                 }
-                return DateTime.Now;
+
+                return userItem.AppendInfo.BirthDay;
             }
         }
 
@@ -142,7 +294,7 @@ namespace Solemart.BusinessLib
                     LoadAppendInfo();
                 }
 
-                return SystemUtil.Sex.Unknown;
+                return userItem.AppendInfo.Sex;
             }
         }
 
