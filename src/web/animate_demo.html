@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style type="text/css">
+        .topCart { position: fixed; top: 0; width: 200px; height: 50px; background-color: #b6ff00; text-align: center; vertical-align: central; z-index: 3; }
+        .main { margin-top: 300px; margin-left: 300px; height: 150px; vertical-align: middle; width: 300px; background-color: #e1d9d9; }
+        .goodContent { width: 100px; height: 50px; background-color: #0094ff; }
+        .good { width: 100px; height: 50px; background-color: #e1d9d9; opacity: 0.05; position: absolute; left: 300px; top: 300px; z-index: 5; border-radius: 10px; }
+        .addToCart{padding:10px;}
+        a { text-decoration: none; }
+
+        @keyframes flyToCart {
+            from { background-color: red; opacity: 0.8; }
+            50% { transform: rotate(-720deg); }
+            to { position: fixed; top: 5px; left: 10px; width: 1px; height: 1px; }
+        }
+    </style>
+    <script src="jquery/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".addToCart").bind("click", function () {
+                $('.good').css({ "animation-name": "flyToCart", "animation-duration": "1s" });
+
+                setTimeout(function () {
+                    $('.good').css({ "animation-name": "", "animation-duration": "" });
+                }, 1000)
+            })
+
+        })
+    </script>
+</head>
+<body>
+    <div class="topCart">Shopping Cart</div>
+    <div class="good"></div>
+    <div class="main">
+        <div class="goodItem">
+            <div class="goodContent">物品</div>
+            <a href="javascript:void;" class="addToCart">Add to Cart</a>
+        </div>
+    </div>
+</body>
+</html>
