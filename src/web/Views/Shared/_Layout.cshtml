@@ -48,23 +48,12 @@
 </head>
 <body>
     <div class="viewport">
-        <div class="searchBar">
-            <div class="logoArea">
-                @*<a href="/"><img class="logo_img" src="/Images/ledao64.png" /></a>*@
-            </div>
-            <div class="searchBox">
-                <input type="text" placeholder="产品名称" id="txtSearch" />
-                <input type="button" class="comm_btn" onclick="javascript: search_product();" title="search" value="搜索" />
-            </div>
-        </div>
-        <div id="main">
-            @RenderBody()
-        </div>
-        @*<footer>
+        @RenderBody()
+        <footer>
             <h3>顶级水果盛宴</h3>
             <p>罗源乐道贸易有限公司 版权所有&copy;2015</p>
             <p>订购热线：400-899-0918  0591-26980918</p>
-        </footer>*@
+        </footer>
     </div>
     @RenderSection("scripts", required: false)
 </body>

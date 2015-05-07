@@ -30,6 +30,11 @@ namespace Solemart.Web.Models
         public decimal Price { get; set; }
 
         /// <summary>
+        /// The unit of the product.
+        /// </summary>
+        public string Unit { get; set; }
+
+        /// <summary>
         /// The discount of the saled product
         /// </summary>
         public int Discount { get; set; }

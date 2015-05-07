@@ -34,10 +34,13 @@ namespace Solemart.Web.Controllers
         /// <summary>
         /// Modify the user's information
         /// </summary>
-        /// <param name="userinfo">要修改的类型</param>
+        /// <param name="id">要修改的类型</param>
+        /// <param name="newVal">the new value</param>
         /// <returns>修改结果的View</returns>
-        public ActionResult Modify(UserItem userinfo)
+        public ActionResult Modify(string id, string newVal)
         {
+            SolemartUser user = User as SolemartUser;
+
             return Content("ok");
         }
 

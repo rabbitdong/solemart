@@ -60,12 +60,20 @@ namespace Solemart.Web.Controllers
             List<ProductImageItem> images = ProductManager.GetProductImage(id);
             int commentCount = ProductManager.GetProductCommentCount(id);
 
+            Cart cart = (User as SolemartUser).Cart;
+            CartItem item = cart.CartItems.FirstOrDefault(c => c.ProductID == id);
+            if (item != null)
+                ViewBag.CartItem = item.Amount;
+            else
+                ViewBag.CartItem = 0;
+
             ProductDetailViewModel model = new ProductDetailViewModel
             {
                 ProductID = id,
                 ProductName = product.ProductName,
                 ProductDescription = product.Description,
                 Price = saleInfo.Price,
+                Unit = product.Unit,
                 Discount = saleInfo.Discount,
                 SpecialFlag = saleInfo.SpecialFlag,
                 RemainAmount = product.StockCount - product.ReserveCount,
