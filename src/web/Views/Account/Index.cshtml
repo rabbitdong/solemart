@@ -108,8 +108,8 @@
 
         $("#pwd_dialog").dialog({
             autoOpen: false,
-            height: 300,
-            width: 400,
+            height: 380,
+            width: 300,
             modal: true,
 
             create: function (event, ui) {
@@ -185,7 +185,7 @@
             }
             else {
                 var val = inv.children("input").val();
-                if (validateEmail(val)) {
+                if (Validator.ValidateEmail(val)) {
                     post_change(val, "uname");
                     inv.html(val);
                 }
@@ -211,7 +211,7 @@
 
                 $("#email_val").focusout(function () {
                     var newval = inv.children("input").val();
-                    if (!validateEmail(newval)) {
+                    if (!Validator.ValidateEmail(newval)) {
                         $('#err_for_email').css('visibility', 'visible');
                     }
                     else {
@@ -222,7 +222,7 @@
             }
             else {
                 var val = inv.children("input").val();
-                if (validateEmail(val)) {
+                if (Validator.ValidateEmail(val)) {
                     post_change(val, "email");
                     inv.html(val);
                 }
@@ -283,7 +283,7 @@
             }
             else {
                 var val = inv.children("input").val();
-                if (validatePhone(val)) {
+                if (Validator.ValidatePhone(val)) {
                     post_change(val, "phone1");
                     inv.html(val);
                 }
