@@ -73,16 +73,13 @@
     
 </div>
 <div class="bottomShoppingCart">
-    <h2>
-        <span>@Model.Price.ToString("C2") </span>
-    </h2>
     <p>
-        <span>剩余数量:</span>
-        <span>@Model.RemainAmount</span>
+        <span>@Model.Price.ToString("C2") </span> <span>剩余 @Model.RemainAmount</span>
     </p>
-
     <div class="addToCart">
-        <a class="comm_btn" href="javascript:void;" title="把一件本商品放入购物车">放入购物车</a>
+        <a href="javascript:void;" data-action="add">+</a>
+        <input type="text" value="@ViewBag.CartItem" />
+        <a href="javascript:void;" data-action="sub">-</a>
     </div>
 </div>
 
@@ -91,21 +88,43 @@
     var cur_pid = @Model.ProductID ;
 
     $(function () {
-        var myScroll = new IScroll('#imageWrapper', {
-            scrollX: true,
-            scrollY: false,
-            mouseWheel: true,
-            scrollbars: false
-        });
+        //var myScroll = new IScroll('#imageWrapper', {
+        //    scrollX: true,
+        //    scrollY: false,
+        //    mouseWheel: true,
+        //    scrollbars: false
+        //});
 
         $(".addToCart a").bind("click", function(){
-            $.post("/Cart/Add/" + @Model.ProductID, 
-                {},
-                function (result) {
-                    var ret = new WebReturn(result);
-                    if (!ret.success)
-                        alert(ret.message);
-                });
+            var input = $(".addToCart input");
+            var count = parseInt(input.val());
+
+            if($(this).data("action") == "add"){
+                $.post("/Cart/Add/" + @Model.ProductID,
+                    {},
+                    function (result) {
+                        var ret = new WebReturn(result);
+                        if (!ret.success)
+                            alert(ret.message);
+                        else
+                            input.val(1+count);
+                    });
+            }
+            else if(count == 0)
+                return;
+            else{
+                $.post("/Cart/Modify/" + @Model.ProductID,
+                    {
+                        amount:count-1
+                    },
+                    function (result) {
+                        var ret = new WebReturn(result);
+                        if (!ret.success)
+                            alert(ret.message);
+                        else
+                            input.val(count-1);
+                    });
+            }
         });
         //$("#write_comment").hide();
 

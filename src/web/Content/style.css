@@ -7,12 +7,12 @@ footer { text-align: center; margin-bottom: 100px; }
 /*  
 导航栏的UI
 */
-.appNav { position: fixed; margin-left: 10%; width: 80%; top: 0px; z-index: 3000; background-color: rgba(233,233,233,100); max-width: 512px; vertical-align:middle; }
+.appNav { position: fixed; margin-left: 10%; width: 80%; top: 0px; z-index: 3000; background-color: rgba(233,233,233,100); max-width: 512px; }
     .appNav .seperateLine { float: left; width: 1px; height: 1.2em; background: #7f7f7f; margin-top: 0.1em; }
     .appNav .appLink { width: 50%; border-bottom: 1px solid #7f7f7f; float: left; height: 1.4em; font-size: 1.2em; text-decoration: none; color: #7f7f7f; text-align: center; }
-    .appNav .shoppingCart { margin-right: -2px; border-left: 1px solid #7f7f7f; }
-    .appNav .shoppingCart:before { margin: 0 auto; content:url(/Images/shoppingCart02.png); margin-right:1px; vertical-align:top; }
-        .appNav .shoppingCart .roundIndicator { background-color: #c0392b; border-radius: 10px; font-size: 12px; display: inline-block; width: 20px; height: 20px; color: #ddd; }
+    .appNav .shoppingCart { margin-right: -2px; border-left: 1px solid #7f7f7f; background:url(/Images/ledao_icons_small.png) no-repeat; background-position:30% -58px; }
+    /*.appNav .shoppingCart:before { margin: 0 auto; content:url(/Images/shoppingCart02.png); margin-right:1px; vertical-align:top; }*/
+        .appNav .shoppingCart .roundIndicator { background-color: #c0392b; border-radius: 10px; font-size: 12px; display: inline-block; width: 20px; height: 20px; color: #ddd; vertical-align:middle; }
     .appNav .myAccount { margin-left: -1px; border-right: 1px solid #7f7f7f; }
 
 /* 微信上还不是很好支持这个
@@ -50,9 +50,9 @@ table.cart { width: 100%; border: 1px solid #ccc; border-collapse: collapse; }
 
 /* 底部购物车（如产品详细页等） */
 .bottomShoppingCart { position: fixed; left: 0px; width: 100%; bottom: 0px; z-index: 6000; background-color: #ecf0f1; padding: 5px; }
-    .bottomShoppingCart h2 { text-align: center; padding: 5px 0; }
-    .bottomShoppingCart .addToCart a { display:inline-block; text-align:center; font-weight: bold; vertical-align: central; width: 2em; background-color: #2c3e50; color: #1abc9c; }
-    .bottomShoppingCart .addToCart input { width: 3em; }
+    .bottomShoppingCart p { text-align: center; padding: 5px 0; float:right; }
+    .bottomShoppingCart .addToCart a { display:inline-block; text-align:center; font-weight: bold; vertical-align: central; width: 1em; font-size:1.5em; background-color: #2c3e50; color: #1abc9c; }
+    .bottomShoppingCart .addToCart input { width: 2em; font-size:1.5em; }
 /* 产品详细页的样式 */
 .productDetail { border: 1px solid #ccc; border-radius: 8px; background-color: #fff; margin-top: 30px; }
     .productDetail h2 { text-align: center; }
