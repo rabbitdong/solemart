@@ -333,6 +333,7 @@
     <Content Include="Views\Product\_CateList.cshtml" />
     <Content Include="Views\Shared\_Pager.cshtml" />
     <Content Include="Views\Shared\TopAppNav.cshtml" />
+    <Content Include="Views\Shared\UserBoard.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
