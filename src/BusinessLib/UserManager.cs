@@ -26,7 +26,7 @@ namespace Solemart.BusinessLib
                 int userid = context.RegisterNewUser(name, email, pwd, DateTime.Now);
                 if (userid > 0)
                 {
-                    context.UserAppendInfoItems.Add(new UserAppendInfoItem { UserID = userid });
+                    context.UserAppendInfoItems.Add(new UserAppendInfoItem { UserID = userid, Address="", Phone="", Sex= SystemUtil.Sex.Unknown });
                     return new UserItem { UserID = userid, UserName = name, Email = email, Roles = Role.NormalUser.ToString(), LoginType = SystemUtil.LoginType.Local };
                 }
 

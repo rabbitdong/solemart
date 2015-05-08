@@ -28,7 +28,7 @@ namespace Solemart.WebUtil
                     "LC@" + email, DateTime.Now, DateTime.Now.AddMinutes(30), isPersist, user.UserID.ToString());
                 HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(ticket));
                 if(isPersist)
-                    cookie.Expires = DateTime.Now.AddMinutes(30);
+                    cookie.Expires = DateTime.Now.AddYears(1);
                 ctx.User = user;
                 ctx.Response.Cookies.Add(cookie);
 

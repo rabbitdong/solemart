@@ -10,9 +10,9 @@ footer { text-align: center; margin-bottom: 100px; }
 .appNav { position: fixed; margin-left: 10%; width: 80%; top: 0px; z-index: 3000; background-color: rgba(233,233,233,100); max-width: 512px; }
     .appNav .seperateLine { float: left; width: 1px; height: 1.2em; background: #7f7f7f; margin-top: 0.1em; }
     .appNav .appLink { width: 50%; border-bottom: 1px solid #7f7f7f; float: left; height: 1.4em; font-size: 1.2em; text-decoration: none; color: #7f7f7f; text-align: center; }
-    .appNav .shoppingCart { margin-right: -2px; border-left: 1px solid #7f7f7f; background:url(/Images/ledao_icons_small.png) no-repeat; background-position:30% -58px; }
+    .appNav .shoppingCart { margin-right: -2px; border-left: 1px solid #7f7f7f; background:url(/Images/ledao_icons_small.png) no-repeat; background-position:10% -58px; }
     /*.appNav .shoppingCart:before { margin: 0 auto; content:url(/Images/shoppingCart02.png); margin-right:1px; vertical-align:top; }*/
-        .appNav .shoppingCart .roundIndicator { background-color: #c0392b; border-radius: 10px; font-size: 12px; display: inline-block; width: 20px; height: 20px; color: #ddd; vertical-align:middle; }
+        .appNav .shoppingCart .roundIndicator { background-color: #c0392b; border-radius: 10px; font-size: 12px; display: inline-block; width: 18px; height: 18px; color: #ddd;}
     .appNav .myAccount { margin-left: -1px; border-right: 1px solid #7f7f7f; }
 
 /* 微信上还不是很好支持这个
@@ -26,6 +26,14 @@ footer { text-align: center; margin-bottom: 100px; }
     .searchBar .logoArea { float: left; }
     .searchBar .searchBox { text-align: right; }
 input#txtSearch { margin-left: 0px; border: 1px solid #ddd; width: 12em; background-color: #ddd; padding: 1px 2px; }
+
+/*首页产品列表区的对应背后框*/
+.good { width: 90%; height: 80px; background-color: #e1d9d9; opacity: 0.05; position: absolute; left: 10px; top: 10px; z-index: 5; border-radius: 10px; }
+@keyframes flyToCart {
+    from { background-color: #71a96e; opacity: 0.8; }
+    50% { transform: rotate(-720deg); }
+    to { position: fixed; top: 5px; left: 10px; width: 1px; height: 1px; }
+}
 
 /* 首页产品列表区*/
 .productListWrapper { margin-bottom: 12px; box-shadow: 0 1px 1px #dcdcdc; width: 100%; }
@@ -70,6 +78,7 @@ img { border: 0px; }
 footer { color: #8f8f8f; clear: both; }
 div.main { min-height: 50em; vertical-align: top; }
 .comm_btn { width: auto; overflow: visible; font-family: Verdana, Arial, sans; border-radius: 3px; color: #ecf0f1; letter-spacing: 1px; padding: 3px 10px; margin: 5px 15px; border: medium none currentColor; background-color: #2c3e50; cursor: pointer; }
+.comm_btn a:visited, .comm_btn a:active, .comm_btn a:link, .comm_btn a:hover{color:#ecf0f1;}
 .disablebtn { background-color: #808080; }
 .ellipsis { overflow: hidden; text-overflow: ellipsis; -o-text-overflow: ellipsis; white-space: nowrap; }
 input[type=text], input[type=password] { height: 1.5em; }

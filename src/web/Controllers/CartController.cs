@@ -10,6 +10,7 @@ using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
 using Solemart.SystemUtil;
 using Solemart.WebUtil;
+using Newtonsoft.Json;
 
 namespace Solemart.Web.Controllers
 {
@@ -27,6 +28,21 @@ namespace Solemart.Web.Controllers
         /// </summary>
         /// <param name="id">加入购物车的物品ID</param>
         /// <returns>加入购物车后的View</returns>
+        public ActionResult TotalAmount()
+        {
+            SolemartUser user = this.User as SolemartUser;
+
+            //商品添加到购物车中（购物车显示商品的信息）
+            int totalCount = (int)user.Cart.CartItems.Sum(i => i.Amount);
+            string resultData = JsonConvert.SerializeObject((new { TotalCount = totalCount }));
+
+            return Content((new WebResult<string> { ResultCode = WebResultCode.Success, ResultData = resultData }).ResponseString);
+        }
+
+        /// <summary>用户加入购物车操作
+        /// </summary>
+        /// <param name="id">加入购物车的物品ID</param>
+        /// <returns>加入购物车后的View</returns>
         public ActionResult Add(int id)
         {
             SolemartUser user = this.User as SolemartUser;
@@ -34,8 +50,11 @@ namespace Solemart.Web.Controllers
             //商品添加到购物车中（购物车显示商品的信息）
             ProductItem product = ProductManager.GetProductByID(id);
             user.Cart.AddToCart(product, 1);
+            int totalCount = (int)user.Cart.CartItems.Sum(i => i.Amount);
+            int theCount = (int)user.Cart.CartItems.FirstOrDefault(i => i.ProductID == id).Amount;
+            string resultData = JsonConvert.SerializeObject((new {TotalCount=totalCount, TheCount=theCount}));
 
-            return Content(WebResult<string>.SuccessResult.ResponseString);
+            return Content((new WebResult<string> { ResultCode = WebResultCode.Success, ResultData = resultData }).ResponseString);
         }
 
         /// <summary>用户修改购物车操作

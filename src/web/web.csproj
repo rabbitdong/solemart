@@ -162,6 +162,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="animate_demo.html" />
     <Content Include="Content\ebooks.css" />
     <Content Include="Content\jquery-ui-1.10.3.custom.min.css" />
     <Content Include="Content\m.css" />

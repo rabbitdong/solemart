@@ -8,12 +8,12 @@
     <div class="logoArea">
         <a href="/"><img class="logo_img" src="/Images/ledao64.png" /></a>
     </div>
-    <div class="searchBox">
+    @*<div class="searchBox">
         <input type="text" placeholder="产品名称" id="txtSearch" />
         <input type="button" class="comm_btn" onclick="javascript: search_product();" title="search" value="搜索" />
-    </div>
+    </div>*@
 </div>
-
+<div class="good" id="good"></div>
 <div class="productListWrapper">
     <ul class="productList">
         @foreach (ProductForListViewModel product in Model.ProductList)
@@ -47,8 +47,22 @@
                 {},
                 function (result) {
                     var ret = new WebReturn(result);
-                    if (!ret.success)
+                    if (!ret.success) {
                         alert(ret.message);
+                        return;
+                    }
+
+                    var retData = JSON.parse(ret.content);
+                    var indicator = $(".roundIndicator");
+                    indicator.show();
+                    indicator.html(retData.TotalCount);
+
+                    $('.good').css({"top":$(this).css("top"),"animation-name": "flyToCart", "animation-duration": "1s" });
+
+                    setTimeout(function () {
+                        $('.good').css({ "animation-name": "", "animation-duration": "" });
+                    }, 1000)
+
                 });
         })
     })

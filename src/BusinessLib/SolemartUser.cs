@@ -382,18 +382,22 @@ namespace Solemart.BusinessLib
                     //如果发货地址还是为空，就使用用户的附加信息字段中的信息
                     if (sendAddress == null)
                     {
-                        UserAppendInfoItem uai = UserManager.GetUserAppendInfo(UserID);
-                        if (uai != null && string.IsNullOrEmpty(uai.Address))
-                            sendAddress.Address = uai.Address;
-                        if (uai != null && string.IsNullOrEmpty(uai.Phone))
-                            sendAddress.Phone = uai.Phone;
+                        if (userItem.AppendInfo == null)
+                            LoadAppendInfo();
+
+                        sendAddress = new SendAddressItem { Address = string.Empty, Phone = string.Empty, PostCode = string.Empty };
+                        if (!string.IsNullOrEmpty(userItem.AppendInfo.Address))
+                            sendAddress.Address = userItem.AppendInfo.Address;
+                        if (!string.IsNullOrEmpty(userItem.AppendInfo.Phone))
+                            sendAddress.Phone = userItem.AppendInfo.Phone;
                     }
                 }
 
                 if (sendAddress == null)
                 {
-                    sendAddress = new SendAddressItem();
+                    sendAddress = new SendAddressItem { Address="", Phone="", PostCode="" };
                 }
+
                 //最终都返回送货地址信息
                 return sendAddress;
             }
