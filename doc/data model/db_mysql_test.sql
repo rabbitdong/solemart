@@ -180,6 +180,8 @@ CREATE TABLE TestOrderItems(
 	RejectTime	DATETIME,
 	STATUS		INTEGER DEFAULT 0,		#订单状态: 0: 下订单  1: 订单取消  2:已发送  3: 已接收  4: 已退货 
 	TotalPrice	DECIMAL(10,2),
+	RealPrice   DECIMAL(10,2),
+	DeliverPrice DECIMAL(10,2),	
 	Address		NVARCHAR(100),
 	Phone		VARCHAR(15),
 	PostCode	VARCHAR(10),

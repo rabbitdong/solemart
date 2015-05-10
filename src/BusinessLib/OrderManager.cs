@@ -28,6 +28,12 @@ namespace Solemart.BusinessLib {
                     //要进行订单号关联
                     odi.OrderID = orderItem.OrderID;
                     context.OrderDetailItems.Add(odi);
+
+                    ProductItem product = context.ProductItems.Find(odi.ProductID);
+                    if (product != null)
+                    {
+                        product.ReserveCount += odi.Amount;
+                    }
                 }
 
                 return context.SaveChanges() > 0;
@@ -166,6 +172,22 @@ namespace Solemart.BusinessLib {
                 if (order == null || order.Status != OrderStatus.Sending)
                     return false;
                 order.Status = OrderStatus.Received;
+
+   //             SELECT ProductID, SUM(Amount) FROM OrderDetailItems
+   //WHERE OrderID IN (SELECT OrderID FROM OrderItems WHERE STATUS=3)
+   //GROUP BY ProductID
+                var q = from o in context.OrderDetailItems
+                        where o.OrderID == orderID
+                        select new { ProductID = o.ProductID, Amount = o.Amount };
+
+                foreach (var item in q)
+                {
+                    ProductItem product = context.ProductItems.Find(item.ProductID);
+                    product.StockCount -= item.Amount;
+                    if (product.ReserveCount > item.Amount)
+                        product.ReserveCount -= item.Amount;
+                }
+
                 return context.SaveChanges() > 0;
             }
         }

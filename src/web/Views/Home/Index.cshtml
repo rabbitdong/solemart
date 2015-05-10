@@ -21,7 +21,7 @@
             <li id="product_@product.ProductID" class="productItem">
                 <div class="productImage">
                     <a href="/Product/Detail/@product.ProductID" title="查看水果详情"><img class="productImg" style="width:90%;" src="/Images/product/normal/@product.ProductImageUrl" /></a>
-                    <a class="addToCart" data-pid="@product.ProductID" href="javascript:void;"><img src="~/Images/common/add_to_shopping_cart_small.png" title="购买" /></a>
+                    <a class="addToCart" data-pid="@product.ProductID" href="javascript:void;">买</a>
                 </div>
                 <div class="productInfo">
                     <p class="productTitle">
@@ -30,10 +30,10 @@
                     <p class="productPrice">
                         <span>@product.Price.ToString("C2")</span>/@product.Unit
                     </p>
-                    @if (product.IsOutOfStock)
+                    @*@if (product.IsOutOfStock)
                     {
-                        <p class="no_available">缺货，只可预订</p>
-                    }
+                        <p class="noAvailable">缺货，只可预订</p>
+                    }*@
                 </div>
             </li>
         }

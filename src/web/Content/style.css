@@ -40,7 +40,7 @@ input#txtSearch { margin-left: 0px; border: 1px solid #ddd; width: 12em; backgro
     .productListWrapper .productList { }
         .productListWrapper .productList .productItem { position: relative; padding: 2px; margin: 2px; border: 1px solid #7f7f7f; }
             .productListWrapper .productList .productItem img.productImage { width: 90%; min-width: 330px; }
-            .productListWrapper .productList .productItem .productImage .addToCart { position: absolute; right: 0px; top: 0px; width: 48px; height: 48px; }
+            .productListWrapper .productList .productItem .productImage .addToCart { position: absolute; bottom: 10px; right: 10px; width: 50px; height: 50px; border-radius:25px; background-color:rgb(85, 138, 190);text-align:center;vertical-align:central;color:#ddd;font-size:32px;font-weight:bold;border:1px solid rgb(65, 118, 170) }
             .productListWrapper .productList .productItem .productInfo { font-size: 12px; text-align: center; font-size: 0.9em; margin-bottom: 0.5em; }
                 .productListWrapper .productList .productItem .productInfo .productPrice { }
 
