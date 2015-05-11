@@ -25,7 +25,6 @@ namespace WinSolemart
     {
         public MainWindow()
         {
-            
         }
     }
 }

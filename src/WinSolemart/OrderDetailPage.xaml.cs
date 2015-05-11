@@ -1,6 +1,4 @@
-﻿using Solemart.BusinessLib;
-using Solemart.DataProvider.Entity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Printing;
@@ -15,6 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WinSolemart.Models;
+using Solemart.BusinessLib;
+using Solemart.DataProvider.Entity;
+using Solemart.SystemUtil;
 
 namespace WinSolemart
 {
@@ -29,6 +30,12 @@ namespace WinSolemart
         public OrderDetailPage(OrderListViewModel model)
         {
             InitializeComponent();
+
+            if (model.OrderStatus != OrderStatus.Ordered)
+            {
+                btnSendOrder.Visibility = System.Windows.Visibility.Hidden;
+                btnPrint.Content = "补打订单";
+            }
 
             detailModel = new OrderDetailViewModel();
             detailModel.OrderID = model.OrderID;

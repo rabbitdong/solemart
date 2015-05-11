@@ -14,7 +14,11 @@
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 
-        <Button Grid.Row="0" Name="btnOrder">新订单</Button>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBlock>订单类型：</TextBlock>
+            <ComboBox Name="cmbOrderStatus" Margin="5, 2"/>
+            <Button Name="btnGetOrder" Margin="5,2" Padding="5,2" Click="btnGetOrder_Click">查询</Button>            
+        </StackPanel>
         <DataGrid Grid.Row="1" Name="dgOrder"  IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="订单号" Binding="{Binding OrderID}"/>
@@ -31,6 +35,9 @@
                 </DataGridHyperlinkColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Grid.Row="2" Name="btnNextPage">下一页</Button>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <Button Name="btnPreviousPage" Margin="5,2" Click="btnPreviousPage_Click">上一页</Button>
+            <Button Name="btnNextPage" Margin="5,2" Click="btnNextPage_Click">下一页</Button>
+        </StackPanel>
     </Grid>
 </Page>

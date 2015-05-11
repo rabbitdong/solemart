@@ -31,12 +31,16 @@ namespace WinSolemart
         {
             InitializeComponent();
 
+            cmbOrderStatus.ItemsSource = EnumConstantList.OrderStatusList;
+            cmbOrderStatus.SelectedIndex = 0;
+
             int totalCount = 0;
             List<OrderItem> orders = OrderManager.GetPagedOrders(OrderStatus.Ordered, 0, 10, out totalCount);
             model = orders.Select(o => new OrderListViewModel
             {
                 OrderID = o.OrderID,
                 UserName = o.User.UserName,
+                OrderStatus = o.Status,
                 Address = o.Address,
                 Receiver = o.Receiver,
                 OrderTime = o.OrderTime,
@@ -63,12 +67,17 @@ namespace WinSolemart
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
+            BindedEnumItem item = cmbOrderStatus.SelectedItem as BindedEnumItem;
+            if ((OrderStatus)item.enumValue != OrderStatus.Ordered)
+                return;
+
             int totalCount = 0;
             List<OrderItem> orders = OrderManager.GetPagedOrders(OrderStatus.Ordered, 0, 10, out totalCount);
             model = orders.Select(o => new OrderListViewModel
             {
                 OrderID = o.OrderID,
                 UserName = o.User.UserName,
+                OrderStatus = o.Status,
                 Address = o.Address,
                 Receiver = o.Receiver,
                 OrderTime = o.OrderTime,
@@ -77,7 +86,41 @@ namespace WinSolemart
                 OrderDetails = o.OrderDetails
             });
 
+            dgOrder.ItemsSource = model;
             dgOrder.Items.Refresh();
+        }
+
+        private void btnGetOrder_Click(object sender, RoutedEventArgs e)
+        {
+            BindedEnumItem item = cmbOrderStatus.SelectedItem as BindedEnumItem;
+
+            int totalCount = 0;
+            List<OrderItem> orders = OrderManager.GetPagedOrders((OrderStatus)item.enumValue, 0, 10, out totalCount);
+            model = orders.Select(o => new OrderListViewModel
+            {
+                OrderID = o.OrderID,
+                UserName = o.User.UserName,
+                OrderStatus = o.Status,
+                Address = o.Address,
+                Receiver = o.Receiver,
+                OrderTime = o.OrderTime,
+                ReceiverPhone = o.Phone,
+                TotalAmount = o.TotalPrice,
+                OrderDetails = o.OrderDetails
+            });
+
+            dgOrder.ItemsSource = model;
+            dgOrder.Items.Refresh();
+        }
+
+        private void btnNextPage_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnPreviousPage_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

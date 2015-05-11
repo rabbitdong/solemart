@@ -52,6 +52,18 @@ namespace Solemart.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// The interface for the weixin
+        /// </summary>
+        /// signature  微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。  
+        /// timestamp  时间戳  
+        /// nonce  随机数  
+        /// echostr  随机字符串  
+        public ActionResult WeixinAuthenticate(string signature, string timestamp, string nonce, string echostr)
+        {
+            return Content(echostr);
+        }
+
         /// <summary>用户注册的处理
         /// </summary>
         /// <returns>返回用户注册页面</returns>

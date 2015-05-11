@@ -157,7 +157,28 @@ namespace Solemart.SystemUtil
     }
     #endregion
 
-    public class EnumConstantList
+    /// <summary>
+    /// The enum item used for the binding.
+    /// </summary>
+    public class BindedEnumItem
     {
+        public Enum enumValue;
+
+        public override string ToString()
+        {
+            return enumValue.ToDisplayStr();
+        }
+    }
+
+    public static class EnumConstantList
+    {
+        /// <summary>
+        /// Get all the order status enumeration.
+        /// </summary>
+        public static BindedEnumItem[] OrderStatusList = {new BindedEnumItem{enumValue=OrderStatus.Ordered},
+                                                             new BindedEnumItem{enumValue=OrderStatus.Sending},
+                                                             new BindedEnumItem{ enumValue=OrderStatus.Cancel},                                                         
+                                                         new BindedEnumItem{enumValue=OrderStatus.Received}
+                                                         };
     }
 }
