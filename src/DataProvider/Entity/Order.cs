@@ -67,6 +67,16 @@ namespace Solemart.DataProvider.Entity
         public decimal TotalPrice { get; set; }
 
         /// <summary>
+        /// The realprice of order.
+        /// </summary>
+        public decimal RealPrice { get; set; }
+
+        /// <summary>
+        /// The deliver price of the order.
+        /// </summary>
+        public decimal DeliverPrice { get; set; }
+
+        /// <summary>
         /// 订单的状态信息
         /// </summary>
         public OrderStatus Status { get; set; }
