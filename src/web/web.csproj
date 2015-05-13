@@ -63,9 +63,6 @@
       <HintPath>..\..\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
-    <Reference Include="SimLogLib">
-      <HintPath>..\..\lib\SimLogLib.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
@@ -338,9 +335,7 @@
     <Content Include="Views\Shared\TopAppNav.cshtml" />
     <Content Include="Views\Shared\UserBoard.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Log\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\BusinessLib\BusinessLib.csproj">
       <Project>{9e9280a4-7b28-4130-b712-5030e54b5311}</Project>

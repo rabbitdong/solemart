@@ -10,7 +10,6 @@ using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
 using Solemart.SystemUtil;
 using Solemart.WebUtil;
-using SimLogLib;
 
 namespace Solemart.Web
 {
@@ -23,9 +22,6 @@ namespace Solemart.Web
         private void Application_Start(object sender, EventArgs e)
         {
             ConfigSettings.LoadAppConfig();
-            LogConfig.LogDir = Server.MapPath("~/Log");
-            LogConfig.LogCapacityEachBlock = 500;
-
             // Code that runs on application startup
             AreaRegistration.RegisterAllAreas();
 
@@ -59,16 +55,6 @@ namespace Solemart.Web
                 AccountUtil.Login(SolemartUserCache.GetUser(SolemartUser.DefaultAnonymousUserID));
 
             }
-        }
-
-        void Application_BeginRequest(object sender, EventArgs e)
-        {
-            //请求js，css，.jpg, .png等忽略
-            if (Request.RawUrl.Contains(".js") || Request.RawUrl.Contains(".css"))
-                return;
-
-            bool isFromWeixin = WebUtil.RequestUtil.IsWeixinRequest(Request.ServerVariables);
-            Log.Instance.WriteLog(string.Format("url[{0}],form[{1}],FromWeixin[{2}]", Request.RawUrl, Request.Form.GetLogString(), isFromWeixin));
         }
 
         void Application_Error(object sender, EventArgs e)
