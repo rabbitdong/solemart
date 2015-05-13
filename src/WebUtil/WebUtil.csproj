@@ -47,6 +47,7 @@
     <Compile Include="AlipayCore.cs" />
     <Compile Include="AlipayNotify.cs" />
     <Compile Include="AlipaySubmit.cs" />
+    <Compile Include="RequestUtil.cs" />
     <Compile Include="WebResult.cs" />
     <Compile Include="MD5.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

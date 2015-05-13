@@ -12,6 +12,8 @@ using Solemart.BusinessLib;
 using Solemart.SystemUtil;
 using Solemart.WebUtil;
 using Solemart.Web.Models;
+using SimLogLib;
+using LogUtil = SimLogLib.Util;
 
 namespace Solemart.Web.Controllers
 {
@@ -53,17 +55,6 @@ namespace Solemart.Web.Controllers
         }
 
         /// <summary>
-        /// The interface for the weixin
-        /// </summary>
-        /// signature  微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。  
-        /// timestamp  时间戳  
-        /// nonce  随机数  
-        /// echostr  随机字符串  
-        public ActionResult WeixinAuthenticate(string signature, string timestamp, string nonce, string echostr)
-        {
-            return Content(echostr);
-        }
-
         /// <summary>用户注册的处理
         /// </summary>
         /// <returns>返回用户注册页面</returns>
@@ -72,21 +63,25 @@ namespace Solemart.Web.Controllers
             return View();
         }
 
-        /// <summary>用于验证微信公众号的信息
+
+
+        /// <summary>
+        /// The interface for validating from the weixin
         /// </summary>
         /// <returns></returns>
-        public ActionResult ValidateWeixin()
+        /// signature  微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。  
+        /// timestamp  时间戳  
+        /// nonce  随机数  
+        /// echostr  随机字符串  
+        public ActionResult ValidateWeixin(string signature, string timestamp, string nonce, string echostr)
         {
-            string signature = Request["signature"];
-            string timestamp = Request["timestamp"];
-            string nonce = Request["nonce"];
             string token = "solemart";
             string[] tmpArr = { token, timestamp, nonce };
             Array.Sort(tmpArr);
             string tmpStr = tmpArr[0] + tmpArr[1] + tmpArr[2];
-            tmpStr = FormsAuthentication.HashPasswordForStoringInConfigFile(tmpStr, "SHA1");
+            string resultStr = FormsAuthentication.HashPasswordForStoringInConfigFile(tmpStr, "SHA1");
+            Log.Instance.WriteLog(string.Format("ValidateWeixin: request[{0}], calculate[{1}]", tmpStr, resultStr));
 
-            string echostr = Request["echostr"];
             return Content(echostr);
         }
 
@@ -97,6 +92,18 @@ namespace Solemart.Web.Controllers
         {
             AccountUtil.Logout();
             return Content(WebResult<string>.SuccessResult.ResponseString);
+        }
+
+        public ActionResult GetLog()
+        {
+            List<LogItem> logs = Log.Instance.GetLog(DateTime.Now);
+            StringBuilder sb = new StringBuilder();
+            foreach (LogItem log in logs)
+            {
+                sb.AppendFormat("{0}: {1}<br/>", log.Time, log.Message);
+            }
+
+            return Content(sb.ToString());
         }
 
         /// <summary>用户注册一个新帐号的处理
