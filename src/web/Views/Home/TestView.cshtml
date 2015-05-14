@@ -4,9 +4,9 @@
 <script type="text/javascript">
     $(function () {
         var context = localStorage.getItem("context");
-        if (context && context != "") {
-            context = "my name";
-            localStorage.setItem("context", context);
+        if (!context || context == "") {
+            context = "first time!";
+            localStorage.setItem("context", "saved value");
         }
 
         alert(context);
