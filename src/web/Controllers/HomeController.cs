@@ -85,6 +85,12 @@ namespace Solemart.Web.Controllers
             return Content(echostr);
         }
 
+        public ActionResult TestView(string context)
+        {
+            Log.Instance.WriteLog(string.Format("request context[{0}]", context));
+            return View();
+        }
+
         /// <summary>用户注销操作
         /// </summary>
         /// <returns>返回注销结果</returns>

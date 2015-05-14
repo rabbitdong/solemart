@@ -337,6 +337,7 @@
     <Content Include="Views\Shared\_Pager.cshtml" />
     <Content Include="Views\Shared\TopAppNav.cshtml" />
     <Content Include="Views\Shared\UserBoard.cshtml" />
+    <Content Include="Views\Home\TestView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Log\" />
