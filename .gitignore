@@ -1,9 +1,12 @@
 *.suo
 src/*/bin
 src/*/obj
+src/*/obj/*/*
 tools/*/bin
 tools/*/obj
 tools/*/obj/*
 *.user
 release/*
 src/*/Log/*
+*.cache
+src/BusinessLib/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
