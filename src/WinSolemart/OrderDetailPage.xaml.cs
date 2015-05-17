@@ -47,15 +47,20 @@ namespace WinSolemart
             detailModel.OrderTime = model.OrderTime;
             detailModel.DetailItems = new List<OrderDetailItemViewModel>();
 
+            string amountString = string.Empty;
             foreach (OrderDetailItem orderDetail in model.OrderDetails)
             {
+                if (orderDetail.Product.Unit == "斤")
+                    amountString = string.Format("{0}{1}", orderDetail.Amount, orderDetail.Product.Unit);
+                else
+                    amountString = string.Format("{0:d}{1}", (int)(orderDetail.Amount), orderDetail.Product.Unit);
                 detailModel.DetailItems.Add(new OrderDetailItemViewModel
                 {
                     ProductName = orderDetail.Product.ProductName,
                     ProductArea = orderDetail.Product.ProducingArea,
-                    AmountString = string.Format("{0}({1})", orderDetail.Amount, orderDetail.Product.Unit),
+                    AmountString = amountString,
                     UnitPrice = orderDetail.UnitPrice.ToString(),
-                    TotalPrice = (orderDetail.UnitPrice * orderDetail.Amount).ToString()
+                    TotalPrice = (orderDetail.UnitPrice * orderDetail.Amount).ToString("0.00")
                 });
             }
 
