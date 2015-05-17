@@ -144,8 +144,8 @@
                 //On completion clear the status
                 status.text('');
                 //Add uploaded file to list
-                if (response === "success") {
-                    $('<li></li>').appendTo('#files').html('<img src="/uploads/' + file + '" alt="" /><br />' + file).addClass('success');
+                if (response == "success") {
+                    //$('<li></li>').appendTo('#files').html('<img src="/uploads/' + file + '" alt="" /><br />' + file).addClass('success');
                     window.location.reload();
                 } else {
                     $('<li></li>').appendTo('#files').text(response).addClass('error');

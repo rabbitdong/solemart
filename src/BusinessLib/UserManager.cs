@@ -360,5 +360,14 @@ namespace Solemart.BusinessLib
                 return false;
             }
         }
+
+        /// <summary>
+        /// Generate a random user name.
+        /// </summary>
+        /// <returns></returns>
+        public static string GenerateRandomUserName()
+        {
+            return "";
+        }
     }
 }

@@ -284,7 +284,7 @@ namespace Solemart.BusinessLib
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                return context.ProductImageItems.Where(p => (p.ProductID == productID)).ToList();
+                return context.ProductImageItems.Where(p => (p.ProductID == productID)).OrderBy(p=>p.ImageID).ToList();
             }
         }
 

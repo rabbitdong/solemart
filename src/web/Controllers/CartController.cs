@@ -154,9 +154,10 @@ namespace Solemart.Web.Controllers
             {
                 // 已进入订单后，临时购物车上物品需要清除
                 user.Cart.ClearAndSave(user.UserID);
+#if false //支付宝暂时不支持
                 if (oi.PaymentType == PaymentType.OnLine)
                 {
-                    #region 填写支付宝参数
+                #region 填写支付宝参数
                     //支付类型
                     string payment_type = "1";
                     //必填，不能修改
@@ -261,8 +262,11 @@ namespace Solemart.Web.Controllers
             }
             else
             {
-                return Content("error");
+#endif
+                return Content(new WebResult<string> { ResultCode= WebResultCode.Success, ResultData = oi.OrderID.ToString() }.ResponseString);
             }
+            else
+                return Content(WebResult<string>.NormalErrorResult.ResponseString);
         }
 
         /// <summary>用户确定结帐的处理

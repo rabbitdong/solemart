@@ -184,16 +184,12 @@
                 paytype: $("#paytype").val()
             },
             function (result) {
-                if (result.substring(0, 2) == "ok") {
-                    if (result.indexOf("ok-alipay-") != -1) {
-                        document.write(result.substring(10, result.length));
-                    }
-                    else {
-                        window.location.href = "/Cart/CheckOutCompleted/" + result.substring(3, result.length);
-                    }
+                var ret = new WebReturn(result);
+                if (ret.success) {
+                    window.location.href = "/Cart/CheckOutCompleted/" + ret.content;
                 }
                 else {
-                    alert("error");
+                    alert(ret.message);
                 }
             }
         );
