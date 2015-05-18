@@ -1,6 +1,6 @@
 ﻿<NavigationWindow x:Class="WinSolemart.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="GladTao" Source="OrderListPage.xaml"  Height="600" Width="900">
+        Title="乐道订单打印系统" Source="OrderListPage.xaml"  Height="600" Width="900">
 
 </NavigationWindow>

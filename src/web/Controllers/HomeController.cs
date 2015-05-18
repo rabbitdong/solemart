@@ -87,8 +87,24 @@ namespace Solemart.Web.Controllers
 
         public ActionResult TestView(string context)
         {
-            Log.Instance.WriteLog(string.Format("request context[{0}]", context));
-            return View();
+            const string cookieName = "ledaoUser";
+            HttpCookie nameCookie = Request.Cookies[cookieName];
+            string userName = string.Empty;
+            if (nameCookie == null || string.IsNullOrEmpty(nameCookie.Value))
+            {
+                userName = UserManager.GenerateRandomUserName();
+                nameCookie = new HttpCookie(cookieName, userName);
+                nameCookie.Expires = DateTime.Now.AddYears(10);
+                Response.Cookies.Add(nameCookie);
+                Log.Instance.WriteLog(string.Format("TestView request generate user name[{0}]", userName));
+            }
+            else
+            {
+                userName = nameCookie.Value;
+                Log.Instance.WriteLog(string.Format("TestView user name[{0}] access", userName));
+            }
+
+            return View((object)userName);
         }
 
         /// <summary>用户注销操作

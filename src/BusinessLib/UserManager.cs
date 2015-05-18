@@ -12,6 +12,7 @@ namespace Solemart.BusinessLib
     /// </summary>
     public class UserManager
     {
+        private static Random rand = new Random();
         /// <summary>
         /// Add a new user
         /// </summary>
@@ -367,7 +368,14 @@ namespace Solemart.BusinessLib
         /// <returns></returns>
         public static string GenerateRandomUserName()
         {
-            return "";
+            const string valid = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            StringBuilder res = new StringBuilder();
+            for(int i=0; i<8; ++i)
+            {
+                res.Append(valid[rand.Next(valid.Length)]);
+            }
+
+            return res.ToString();
         }
     }
 }

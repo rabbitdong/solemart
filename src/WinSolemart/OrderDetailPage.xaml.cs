@@ -80,7 +80,7 @@ namespace WinSolemart
             txtOrderID.Text = string.Format("订单号：{0:00000000}", detailModel.OrderID);
             txtUserInfo.Text = string.Format("客   户：{0}", detailModel.Receiver);
             txtReceiver.Text = string.Format("收  货 人：{0}", detailModel.Receiver);
-            txtOrderDate.Text = string.Format("下单时间：{0:yyyy年M月d日 H小时}", detailModel.OrderTime);
+            txtOrderDate.Text = string.Format("下单时间：{0:yyyy年M月d日 H时}", detailModel.OrderTime);
             txtSendAddress.Text = string.Format("送货地址：{0} 电话：{1}", detailModel.Address, detailModel.ReceiverPhone);
             txtTotalPrice.Text = string.Format("总金额：{0}元", detailModel.TotalPrice);
         }

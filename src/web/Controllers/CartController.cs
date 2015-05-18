@@ -64,10 +64,18 @@ namespace Solemart.Web.Controllers
         public ActionResult Modify(int id, decimal amount)
         {
             SolemartUser user = this.User as SolemartUser;
-            if (!user.Cart.ModifyCartItem(id, amount))
-                return Content(WebResult<string>.ParameterErrorResult.ResponseString);
+            if (user.Cart.ModifyCartItem(id, amount))
+            {
+                int totalCount = (int)user.Cart.CartItems.Sum(i => i.Amount);
+                int theCount = 0;
+                if(amount > 0)
+                    theCount = (int)user.Cart.CartItems.FirstOrDefault(i => i.ProductID == id).Amount;
+                string resultData = JsonConvert.SerializeObject((new { TotalCount = totalCount, TheCount = theCount }));
 
-            return Content(WebResult<string>.SuccessResult.ResponseString);
+                return Content((new WebResult<string> { ResultCode = WebResultCode.Success, ResultData = resultData }).ResponseString);
+            }
+
+            return Content(WebResult<string>.NormalErrorResult.ResponseString);
         }
 
         /// <summary>用户请求进行结帐的处理

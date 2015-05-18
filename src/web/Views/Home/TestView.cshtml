@@ -1,19 +1,4 @@
-﻿<div>
-    <h1>For test</h1>
+﻿@model string
+<div>
+    <h1>For test user: @Model</h1>
 </div>
-<script type="text/javascript">
-    $(function () {
-        var context = localStorage.getItem("context");
-        if (!context || context == "") {
-            context = "first time!";
-            localStorage.setItem("context", "saved value");
-        }
-
-        alert(context);
-        $.post(window.location.href,
-            { "context": context },
-            function (result) {
-                alert("write success!");
-            });
-    })
-</script>

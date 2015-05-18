@@ -74,7 +74,7 @@
 </div>
 <div class="bottomShoppingCart">
     <p>
-        <span>@Model.Price.ToString("C2") </span> <span>剩余 @Model.RemainAmount ( @Model.Unit)</span>
+        <span>@Model.Price.ToString("C2")/@Model.Unit </span> <span>剩余 @Model.RemainAmount@Model.Unit</span>
     </p>
     <div class="addToCart">
         <a href="javascript:void;" data-action="add">+</a>
@@ -86,6 +86,24 @@
 <script type="text/javascript">
     var star_level = 5; //默认的评价级别
     var cur_pid = @Model.ProductID ;
+
+    function updateShoppingCartIndicator(content){
+        var retData = JSON.parse(content);
+        var indicator = $(".roundIndicator");
+        if(retData.TotalCount > 0){
+            indicator.show();
+            indicator.html(retData.TotalCount);
+
+            //$('.good').css({"top":$(this).css("top"),"animation-name": "flyToCart", "animation-duration": "1s" });
+
+            //setTimeout(function () {
+            //    $('.good').css({ "animation-name": "", "animation-duration": "" });
+            //}, 1000)
+        }
+        else{
+            indicator.hide();
+        }
+    }
 
     $(function () {
         //var myScroll = new IScroll('#imageWrapper', {
@@ -106,8 +124,10 @@
                         var ret = new WebReturn(result);
                         if (!ret.success)
                             alert(ret.message);
-                        else
+                        else{
                             input.val(1+count);
+                            updateShoppingCartIndicator(ret.content);
+                        }
                     });
             }
             else if(count == 0)
@@ -121,8 +141,10 @@
                         var ret = new WebReturn(result);
                         if (!ret.success)
                             alert(ret.message);
-                        else
+                        else{
                             input.val(count-1);
+                            updateShoppingCartIndicator(ret.content);
+                        }
                     });
             }
         });

@@ -67,6 +67,11 @@ namespace Solemart.Web.Controllers
             else
                 ViewBag.CartItem = 0;
 
+            string remainAmountString = string.Empty;
+            if (product.Unit == "斤")
+                remainAmountString = string.Format("{0}", product.StockCount - product.ReserveCount);
+            else
+                remainAmountString = string.Format("{0:d}", (int)(product.StockCount - product.ReserveCount));
             ProductDetailViewModel model = new ProductDetailViewModel
             {
                 ProductID = id,
@@ -76,7 +81,7 @@ namespace Solemart.Web.Controllers
                 Unit = product.Unit,
                 Discount = saleInfo.Discount,
                 SpecialFlag = saleInfo.SpecialFlag,
-                RemainAmount = product.StockCount - product.ReserveCount,
+                RemainAmount = remainAmountString,
                 BrandDescription = product.Brand.Description,
                 BrandLogo = product.Brand.BrandLogo,
                 BrandUrl = product.Brand.BrandUrl,

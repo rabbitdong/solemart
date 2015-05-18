@@ -47,7 +47,7 @@ namespace Solemart.Web.Models
         /// <summary>
         /// The remain amount of the product.
         /// </summary>
-        public decimal RemainAmount { get; set; }
+        public string RemainAmount { get; set; }
         #endregion
 
         #region brand info
