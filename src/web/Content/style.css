@@ -40,7 +40,7 @@ input#txtSearch { margin-left: 0px; border: 1px solid #ddd; width: 12em; backgro
 /* 首页产品列表区*/
 .productListWrapper { margin-bottom: 12px; box-shadow: 0 1px 1px #dcdcdc; width: 100%; }
     .productListWrapper .productList { }
-        .productListWrapper .productList .productItem { position: relative; padding: 2px; margin: 2px; border: 1px solid #7f7f7f; }
+        .productListWrapper .productList .productItem { position: relative; padding: 2px; margin: 2px; border: 1px solid #ccc; border-radius: 8px; background-color: #fff; }
             .productListWrapper .productList .productItem img.productImage { width: 90%; min-width: 330px; }
             .productListWrapper .productList .productItem .productImage .addToCart {position: absolute; bottom: 10px; right: 10px; width: 42px; height: 42px; border-radius: 21px; background-color: rgb(85, 138, 190); text-align: center; vertical-align: middle; border: 1px solid rgb(65, 118, 170); color: #ddd; font-size: 32px; }
             .productListWrapper .productList .productItem .productInfo { font-size: 12px; text-align: center; font-size: 0.9em; margin-bottom: 0.5em; }
@@ -59,10 +59,11 @@ table.cart { width: 100%; border: 1px solid #ccc; border-collapse: collapse; }
     table.cart input.prodamount { line-height: 1.2em; height: 18px; width: 30px; }
 
 /* 底部购物车（如产品详细页等） */
-.bottomShoppingCart { position: fixed; left: 0px; width: 100%; bottom: 0px; z-index: 6000; background-color: #ecf0f1; padding: 5px; }
-    .bottomShoppingCart p { text-align: center; padding: 5px 0; float: right; }
-    .bottomShoppingCart .addToCart a { display: inline-block; text-align: center; font-weight: bold; vertical-align: central; width: 1em; font-size: 1.5em; background-color: #2c3e50; color: #1abc9c; }
-    .bottomShoppingCart .addToCart input { width: 2em; font-size: 1.5em; }
+.bottomShoppingCart { position: fixed; left: 0px; width: 100%; bottom: 0px; z-index: 6000; background-color: #ecf0f1; padding: 5px; margin:2px 0; }
+    .bottomShoppingCart a.backLink{display:inline-block;width:50px;background-color:#2ecc71;border-radius:15px;font-size:1.5em;color:#333;margin-right:20px;}
+    .bottomShoppingCart p.amountText { text-align: center; padding: 5px 0; float: right; margin-right:10px; }
+    .bottomShoppingCart a { display: inline-block; text-align: center; font-weight: bold; vertical-align: central; width: 1em; font-size: 1.5em; background-color: #27ae60; color:#333; border-radius:15px; }
+    .bottomShoppingCart input { width: 1.5em; font-size: 1.4em; }
 /* 产品详细页的样式 */
 .productDetail { border: 1px solid #ccc; border-radius: 8px; background-color: #fff; margin-top: 30px; }
     .productDetail h2 { text-align: center; }

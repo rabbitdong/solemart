@@ -73,10 +73,11 @@
     
 </div>
 <div class="bottomShoppingCart">
-    <p>
-        <span>@Model.Price.ToString("C2")/@Model.Unit </span> <span>剩余 @Model.RemainAmount@Model.Unit</span>
+    <p class="amountText">
+        <span>@Model.Price.ToString("C2")/@Model.Unit </span> <span>剩余 @Model.RemainAmount@Model.Unit </span>
     </p>
-    <div class="addToCart">
+    <div class="bottomNav">
+        <a class="backLink" href="javascript:void;" onclick="return window.history.back();">&lt;</a>
         <a href="javascript:void;" data-action="add">+</a>
         <input type="text" value="@ViewBag.CartItem" />
         <a href="javascript:void;" data-action="sub">-</a>
@@ -113,8 +114,8 @@
         //    scrollbars: false
         //});
 
-        $(".addToCart a").bind("click", function(){
-            var input = $(".addToCart input");
+        $(".bottomNav a").bind("click", function(){
+            var input = $(".bottomNav input");
             var count = parseInt(input.val());
 
             if($(this).data("action") == "add"){
@@ -132,7 +133,7 @@
             }
             else if(count == 0)
                 return;
-            else{
+            else if($(this).data("action") == "sub"){
                 $.post("/Cart/Modify/" + @Model.ProductID,
                     {
                         amount:count-1
