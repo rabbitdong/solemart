@@ -34,7 +34,7 @@ namespace Solemart.Web.Controllers
 
             //商品添加到购物车中（购物车显示商品的信息）
             decimal totalAmount = (int)user.Cart.CartItems.Sum(i => (i.Amount * i.UnitPrice));
-            string resultData = JsonConvert.SerializeObject((new { TotalCount = totalAmount.ToString("c") }));
+            string resultData = JsonConvert.SerializeObject((new { TotalAmount = totalAmount.ToString("c") }));
 
             return Content((new WebResult<string> { ResultCode = WebResultCode.Success, ResultData = resultData }).ResponseString);
         }
@@ -51,8 +51,22 @@ namespace Solemart.Web.Controllers
             ProductItem product = ProductManager.GetProductByID(id);
             user.Cart.AddToCart(product, 1);
             decimal totalAmount = (int)user.Cart.CartItems.Sum(i => (i.Amount*i.UnitPrice));
-            int theCount = (int)user.Cart.CartItems.FirstOrDefault(i => i.ProductID == id).Amount;
-            string resultData = JsonConvert.SerializeObject((new {TotalCount=totalAmount.ToString("c"), TheCount=theCount}));
+            CartItem cartItem = user.Cart.CartItems.FirstOrDefault(i => i.ProductID == id);
+            decimal theCount = 0;
+            decimal theAmount = 0M;
+            if (cartItem != null)
+            {
+                theCount = cartItem.Amount;
+                theAmount = cartItem.Amount * cartItem.UnitPrice;
+            }
+
+            string theCountString = string.Empty;
+            if (product.Unit == "斤")
+                theCountString = theCount.ToString();
+            else
+                theCountString = string.Format("{0:d}", (int)theCount);
+
+            string resultData = JsonConvert.SerializeObject((new {TotalAmount=totalAmount.ToString("c"), TheCount=theCountString, TheAmount = theAmount.ToString("c")}));
 
             return Content((new WebResult<string> { ResultCode = WebResultCode.Success, ResultData = resultData }).ResponseString);
         }
@@ -67,10 +81,23 @@ namespace Solemart.Web.Controllers
             if (user.Cart.ModifyCartItem(id, amount))
             {
                 decimal totalAmount = (int)user.Cart.CartItems.Sum(i => (i.Amount * i.UnitPrice));
-                int theCount = 0;
-                if(amount > 0)
-                    theCount = (int)user.Cart.CartItems.FirstOrDefault(i => i.ProductID == id).Amount;
-                string resultData = JsonConvert.SerializeObject((new { TotalCount = totalAmount.ToString("c"), TheCount = theCount }));
+                ProductItem product = ProductManager.GetProductByID(id);
+
+                decimal theCount = 0;
+                decimal theAmount = 0M;
+                if (amount > 0)
+                {
+                    CartItem cartItem = user.Cart.CartItems.FirstOrDefault(i => i.ProductID == id);
+                    theCount = cartItem.Amount;
+                    theAmount = cartItem.Amount * cartItem.UnitPrice;
+                }
+                string theCountString = string.Empty;
+                if (product.Unit == "斤")
+                    theCountString = theCount.ToString();
+                else
+                    theCountString = string.Format("{0:d}", (int)theCount);
+
+                string resultData = JsonConvert.SerializeObject((new { TotalAmount = totalAmount.ToString("c"), TheCount = theCountString, TheAmount = theAmount.ToString("c") }));
 
                 return Content((new WebResult<string> { ResultCode = WebResultCode.Success, ResultData = resultData }).ResponseString);
             }

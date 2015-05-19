@@ -77,7 +77,7 @@
         <span>@Model.Price.ToString("C2")/@Model.Unit </span> <span>剩余 @Model.RemainAmount@Model.Unit </span>
     </p>
     <div class="bottomNav">
-        <a class="backLink" href="javascript:void;" onclick="return window.history.back();">&lt;</a>
+        <a class="backLink" href="/">&lt;</a>
         <a href="javascript:void;" data-action="add" class="addSubButton">+</a>
         <input type="text" value="@ViewBag.CartItem" />
         <a href="javascript:void;" data-action="sub" class="addSubButton">-</a>
@@ -93,7 +93,7 @@
         var indicator = $(".roundIndicator");
         //if(retData.TotalCount != ""){
         //    indicator.show();
-            indicator.html(retData.TotalCount);
+            indicator.html(retData.TotalAmount);
 
             //$('.good').css({"top":$(this).css("top"),"animation-name": "flyToCart", "animation-duration": "1s" });
 
