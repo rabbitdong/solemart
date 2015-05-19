@@ -34,6 +34,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="SimLogLib">
+      <HintPath>..\..\lib\SimLogLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -57,6 +60,10 @@
     <ProjectReference Include="..\BusinessLib\BusinessLib.csproj">
       <Project>{9e9280a4-7b28-4130-b712-5030e54b5311}</Project>
       <Name>BusinessLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataProvider\DataProvider.csproj">
+      <Project>{f908ec89-0480-43c3-9830-0323158d8d20}</Project>
+      <Name>DataProvider</Name>
     </ProjectReference>
     <ProjectReference Include="..\SystemUtil\SystemUtil.csproj">
       <Project>{ad5e4432-2d4c-4519-b834-2b917686f98c}</Project>

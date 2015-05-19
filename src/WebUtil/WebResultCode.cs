@@ -46,6 +46,11 @@ namespace Solemart.WebUtil
         FileTooLong = 0x2001,
 
         /// <summary>
+        /// 输入不完整
+        /// </summary>
+        IncompleteInput = 0x2002,
+
+        /// <summary>
         /// 重复字段错误
         /// </summary>
         DuplicatedField = 0x4000,

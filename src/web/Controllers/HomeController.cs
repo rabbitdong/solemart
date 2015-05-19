@@ -51,6 +51,25 @@ namespace Solemart.Web.Controllers
                 model.ProductList.Add(pmodel);
             }
 
+            SolemartUser user = User as SolemartUser;
+            if (RequestUtil.IsWeixinRequest(Request.ServerVariables) && user.IsAnonymous)
+            {
+                int userid= 0;
+                HttpCookie cookie = Request.Cookies[AccountUtil.UserIDCookieName];
+                if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
+                {
+                    int.TryParse(cookie.Value, out userid);
+                    Log.Instance.WriteLog(string.Format("Weixin user login. userid[{0}], value[{1}]", userid, cookie.Value));
+                }
+                else
+                {
+                    Log.Instance.WriteLog(string.Format("New weixin user. userid[{0}]", userid));
+                }
+
+                //whatever there's a id or not. it will create a user for weixin.
+                AccountUtil.WeixinLogin(userid);                
+            }
+
             return View(model);
         }
 

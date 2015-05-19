@@ -66,6 +66,7 @@ namespace Solemart.WebUtil
         public static WebResult<string> ParameterErrorResult = new WebResult<string> { ResultCode = WebResultCode.ParametersError, ResultMessage = "参数错误", ResultData = "parameter error!" };
         public static WebResult<string> FileTooLongResult = new WebResult<string> { ResultCode = WebResultCode.FileTooLong, ResultMessage = "文件太大", ResultData = "1M" };
         public static WebResult<string> NormalErrorResult = new WebResult<string>() { ResultCode = WebResultCode.Error, ResultMessage = "发生错误" };
+        public static WebResult<string> IncompleteInputResult = new WebResult<string> { ResultCode = WebResultCode.IncompleteInput, ResultMessage = "输入不完整" };
 
         /// <summary>
         /// 结果数据

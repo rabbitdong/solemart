@@ -153,7 +153,13 @@ namespace Solemart.SystemUtil
         /// <summary>用户从QQ登录
         /// </summary>
         [EnumDisplay("QQ用户")]
-        QQ = 1
+        QQ = 1,
+
+        /// <summary>
+        /// 从微信来的用户
+        /// </summary>
+        [EnumDisplay("Weixin用户")]
+        Weixin = 2
     }
     #endregion
 

@@ -108,6 +108,26 @@ namespace Solemart.DataProvider
         }
 
         /// <summary>
+        /// Insert a new local register user
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <param name="regTime"></param>
+        /// <returns></returns>
+        public int RegisterNewWeixinUser(string username, DateTime regTime)
+        {
+#if TEST
+            string sql="insert into TestUserItems(UserName, LoginType, RegTime, Roles) values(@UserName, 2, @RegTime, '2');select LAST_INSERT_ID();";
+#else
+            string sql = "insert into UserItems(UserName, LoginType, RegTime, Roles) values(@UserName, 2, @RegTime, '2');select LAST_INSERT_ID();";
+#endif
+            var q = this.Database.SqlQuery<int>(sql,
+                new MySqlParameter("@UserName", username),
+                new MySqlParameter("@RegTime", regTime));
+            return q.FirstOrDefault();
+        }
+
+        /// <summary>
         /// Insert a new QQ register user.
         /// </summary>
         /// <param name="qqemail"></param>

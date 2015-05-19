@@ -33,8 +33,8 @@ namespace Solemart.Web.Controllers
             SolemartUser user = this.User as SolemartUser;
 
             //商品添加到购物车中（购物车显示商品的信息）
-            int totalCount = (int)user.Cart.CartItems.Sum(i => i.Amount);
-            string resultData = JsonConvert.SerializeObject((new { TotalCount = totalCount }));
+            decimal totalAmount = (int)user.Cart.CartItems.Sum(i => (i.Amount * i.UnitPrice));
+            string resultData = JsonConvert.SerializeObject((new { TotalCount = totalAmount.ToString("c") }));
 
             return Content((new WebResult<string> { ResultCode = WebResultCode.Success, ResultData = resultData }).ResponseString);
         }
@@ -50,9 +50,9 @@ namespace Solemart.Web.Controllers
             //商品添加到购物车中（购物车显示商品的信息）
             ProductItem product = ProductManager.GetProductByID(id);
             user.Cart.AddToCart(product, 1);
-            int totalCount = (int)user.Cart.CartItems.Sum(i => i.Amount);
+            decimal totalAmount = (int)user.Cart.CartItems.Sum(i => (i.Amount*i.UnitPrice));
             int theCount = (int)user.Cart.CartItems.FirstOrDefault(i => i.ProductID == id).Amount;
-            string resultData = JsonConvert.SerializeObject((new {TotalCount=totalCount, TheCount=theCount}));
+            string resultData = JsonConvert.SerializeObject((new {TotalCount=totalAmount.ToString("c"), TheCount=theCount}));
 
             return Content((new WebResult<string> { ResultCode = WebResultCode.Success, ResultData = resultData }).ResponseString);
         }
@@ -66,11 +66,11 @@ namespace Solemart.Web.Controllers
             SolemartUser user = this.User as SolemartUser;
             if (user.Cart.ModifyCartItem(id, amount))
             {
-                int totalCount = (int)user.Cart.CartItems.Sum(i => i.Amount);
+                decimal totalAmount = (int)user.Cart.CartItems.Sum(i => (i.Amount * i.UnitPrice));
                 int theCount = 0;
                 if(amount > 0)
                     theCount = (int)user.Cart.CartItems.FirstOrDefault(i => i.ProductID == id).Amount;
-                string resultData = JsonConvert.SerializeObject((new { TotalCount = totalCount, TheCount = theCount }));
+                string resultData = JsonConvert.SerializeObject((new { TotalCount = totalAmount.ToString("c"), TheCount = theCount }));
 
                 return Content((new WebResult<string> { ResultCode = WebResultCode.Success, ResultData = resultData }).ResponseString);
             }
@@ -114,7 +114,7 @@ namespace Solemart.Web.Controllers
             SolemartUser user = User as SolemartUser;
 
             if(string.IsNullOrWhiteSpace(addrInfo.Address) || string.IsNullOrWhiteSpace(addrInfo.Phone))
-                return Content(WebResult<string>.SuccessResult.ResponseString);
+                return Content(WebResult<string>.IncompleteInputResult.ResponseString);
 
             addrInfo.DeliverWay = DeliverWay.ByManual;
             addrInfo.UserID = user.UserID;

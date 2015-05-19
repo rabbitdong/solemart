@@ -57,14 +57,13 @@ namespace Solemart.Web
             {
                 //如果没有Cookie，说明用户是非注册用户。就用匿名用户进行登陆。
                 AccountUtil.Login(SolemartUserCache.GetUser(SolemartUser.DefaultAnonymousUserID));
-
             }
         }
 
         void Application_BeginRequest(object sender, EventArgs e)
         {
             //请求js，css，.jpg, .png等忽略
-            if (Request.RawUrl.Contains(".js") || Request.RawUrl.Contains(".css"))
+            if (Request.RawUrl.Contains(".js") || Request.RawUrl.Contains(".css") || Request.RawUrl.Contains("jpg"))
                 return;
 
             bool isFromWeixin = WebUtil.RequestUtil.IsWeixinRequest(Request.ServerVariables);

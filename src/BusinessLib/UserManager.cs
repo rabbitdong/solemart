@@ -5,6 +5,7 @@ using System.Text;
 using System.Security.Cryptography;
 using Solemart.DataProvider;
 using Solemart.DataProvider.Entity;
+using Solemart.SystemUtil;
 
 namespace Solemart.BusinessLib
 {
@@ -29,6 +30,29 @@ namespace Solemart.BusinessLib
                 {
                     context.UserAppendInfoItems.Add(new UserAppendInfoItem { UserID = userid, Address="", Phone="", Sex= SystemUtil.Sex.Unknown });
                     return new UserItem { UserID = userid, UserName = name, Email = email, Roles = Role.NormalUser.ToString(), LoginType = SystemUtil.LoginType.Local };
+                }
+
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Add a new user from weixin client.
+        /// </summary>
+        /// <returns>成功注册返回新注册的用户对象，否则返回null</returns>
+        public static UserItem AddWeixinUser(string openID)
+        {
+            string username = GenerateRandomUserName();
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                while (context.UserItems.FirstOrDefault(u => u.UserName == username) != null)
+                    username = GenerateRandomUserName();
+
+                int userid = context.RegisterNewWeixinUser(username, DateTime.Now);
+                if (userid > 0)
+                {
+                    context.UserAppendInfoItems.Add(new UserAppendInfoItem { UserID = userid, Address = "", Phone = "", Sex = SystemUtil.Sex.Unknown });
+                    return new UserItem { UserID = userid, UserName = username, Roles = Role.NormalUser.ToString(), LoginType = LoginType.Weixin };
                 }
 
                 return null;

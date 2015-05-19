@@ -6,11 +6,18 @@ using System.Web;
 using System.Web.Security;
 using Solemart.BusinessLib;
 using System.Threading;
+using Solemart.DataProvider.Entity;
+using SimLogLib;
 
 namespace Solemart.WebUtil
 {
     public static class AccountUtil
     {
+        /// <summary>
+        /// The cookie name user for store the user id from client.
+        /// </summary>
+        public static string UserIDCookieName = "ledaoUserID";
+
         #region 用户登录的方法
         /// <summary>
         /// 用户通过Email和密码登陆系统
@@ -54,8 +61,35 @@ namespace Solemart.WebUtil
             HttpContext.Current.Response.Cookies.Add(authCookie);
             HttpContext.Current.User = user;
         }
+
+        /// <summary>
+        /// Login util for the user with id(used for weixin client).
+        /// </summary>
+        /// <param name="userID">用户的ID, if the value is 0, it indicate the first login. then generate a user for it.</param>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        public static void WeixinLogin(int userID)
+        {
+            SolemartUser user = null;
+            if (userID == 0)
+            {
+                user = new SolemartUser(UserManager.AddWeixinUser(""));
+            }
+            else
+                user = SolemartUserCache.GetUser(userID);
+
+            HttpCookie useridCookie = new HttpCookie(UserIDCookieName, user.UserID.ToString());
+            useridCookie.Expires = DateTime.Now.AddYears(1);
+            HttpContext.Current.Response.Cookies.Add(useridCookie);
+
+            Log.Instance.WriteLog(string.Format("AccountUtil::WeixinLogin userid[{0}], username[{1}]", user.UserID, user.UserName));
+            //use Login to make user session.
+            Login(user);
+        }
         #endregion
 
+        #region 注销用户
         public static void Logout()
         {
             SolemartUser user = HttpContext.Current.User as SolemartUser;
@@ -71,6 +105,7 @@ namespace Solemart.WebUtil
                 FormsAuthentication.SignOut();
             }
         }
+        #endregion
     }
 
     /// <summary>
