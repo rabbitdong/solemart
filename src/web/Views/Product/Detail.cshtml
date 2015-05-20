@@ -114,7 +114,8 @@
         //    scrollbars: false
         //});
 
-        $(".bottomNav a").bind("click", function(){
+        $(".bottomNav a").bind("click", function(e){
+            e.preventDefault();
             var input = $(".bottomNav input");
             var count = parseInt(input.val());
 

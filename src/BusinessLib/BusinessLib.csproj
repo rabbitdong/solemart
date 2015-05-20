@@ -34,6 +34,13 @@
     <Reference Include="EntityFramework">
       <HintPath>..\..\lib\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SimLogLib">
+      <HintPath>..\..\lib\SimLogLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Security" />
@@ -54,6 +61,7 @@
     <Compile Include="SystemManager.cs" />
     <Compile Include="UserManager.cs" />
     <Compile Include="VendorManager.cs" />
+    <Compile Include="WeixinService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataProvider\DataProvider.csproj">

@@ -32,6 +32,26 @@ namespace Solemart.SystemUtil
         public static string SiteUrl = string.Empty;
 
         /// <summary>
+        /// The weixin appid.
+        /// </summary>
+        public static string WeixinAppID = "wx076fc04f7025fe41";
+
+        /// <summary>
+        /// The weixin app secret.
+        /// </summary>
+        public static string WeixinAppSecret = "be31d106c801d07e7d0ed0417d822d64";
+
+        /// <summary>
+        /// The weixin test appid.
+        /// </summary>
+        public static string TestWeixinAppID = "wxb380b0cdc25542ac";
+
+        /// <summary>
+        /// The weixin test app secret.
+        /// </summary>
+        public static string TestWeixinAppSecret = "a84c7803c508474c4936c7942bd1f8e0";
+
+        /// <summary>
         /// Load the system configuration
         /// </summary>
         public static void LoadAppConfig()

@@ -52,9 +52,7 @@ namespace Solemart.Web.Controllers
                 model.ProductList.Add(pmodel);
             }
 
-            SolemartUser user = User as SolemartUser;
-            
-            int id= rand.Next(10000000);
+            SolemartUser user = User as SolemartUser;            
             if (RequestUtil.IsWeixinRequest(Request.ServerVariables) && user.IsAnonymous)
             {
                 int userid= 0;

@@ -141,7 +141,6 @@ namespace Solemart.Web.Controllers
         {
             SolemartUser user = User as SolemartUser;
 
-            Log.Instance.WriteLog(string.Format("Address:[{0}], Phone:[{1}]", addrInfo.Address, addrInfo.Phone));
             if(string.IsNullOrWhiteSpace(addrInfo.Address) || string.IsNullOrWhiteSpace(addrInfo.Phone))
                 return Content(WebResult<string>.IncompleteInputResult.ResponseString);
 

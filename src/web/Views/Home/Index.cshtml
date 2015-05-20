@@ -42,7 +42,9 @@
 
 <script type="text/javascript">
     $(function () {
-        $("ul.productList").on("click", "li a.addToCart", function () {
+        $("ul.productList").on("click", "li a.addToCart", function (e) {
+            e.preventDefault();
+
             $.post("/Cart/Add/" + $(this).data("pid"),
                 {"addition":"parameter"},
                 function (result) {
