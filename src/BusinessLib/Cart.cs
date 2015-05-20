@@ -75,9 +75,10 @@ namespace Solemart.BusinessLib
             }
         }
 
-        /// <summary>清除购物车中的所有商品项
+        /// <summary>
+        /// Clear all the cart items.
         /// </summary>
-        public void Clear()
+        private void Clear()
         {
             cartItems.Clear();
         }
@@ -90,7 +91,13 @@ namespace Solemart.BusinessLib
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                return context.ClearCartForUser(userID);
+                if (context.ClearCartForUser(userID))
+                {
+                    Clear();
+                    return true;
+                }
+
+                return false;
             }
         }
 

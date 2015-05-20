@@ -199,6 +199,11 @@ namespace Solemart.DataProvider.Entity
         public string NickName { get; set; }
 
         /// <summary>
+        /// The point of user having.
+        /// </summary>
+        public int PointAmount { get; set; }
+
+        /// <summary>
         /// The question for losing the password.
         /// </summary>
         public string Question { get; set; }
@@ -267,6 +272,33 @@ namespace Solemart.DataProvider.Entity
         /// The extent content for the user(JSON)
         /// </summary>
         public string ExtContent { get; set; }
+    }
+    #endregion
+
+    #region 用户积分表
+    /// <summary>
+    /// The user point transaction logging table
+    /// </summary>
+#if TEST
+    [Table("TestUserPointItems")]
+#endif
+    public class UserPointItem
+    {
+        [Key]
+        public long AutoID { get; set; }
+
+        public int UserID { get; set; }
+
+        [ForeignKey("UserID")]
+        public virtual UserItem UserItem { get; set; }
+
+        public int PointAmount { get; set; }
+
+        public PointType PointType { get; set; }
+
+        public DateTime TransTime { get; set; }
+
+        public string Remark { get; set; }
     }
     #endregion
 

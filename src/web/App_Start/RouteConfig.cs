@@ -9,6 +9,9 @@ namespace Solemart.Web {
     public class RouteConfig {
         public static void RegisterRoutes(RouteCollection routes) {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.IgnoreRoute("Content/{*.pathInfo}");
+            routes.IgnoreRoute("Scripts/{*.pathInfo}");
+            routes.IgnoreRoute("Images/{*.pathInfo}");
 
             routes.MapRoute(
                 name: "Default",

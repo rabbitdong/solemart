@@ -37,6 +37,7 @@ namespace Solemart.DataProvider
         public virtual DbSet<FavoriteItem> FavoriteItems { get; set; }
         public virtual DbSet<AdviserItem> AdviserItems { get; set; }
         public virtual DbSet<BulletinItem> BulletinItems { get; set; }
+        public virtual DbSet<UserPointItem> UserPointITems { get; set; }
         #endregion
 
         public bool ClearTableData(Type tableType)

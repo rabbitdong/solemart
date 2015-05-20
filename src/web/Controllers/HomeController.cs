@@ -19,6 +19,7 @@ namespace Solemart.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private static Random rand = new Random();
         /// <summary>
         /// Display the product list.
         /// </summary>
@@ -52,6 +53,8 @@ namespace Solemart.Web.Controllers
             }
 
             SolemartUser user = User as SolemartUser;
+            
+            int id= rand.Next(10000000);
             if (RequestUtil.IsWeixinRequest(Request.ServerVariables) && user.IsAnonymous)
             {
                 int userid= 0;
@@ -59,11 +62,11 @@ namespace Solemart.Web.Controllers
                 if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
                 {
                     int.TryParse(cookie.Value, out userid);
-                    Log.Instance.WriteLog(string.Format("Weixin user login. userid[{0}], value[{1}]", userid, cookie.Value));
+                    Log.Instance.WriteLog(string.Format("Weixin user login. userid[{0}], value[{1}], from[{2}]", userid, cookie.Value, Request.UserHostAddress));
                 }
                 else
                 {
-                    Log.Instance.WriteLog(string.Format("New weixin user. userid[{0}]", userid));
+                    Log.Instance.WriteLog(string.Format("New weixin user. userid[{0}], from[{1}]", userid, Request.UserHostAddress));
                 }
 
                 //whatever there's a id or not. it will create a user for weixin.

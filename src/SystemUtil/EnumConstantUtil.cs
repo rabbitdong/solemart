@@ -140,6 +140,27 @@ namespace Solemart.SystemUtil
     }
     #endregion
 
+    #region 用户的积分类型
+    /// <summary>
+    /// 表示用户积分类型
+    /// </summary>
+    public enum PointType
+    {
+        /// <summary>
+        /// 购买物品积分
+        /// </summary>
+        BuyGoods = 1,
+        /// <summary>
+        /// 花费积分用于购买物品
+        /// </summary>
+        ConsumeGoods  = 2,
+        /// <summary>
+        /// 退货扣除积分
+        /// </summary>
+        ReturnGoods = 3,
+    }
+    #endregion
+
     #region 用户的登录类型  LoginType
     /// <summary>用户的登录类型（可以从其它网站的认证登录）
     /// </summary>

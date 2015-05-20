@@ -169,7 +169,8 @@ namespace Solemart.BusinessLib
 
                 if (context.SaveChanges() > 0)
                 {
-                    userItem.AppendInfo.Address = address;
+                    if(userItem.AppendInfo != null)
+                        userItem.AppendInfo.Address = address;
                     return true;
                 }
 
@@ -192,7 +193,8 @@ namespace Solemart.BusinessLib
 
                 if (context.SaveChanges() > 0)
                 {
-                    userItem.AppendInfo.Phone = phone;
+                    if(userItem.AppendInfo != null)
+                        userItem.AppendInfo.Phone = phone;
                     return true;
                 }
 
@@ -215,7 +217,85 @@ namespace Solemart.BusinessLib
 
                 if (context.SaveChanges() > 0)
                 {
-                    userItem.AppendInfo.Sex = sex;
+                    if(userItem.AppendInfo != null)
+                        userItem.AppendInfo.Sex = sex;
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// The user add the point(for buy the goods).
+        /// </summary>
+        /// <param name="pointAmount"></param>
+        /// <returns></returns>
+        public bool AddPoint(int pointAmount)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserAppendInfoItem tempUserItem = context.UserAppendInfoItems.FirstOrDefault(u => u.UserID == userItem.UserID);
+                if (tempUserItem != null)
+                    tempUserItem.PointAmount += pointAmount;
+
+                context.UserPointITems.Add(new UserPointItem { UserID = UserID, PointAmount = pointAmount, PointType = PointType.BuyGoods, TransTime = DateTime.Now, Remark = "" });
+                if (context.SaveChanges() > 0)
+                {
+                    if(userItem.AppendInfo != null)
+                        userItem.AppendInfo.PointAmount += pointAmount;
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// The user consume the point.(for buy the goods)
+        /// </summary>
+        /// <param name="pointAmount"></param>
+        /// <returns></returns>
+        public bool ConsumePoint(int pointAmount)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserAppendInfoItem tempUserItem = context.UserAppendInfoItems.FirstOrDefault(u => u.UserID == userItem.UserID);
+                if (tempUserItem != null && tempUserItem.PointAmount >= pointAmount)
+                    tempUserItem.PointAmount -= pointAmount;
+
+                //记录积分的变更
+                context.UserPointITems.Add(new UserPointItem { UserID = UserID, PointAmount = -pointAmount, PointType = PointType.ConsumeGoods, TransTime = DateTime.Now, Remark = "" });
+                if (context.SaveChanges() > 0)
+                {
+                    if (userItem.AppendInfo != null)
+                        userItem.AppendInfo.PointAmount -= pointAmount;
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// The user take off the point.(for return the goods)
+        /// </summary>
+        /// <param name="pointAmount"></param>
+        /// <returns></returns>
+        public bool TakeOffPoint(int pointAmount)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserAppendInfoItem tempUserItem = context.UserAppendInfoItems.FirstOrDefault(u => u.UserID == userItem.UserID);
+                if (tempUserItem != null && tempUserItem.PointAmount >= pointAmount)
+                    tempUserItem.PointAmount -= pointAmount;
+
+                //记录积分的变更
+                context.UserPointITems.Add(new UserPointItem { UserID = UserID, PointAmount = -pointAmount, PointType = PointType.ReturnGoods, TransTime = DateTime.Now, Remark = "" });
+                if (context.SaveChanges() > 0)
+                {
+                    if (userItem.AppendInfo != null)
+                        userItem.AppendInfo.PointAmount -= pointAmount;
                     return true;
                 }
 
@@ -241,11 +321,17 @@ namespace Solemart.BusinessLib
             get { return userItem.LoginType == LoginType.QQ; }
         }
 
+        /// <summary>
+        /// Get the user's email address.
+        /// </summary>
         public string Email
         {
             get { return userItem.Email; }
         }
 
+        /// <summary>
+        /// Get the user's address
+        /// </summary>
         public string Address
         {
             get
@@ -259,6 +345,23 @@ namespace Solemart.BusinessLib
             }
         }
 
+        /// <summary>
+        /// Get the user's point
+        /// </summary>
+        public int PointAmount
+        {
+            get
+            {
+                if (userItem.AppendInfo == null)
+                    LoadAppendInfo();
+
+                return userItem.AppendInfo.PointAmount;
+            }
+        }
+
+        /// <summary>
+        /// Get the user's phone number.
+        /// </summary>
         public string Phone
         {
             get
@@ -272,6 +375,9 @@ namespace Solemart.BusinessLib
             }
         }
 
+        /// <summary>
+        /// Get the user's birthday.
+        /// </summary>
         public DateTime BirthDay
         {
             get
@@ -285,6 +391,9 @@ namespace Solemart.BusinessLib
             }
         }
 
+        /// <summary>
+        /// Get the user's sex.
+        /// </summary>
         public Sex Sex
         {
             get

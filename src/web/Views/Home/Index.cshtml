@@ -44,7 +44,7 @@
     $(function () {
         $("ul.productList").on("click", "li a.addToCart", function () {
             $.post("/Cart/Add/" + $(this).data("pid"),
-                {},
+                {"addition":"parameter"},
                 function (result) {
                     var ret = new WebReturn(result);
                     if (!ret.success) {

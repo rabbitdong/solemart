@@ -100,7 +100,7 @@
     </div>
     <div>
         <div class="comm_btn r">
-            <a href="javascript:void(0);" class="comm_btn" onclick="javascript:submitorder();">提交订单</a>
+            <a href="javascript:;" class="comm_btn" id="submitOrder">提交订单</a>
         </div>
     </div>
 </div>
@@ -117,8 +117,36 @@
             $("#addressContent").hide();
             $("#sendinfo1_content_paytype").css("display", "none");
             $("#modifyAddress").css("display", "none");
-            </text>
+        </text>
         }
+
+        $("#submitOrder").bind("click", function () {
+            if (!isCompleteAddress()) {
+                $("#err_for_noinfo").css("visibility", "visible");
+                return false;
+            }
+
+            $.post("/Cart/CheckoutOrder",
+                {
+                    Receiver: $("#receiver").val(),
+                    Address: $("#address").val(),
+                    PostCode: $("#post").val(),
+                    Phone: $("#phone").val(),
+                    PaymentType: $("#sendinfo1_paytype").val(),
+                    remark: $("#order_remark").val(),
+                    paytype: $("#paytype").val()
+                },
+                function (result) {
+                    var ret = new WebReturn(result);
+                    if (ret.success) {
+                        window.location.href = "/Cart/CheckOutCompleted/" + ret.content;
+                    }
+                    else {
+                        alert(ret.message);
+                    }
+                }
+            );
+        });
     });
 
     $(function () {
@@ -165,33 +193,5 @@
         }
 
         return is_validate;
-    }
-
-    function submitorder() {
-        if (!isCompleteAddress()) {
-            $("#err_for_noinfo").css("visibility", "visible");
-            return false;
-        }
-
-        $.post("/Cart/CheckoutOrder",
-            {
-                Receiver: $("#receiver").val(),
-                Address: $("#address").val(),
-                PostCode: $("#post").val(),
-                Phone: $("#phone").val(),
-                PaymentType: $("#sendinfo1_paytype").val(),
-                remark: $("#order_remark").val(),
-                paytype: $("#paytype").val()
-            },
-            function (result) {
-                var ret = new WebReturn(result);
-                if (ret.success) {
-                    window.location.href = "/Cart/CheckOutCompleted/" + ret.content;
-                }
-                else {
-                    alert(ret.message);
-                }
-            }
-        );
     }
 </script>

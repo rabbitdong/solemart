@@ -28,7 +28,8 @@ namespace Solemart.BusinessLib
                 int userid = context.RegisterNewUser(name, email, pwd, DateTime.Now);
                 if (userid > 0)
                 {
-                    context.UserAppendInfoItems.Add(new UserAppendInfoItem { UserID = userid, Address="", Phone="", Sex= SystemUtil.Sex.Unknown });
+                    context.UserAppendInfoItems.Add(new UserAppendInfoItem { UserID = userid, BirthDay=new DateTime(1970, 1, 1), Address="", Phone="", Sex= SystemUtil.Sex.Unknown });
+                    context.SaveChanges();
                     return new UserItem { UserID = userid, UserName = name, Email = email, Roles = Role.NormalUser.ToString(), LoginType = SystemUtil.LoginType.Local };
                 }
 
@@ -51,7 +52,8 @@ namespace Solemart.BusinessLib
                 int userid = context.RegisterNewWeixinUser(username, DateTime.Now);
                 if (userid > 0)
                 {
-                    context.UserAppendInfoItems.Add(new UserAppendInfoItem { UserID = userid, Address = "", Phone = "", Sex = SystemUtil.Sex.Unknown });
+                    context.UserAppendInfoItems.Add(new UserAppendInfoItem { UserID = userid, BirthDay = new DateTime(1970, 1, 1), Address = "", Phone = "", Sex = SystemUtil.Sex.Unknown });
+                    context.SaveChanges();
                     return new UserItem { UserID = userid, UserName = username, Roles = Role.NormalUser.ToString(), LoginType = LoginType.Weixin };
                 }
 
@@ -71,7 +73,8 @@ namespace Solemart.BusinessLib
                 int userid = context.RegisterNewQQUser(nickname, "", "", DateTime.Now);
                 if (userid > 0)
                 {
-                    context.UserAppendInfoItems.Add(new UserAppendInfoItem { UserID = userid });
+                    context.UserAppendInfoItems.Add(new UserAppendInfoItem { UserID = userid, BirthDay = new DateTime(1970, 1, 1), Address = "", Phone = "", Sex = SystemUtil.Sex.Unknown });
+                    context.SaveChanges();
                     return new UserItem { UserID = userid, UserName = nickname, Email = "", Roles = Role.NormalUser.ToString(), LoginType = SystemUtil.LoginType.QQ };
                 }
 

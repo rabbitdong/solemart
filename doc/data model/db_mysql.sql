@@ -22,10 +22,11 @@ INSERT INTO UserItems VALUES(1, 'Anonymous', '', '', 0, '0001-01-01 00:00:00', 1
 CREATE TABLE UserAppendInfoItems(
 	UserID 		INTEGER PRIMARY KEY REFERENCES Users(UserID),
 	NickName	VARCHAR(30),
+	PointAmount INTEGER DEFAULT 0,   -- 用户的积分
 	Question  	VARCHAR(100),
 	Answer    	VARCHAR(30),
 	RealName	VARCHAR(30),
-	Sex			INTEGER,			#0未知，1表示男， 2表示女
+	Sex			INTEGER DEFAULT 0,			#0未知，1表示男， 2表示女
 	HeadImageUrl	VARCHAR(255),
 	BirthDay	DATETIME,
 	SpaceURL	VARCHAR(300),
@@ -36,6 +37,16 @@ CREATE TABLE UserAppendInfoItems(
 	Phone		VARCHAR(12),
 	Address		VARCHAR(120),
 	ExtContent  VARCHAR(2000)    -- 扩展字段，json结构
+) CHARACTER SET utf8;
+
+#The user point items list.
+CREATE TABLE UserPointItems(
+    AutoID      BIGINT AUTO_INCREMENT PRIMARY KEY,
+    UserID      INTEGER NOT NULL REFERENCES UserItems(UserID),
+    PointAmount INTEGER NOT NULL,   # positive if in point. negative if out point.
+    PointType   INTEGER DEFAULT 1,  #Get the point type(default buy the goods). 1. buy goos. 2. consume goods.
+    TransTime   DATETIME,
+    Remark      NVARCHAR(100)       #remark the of transaction.
 ) CHARACTER SET utf8;
 
 #The product categories

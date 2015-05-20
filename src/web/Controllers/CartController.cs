@@ -11,6 +11,7 @@ using Solemart.BusinessLib;
 using Solemart.SystemUtil;
 using Solemart.WebUtil;
 using Newtonsoft.Json;
+using SimLogLib;
 
 namespace Solemart.Web.Controllers
 {
@@ -140,6 +141,7 @@ namespace Solemart.Web.Controllers
         {
             SolemartUser user = User as SolemartUser;
 
+            Log.Instance.WriteLog(string.Format("Address:[{0}], Phone:[{1}]", addrInfo.Address, addrInfo.Phone));
             if(string.IsNullOrWhiteSpace(addrInfo.Address) || string.IsNullOrWhiteSpace(addrInfo.Phone))
                 return Content(WebResult<string>.IncompleteInputResult.ResponseString);
 
@@ -181,14 +183,16 @@ namespace Solemart.Web.Controllers
                 return Content("error");
 
             //Clear the user's cart.
-            user.ClearCart();
+            //user.ClearCart();
             //新订单产生后，刷新最受欢迎的产品列表
             //ProductManager.RefleshMostPopularProducts();
 
-            if (oi.OrderID != -1)
+            if (oi.OrderID > 0)
             {
                 // 已进入订单后，临时购物车上物品需要清除
                 user.Cart.ClearAndSave(user.UserID);
+                //先保存用户的积分(目前的积分按购物的价格计算)。
+                user.AddPoint((int)oi.TotalPrice);
 #if false //支付宝暂时不支持
                 if (oi.PaymentType == PaymentType.OnLine)
                 {
@@ -355,7 +359,11 @@ namespace Solemart.Web.Controllers
                 return Content(WebResult<string>.NormalErrorResult.ResponseString);
 
             if (OrderManager.CancelOrder(order_id))
+            {
+                //由于退货，扣除积分
+                user.TakeOffPoint((int)order.TotalPrice);
                 return Content(WebResult<string>.SuccessResult.ResponseString);
+            }
             return Content(WebResult<string>.NormalErrorResult.ResponseString);
         }
 
