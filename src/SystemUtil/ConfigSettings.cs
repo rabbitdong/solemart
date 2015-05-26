@@ -52,6 +52,11 @@ namespace Solemart.SystemUtil
         public static string TestWeixinAppSecret = "a84c7803c508474c4936c7942bd1f8e0";
 
         /// <summary>
+        /// The time out of the weixin
+        /// </summary>
+        public static readonly int WeixinPostTimeOut = 30;
+
+        /// <summary>
         /// Load the system configuration
         /// </summary>
         public static void LoadAppConfig()
