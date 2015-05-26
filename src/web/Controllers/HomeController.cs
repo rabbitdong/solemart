@@ -14,6 +14,8 @@ using Solemart.WebUtil;
 using Solemart.Web.Models;
 using SimLogLib;
 using LogUtil = SimLogLib.Util;
+using Solemart.WeixinAPI.AdvancedAPIs.OAuth;
+using Solemart.WeixinAPI.Base;
 
 namespace Solemart.Web.Controllers
 {
@@ -23,7 +25,7 @@ namespace Solemart.Web.Controllers
         /// <summary>
         /// Display the product list.
         /// </summary>
-        public ActionResult Index(int? p)
+        public ActionResult Index(int? p, string code)
         {
             int pi = p ?? 0; //表示页索引
             int totalPageCount = 0;
@@ -52,23 +54,14 @@ namespace Solemart.Web.Controllers
                 model.ProductList.Add(pmodel);
             }
 
-            SolemartUser user = User as SolemartUser;            
-            if (RequestUtil.IsWeixinRequest(Request.ServerVariables) && user.IsAnonymous)
+            SolemartUser user = User as SolemartUser;
+            if (!string.IsNullOrEmpty(code))
             {
-                int userid= 0;
-                HttpCookie cookie = Request.Cookies[AccountUtil.UserIDCookieName];
-                if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
+                OAuthAccessTokenResult ret = OAuthApi.GetAccessToken(ConfigSettings.WeixinAppID, ConfigSettings.WeixinAppSecret, code);
+                if (ret.errcode == WeixinReturnCode.Success)
                 {
-                    int.TryParse(cookie.Value, out userid);
-                    Log.Instance.WriteLog(string.Format("Weixin user login. userid[{0}], value[{1}], from[{2}]", userid, cookie.Value, Request.UserHostAddress));
+                    AccountUtil.WeixinLogin(ret.access_token, ret.openid);
                 }
-                else
-                {
-                    Log.Instance.WriteLog(string.Format("New weixin user. userid[{0}], from[{1}]", userid, Request.UserHostAddress));
-                }
-
-                //whatever there's a id or not. it will create a user for weixin.
-                AccountUtil.WeixinLogin(userid);                
             }
 
             return View(model);

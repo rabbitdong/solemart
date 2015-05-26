@@ -28,11 +28,13 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Web.Script.Serialization;
 using Solemart.WeixinAPI.Entities;
 using Solemart.WeixinAPI.Entities.Menu;
 using Solemart.WeixinAPI.Base.Exceptions;
 using Solemart.WeixinAPI.Base.HttpUtility;
+using Solemart.WeixinAPI.Base;
+using Newtonsoft.Json;
+using SimLogLib;
 
 namespace Solemart.WeixinAPI.CommonAPIs
 {
@@ -108,8 +110,7 @@ namespace Solemart.WeixinAPI.CommonAPIs
                 //@"{""menu"":{""button"":[{""type"":""click"",""name"":""单击测试"",""key"":""OneClick"",""sub_button"":[]},{""name"":""二级菜单"",""sub_button"":[{""type"":""click"",""name"":""返回文本"",""key"":""SubClickRoot_Text"",""sub_button"":[]},{""type"":""click"",""name"":""返回图文"",""key"":""SubClickRoot_News"",""sub_button"":[]},{""type"":""click"",""name"":""返回音乐"",""key"":""SubClickRoot_Music"",""sub_button"":[]}]}]}}"
                 object jsonResult = null;
 
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                jsonResult = js.Deserialize<object>(jsonString);
+                jsonResult = JsonConvert.DeserializeObject<object>(jsonString);
 
                 var fullResult = jsonResult as Dictionary<string, object>;
                 if (fullResult != null && fullResult.ContainsKey("menu"))
@@ -146,12 +147,14 @@ namespace Solemart.WeixinAPI.CommonAPIs
             }
             catch (ErrorJsonResultException ex)
             {
+                Log.Instance.WriteError(ex.ToString());
                 finalResult = null;
 
                 //如果没有惨淡会返回错误代码：46003：menu no exist
             }
             catch (Exception ex)
             {
+                Log.Instance.WriteError(ex.ToString());
                 //其他异常
                 finalResult = null;
             }
@@ -168,14 +171,13 @@ namespace Solemart.WeixinAPI.CommonAPIs
         {
             var url = string.Format("https://api.weixin.qq.com/cgi-bin/menu/get?access_token={0}", accessToken);
 
-            var jsonString = HttpUtility.RequestUtility.HttpGet(url, Encoding.UTF8);
+            var jsonString = RequestUtility.HttpGet(url, Encoding.UTF8);
             //var finalResult = GetMenuFromJson(jsonString);
 
             GetMenuResult finalResult;
-            JavaScriptSerializer js = new JavaScriptSerializer();
             try
             {
-                var jsonResult = js.Deserialize<GetMenuResultFull>(jsonString);
+                var jsonResult = JsonConvert.DeserializeObject<GetMenuResultFull>(jsonString);
                 if (jsonResult.menu == null || jsonResult.menu.button.Count == 0)
                 {
                     throw new WeixinException(jsonResult.errmsg);
@@ -185,6 +187,7 @@ namespace Solemart.WeixinAPI.CommonAPIs
             }
             catch (WeixinException ex)
             {
+                Log.Instance.WriteError(ex.ToString());
                 finalResult = null;
             }
 
@@ -431,7 +434,7 @@ namespace Solemart.WeixinAPI.CommonAPIs
         public static WxJsonResult DeleteMenu(string accessToken)
         {
             var url = string.Format("https://api.weixin.qq.com/cgi-bin/menu/delete?access_token={0}", accessToken);
-            var result = Get.GetJson<WxJsonResult>(url);
+            var result = GetMethod.GetJson<WxJsonResult>(url);
             return result;
         }
     }

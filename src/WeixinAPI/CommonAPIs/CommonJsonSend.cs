@@ -25,6 +25,7 @@ using Solemart.WeixinAPI.Entities;
 using Solemart.WeixinAPI.Helpers;
 using Solemart.WeixinAPI.Base.HttpUtility;
 using Solemart.SystemUtil;
+using Solemart.WeixinAPI.Base;
 
 namespace Solemart.WeixinAPI.CommonAPIs
 {
@@ -44,7 +45,7 @@ namespace Solemart.WeixinAPI.CommonAPIs
         /// <param name="data">如果是Get方式，可以为null</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static WxJsonResult Send(string accessToken, string urlFormat, object data, CommonJsonSendType sendType = CommonJsonSendType.POST, int timeOut = ConfigSettings.WeixinPostTimeOut)
+        public static WxJsonResult Send(string accessToken, string urlFormat, object data, CommonJsonSendType sendType = CommonJsonSendType.POST, int timeOut = Config.TIME_OUT)
         {
             return Send<WxJsonResult>(accessToken, urlFormat, data, sendType, timeOut);
         }
@@ -57,13 +58,13 @@ namespace Solemart.WeixinAPI.CommonAPIs
         /// <param name="data">如果是Get方式，可以为null</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static T Send<T>(string accessToken, string urlFormat, object data, CommonJsonSendType sendType = CommonJsonSendType.POST, int timeOut = ConfigSettings.WeixinPostTimeOut)
+        public static T Send<T>(string accessToken, string urlFormat, object data, CommonJsonSendType sendType = CommonJsonSendType.POST, int timeOut = Config.TIME_OUT)
         {
             var url = string.IsNullOrEmpty(accessToken) ? urlFormat : string.Format(urlFormat, accessToken);
             switch (sendType)
             {
                 case CommonJsonSendType.GET:
-                    return Get.GetJson<T>(url);
+                    return GetMethod.GetJson<T>(url);
                 case CommonJsonSendType.POST:
                     SerializerHelper serializerHelper = new SerializerHelper();
                     var jsonString = serializerHelper.GetJsonString(data);
@@ -73,7 +74,7 @@ namespace Solemart.WeixinAPI.CommonAPIs
                         ms.Write(bytes, 0, bytes.Length);
                         ms.Seek(0, SeekOrigin.Begin);
 
-                        return Post.PostGetJson<T>(url, null, ms, timeOut: timeOut);
+                        return PostMethod.PostGetJson<T>(url, null, ms, timeOut: timeOut);
                     }
                 default:
                     throw new ArgumentOutOfRangeException("sendType");

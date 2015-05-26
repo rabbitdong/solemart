@@ -18,7 +18,7 @@ using System.Web;
 using System.Collections;
 using Solemart.WeixinAPI.Helpers;
 
-namespace Solemart.WebUtil.WeixinPay.TenPayLib
+namespace Solemart.WeixinAPI.TenPayLib
 {
     public class CheckRequestHandler : ClientRequestHandler
     {

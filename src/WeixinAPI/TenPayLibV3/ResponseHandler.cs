@@ -17,9 +17,9 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Web;
 using System.Xml;
-using Solemart.WebUtil.WeixinPay.Helpers;
+using Solemart.WeixinAPI.Helpers;
 
-namespace Solemart.WebUtil.WeixinPay.TenPayLibV3
+namespace Solemart.WeixinAPI.TenPayLibV3
 {
 
     /** 
@@ -43,11 +43,6 @@ namespace Solemart.WebUtil.WeixinPay.TenPayLibV3
 		private string Key;
 
         /// <summary>
-        /// appkey
-        /// </summary>
-        private string Appkey;
-
-        /// <summary>
         /// xmlMap
         /// </summary>
         private Hashtable XmlMap;
@@ -65,8 +60,6 @@ namespace Solemart.WebUtil.WeixinPay.TenPayLibV3
         /// 原始内容
         /// </summary>
         protected string Content;
-
-        private string Charset = "gb2312";
 
 		protected HttpContext HttpContext;
 

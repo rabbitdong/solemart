@@ -24,6 +24,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Solemart.WeixinAPI.CommonAPIs;
+using Solemart.WeixinAPI.Base;
+using Solemart.WeixinAPI.Base.HttpUtility;
 
 namespace Solemart.WeixinAPI.AdvancedAPIs.QrCode
 {
@@ -95,7 +97,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.QrCode
         public static void ShowQrCode(string ticket, Stream stream)
         {
             var url = GetShowQrCodeUrl(ticket);
-            HttpUtility.Get.Download(url, stream);
+            GetMethod.Download(url, stream);
         }
 
     }

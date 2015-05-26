@@ -21,7 +21,7 @@ using Solemart.WeixinAPI.Helpers;
 
 namespace Solemart.WeixinAPI.Entities
 {
-	public interface IResponseMessageBase : Weixin.Entities.IResponseMessageBase
+	public interface IResponseMessageBase : Base.Entities.IResponseMessageBase
 	{
 		ResponseMsgType MsgType { get; }
 		//string Content { get; set; }
@@ -31,7 +31,7 @@ namespace Solemart.WeixinAPI.Entities
 	/// <summary>
 	/// 响应回复消息
 	/// </summary>
-    public class ResponseMessageBase : Weixin.Entities.ResponseMessageBase, IResponseMessageBase
+    public class ResponseMessageBase : Base.Entities.ResponseMessageBase, IResponseMessageBase
 	{
 		public virtual ResponseMsgType MsgType
 		{
@@ -105,7 +105,7 @@ namespace Solemart.WeixinAPI.Entities
 				var tType = typeof(T);
 				var responseName = tType.Name.Replace("ResponseMessage", ""); //请求名称
 				ResponseMsgType msgType = (ResponseMsgType)Enum.Parse(typeof(ResponseMsgType), responseName);
-				return CreateFromRequestMessage(requestMessage, msgType) as T;
+				return CreateFromRequestMessage<T>(requestMessage);
 			}
 			catch (Exception ex)
 			{

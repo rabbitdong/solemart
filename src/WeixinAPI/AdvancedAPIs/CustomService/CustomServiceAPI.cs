@@ -25,10 +25,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web.Script.Serialization;
 using Solemart.WeixinAPI.CommonAPIs;
 using Solemart.WeixinAPI.Base.Helpers;
 using Solemart.WeixinAPI.Entities;
+using Solemart.WeixinAPI.Base;
+using Solemart.WeixinAPI.Base.HttpUtility;
 
 namespace Solemart.WeixinAPI.AdvancedAPIs.CustomService
 {
@@ -167,7 +168,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.CustomService
             var url = string.Format("http://api.weixin.qq.com/customservice/kfaccount/uploadheadimg?access_token={0}&kf_account={1}", accessToken, kfAccount);
             var fileDictionary = new Dictionary<string, string>();
             fileDictionary["media"] = file;
-            return HttpUtility.Post.PostFileGetJson<WxJsonResult>(url, null, fileDictionary, null, timeOut: timeOut);
+            return PostMethod.PostFileGetJson<WxJsonResult>(url, null, fileDictionary, null, timeOut: timeOut);
         }
 
         /// <summary>

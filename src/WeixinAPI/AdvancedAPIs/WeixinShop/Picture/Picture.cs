@@ -24,7 +24,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs
             using (var fs = Solemart.WeixinAPI.Base.Helpers.FileHelper.GetFileStream(fileName))
             {
                 var jsonText = Solemart.WeixinAPI.Base.HttpUtility.RequestUtility.HttpPost(url, null, fs);
-                json = Solemart.WeixinAPI.Base.HttpUtility.Post.GetResult<PictureResult>(jsonText);
+                json = Solemart.WeixinAPI.Base.HttpUtility.PostMethod.GetResult<PictureResult>(jsonText);
             }
             return json;
         }

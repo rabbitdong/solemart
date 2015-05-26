@@ -11,6 +11,7 @@
     修改描述：整理接口
 ----------------------------------------------------------------*/
 
+using SimLogLib;
 using System;
 using System.Security.Cryptography;
 using System.Text;
@@ -51,7 +52,8 @@ namespace Solemart.WeixinAPI.Helpers
 			}
 			catch (Exception ex)
 			{
-				inputBye = Encoding.GetEncoding("GB2312").GetBytes(encypStr);
+                Log.Instance.WriteError(ex.ToString());
+                inputBye = Encoding.GetEncoding("GB2312").GetBytes(encypStr);
 			}
 			outputBye = m5.ComputeHash(inputBye);
 

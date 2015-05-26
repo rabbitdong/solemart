@@ -25,10 +25,10 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web.Script.Serialization;
 using Solemart.WeixinAPI.CommonAPIs;
 using Solemart.WeixinAPI.Entities;
 using Solemart.WeixinAPI.Base.HttpUtility;
+using Solemart.WeixinAPI.Base;
 
 namespace Solemart.WeixinAPI.AdvancedAPIs.Groups
 {
@@ -67,7 +67,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.Groups
         {
             var urlFormat = "https://api.weixin.qq.com/cgi-bin/groups/get?access_token={0}";
             var url = string.Format(urlFormat, accessToken);
-            return HttpUtility.Get.GetJson<GroupsJson>(url);
+            return Base.HttpUtility.GetMethod.GetJson<GroupsJson>(url);
         }
 
         /// <summary>

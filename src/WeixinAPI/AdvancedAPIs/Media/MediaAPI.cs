@@ -36,6 +36,7 @@ using Solemart.WeixinAPI.Base.Helpers;
 using Solemart.WeixinAPI.AdvancedAPIs.GroupMessage;
 using Solemart.WeixinAPI.CommonAPIs;
 using Solemart.WeixinAPI.Entities;
+using Solemart.WeixinAPI.Base;
 using Solemart.WeixinAPI.Base.HttpUtility;
 
 namespace Solemart.WeixinAPI.AdvancedAPIs.Media
@@ -59,7 +60,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.Media
             var url = string.Format("http://api.weixin.qq.com/cgi-bin/media/upload?access_token={0}&type={1}", accessToken, type.ToString());
             var fileDictionary = new Dictionary<string, string>();
             fileDictionary["media"] = file;
-            return HttpUtility.Post.PostFileGetJson<UploadTemporaryMediaResult>(url, null, fileDictionary, null, timeOut: timeOut);
+            return PostMethod.PostFileGetJson<UploadTemporaryMediaResult>(url, null, fileDictionary, null, timeOut: timeOut);
         }
 
         /// <summary>
@@ -90,7 +91,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.Media
         {
             var url = string.Format("http://api.weixin.qq.com/cgi-bin/media/get?access_token={0}&media_id={1}",
                 accessToken, mediaId);
-            HttpUtility.Get.Download(url, stream);
+            Solemart.WeixinAPI.Base.HttpUtility.GetMethod.Download(url, stream);
         }
         #endregion
 
@@ -137,7 +138,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.Media
             var fileDictionary = new Dictionary<string, string>();
             //fileDictionary["type"] = UploadMediaFileType.image.ToString();//不提供此参数也可以上传成功
             fileDictionary["media"] = file;
-            return HttpUtility.Post.PostFileGetJson<UploadForeverMediaResult>(url, null, fileDictionary, null, timeOut: timeOut);
+            return PostMethod.PostFileGetJson<UploadForeverMediaResult>(url, null, fileDictionary, null, timeOut: timeOut);
         }
 
         /// <summary>
@@ -156,7 +157,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.Media
             fileDictionary["media"] = file;
             fileDictionary["description"] = string.Format("{{\"title\":\"{0}\", \"introduction\":\"{1}\"}}", title, introduction);
 
-            return HttpUtility.Post.PostFileGetJson<UploadForeverMediaResult>(url, null, fileDictionary, null, timeOut: timeOut);
+            return PostMethod.PostFileGetJson<UploadForeverMediaResult>(url, null, fileDictionary, null, timeOut: timeOut);
         }
 
         /// <summary>
@@ -192,7 +193,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.Media
             };
             SerializerHelper serializerHelper = new SerializerHelper();
             var jsonString = serializerHelper.GetJsonString(data);
-            HttpUtility.Post.Download(url, jsonString, stream);
+            PostMethod.Download(url, jsonString, stream);
         }
 
         /// <summary>
@@ -245,7 +246,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.Media
         {
             string url = string.Format("https://api.weixin.qq.com/cgi-bin/material/get_materialcount?access_token={0}", accessToken);
 
-            return HttpUtility.Get.GetJson<GetMediaCountResultJson>(url);
+            return GetMethod.GetJson<GetMediaCountResultJson>(url);
         }
 
         /// <summary>

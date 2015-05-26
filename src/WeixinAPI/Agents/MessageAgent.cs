@@ -24,6 +24,7 @@ using System.Xml.Linq;
 using Solemart.WeixinAPI.Entities;
 using Solemart.WeixinAPI.Helpers;
 using Solemart.WeixinAPI.MessageHandlers;
+using Solemart.WeixinAPI.Base.HttpUtility;
 
 namespace Solemart.WeixinAPI.Agent
 {
@@ -64,7 +65,7 @@ namespace Solemart.WeixinAPI.Agent
             string signature = CheckSignature.GetSignature(timestamp, nonce, token);
             url += string.Format("{0}signature={1}&timestamp={2}&nonce={3}",
                     url.Contains("?") ? "&" : "?", signature, timestamp, nonce);
-            var responseXml = HttpUtility.RequestUtility.HttpPost(url, null, stream, timeOut: timeOut);
+            var responseXml = RequestUtility.HttpPost(url, null, stream, timeOut: timeOut);
             return responseXml;
         }
 
@@ -214,7 +215,7 @@ namespace Solemart.WeixinAPI.Agent
                 url += string.Format("{0}signature={1}&timestamp={2}&nonce={3}&echostr={4}",
                         url.Contains("?") ? "&" : "?", signature, timestamp, nonce, echostr);
 
-                var responseStr = HttpUtility.RequestUtility.HttpGet(url, null, timeOut: timeOut);
+                var responseStr = RequestUtility.HttpGet(url, null, timeOut: timeOut);
                 return echostr == responseStr;
             }
             catch

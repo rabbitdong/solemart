@@ -33,8 +33,12 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="SimLogLib">
+      <HintPath>..\..\lib\SimLogLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -308,6 +312,29 @@
     <Compile Include="Tencent\Cryptography.cs" />
     <Compile Include="Tencent\Sample.cs" />
     <Compile Include="Tencent\WXBizMsgCrypt.cs" />
+    <Compile Include="TenPayLibV3\RequestHandler.cs" />
+    <Compile Include="TenPayLibV3\ResponseHandler.cs" />
+    <Compile Include="TenPayLibV3\TenPayV3Info.cs" />
+    <Compile Include="TenPayLibV3\TenPayV3InfoCollection.cs" />
+    <Compile Include="TenPayLibV3\TenPayV3Util.cs" />
+    <Compile Include="TenPayLibV3\TenPayV3\TenPayV3.cs" />
+    <Compile Include="TenPayLibV3\TenPayV3\TenPayV3Result.cs" />
+    <Compile Include="TenPayLib\CheckRequestHandler.cs" />
+    <Compile Include="TenPayLib\ClientRequestHandler.cs" />
+    <Compile Include="TenPayLib\ClientResponseHandler.cs" />
+    <Compile Include="TenPayLib\QRCode.cs" />
+    <Compile Include="TenPayLib\RefundQueryRequestHandler.cs" />
+    <Compile Include="TenPayLib\RefundRequestHandler.cs" />
+    <Compile Include="TenPayLib\RefundResponseHandler.cs" />
+    <Compile Include="TenPayLib\RequestHandler.cs" />
+    <Compile Include="TenPayLib\ResponseHandler.cs" />
+    <Compile Include="TenPayLib\TenpayHttpClient.cs" />
+    <Compile Include="TenPayLib\TenPayInfo.cs" />
+    <Compile Include="TenPayLib\TenPayInfoCollection.cs" />
+    <Compile Include="TenPayLib\TenPayRights\TenPayRights.cs" />
+    <Compile Include="TenPayLib\TenPayUtil.cs" />
+    <Compile Include="TenPayLib\TenPay\TenPay.cs" />
+    <Compile Include="TenPayLib\TenPay\TenPayResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="AdvancedAPIs\Card\readme.txt" />

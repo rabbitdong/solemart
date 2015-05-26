@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Text;
 using System.Web;
-using Solemart.WebUtil.WeixinPay.Helpers;
+using Solemart.WeixinAPI.Helpers;
 
-namespace Solemart.WebUtil.WeixinPay.TenPayLib
+namespace Solemart.WeixinAPI.TenPayLib
 {
     public class ClientRequestHandler
     {

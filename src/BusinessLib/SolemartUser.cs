@@ -67,6 +67,37 @@ namespace Solemart.BusinessLib
             isAnonymous = user.Roles.Contains(Role.Anonymous.RoleID.ToString());
         }
 
+        /// <summary>
+        /// 使用openID的用户，如微信用户等
+        /// </summary>
+        /// <param name="openID">The user's openid of third part</param>
+        /// <param name="type">The login type</param>
+        public SolemartUser(string openID, LoginType type)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserItem useritem = context.UserItems.FirstOrDefault(u=>(u.LoginType == type && u.OpenID == openID));
+
+                //如果useritem为空，用户曾经登陆过，直接取数据库中的数据
+                if (useritem != null)
+                {
+                    this.userItem = useritem;
+                    //不管是不是匿名用户，都用购物车
+                    cart = GetUserCart();
+                    isAnonymous = false;
+                }
+                else
+                {
+                    useritem = new UserItem { OpenID = openID, LoginType = type, Roles = Role.NormalUser.ToString() };
+                    context.UserItems.Add(useritem);
+                    context.UserAppendInfoItems.Add(new UserAppendInfoItem { Sex = SystemUtil.Sex.Unknown });
+
+                    //写入数据库
+                    context.SaveChanges();
+                }
+            }
+        }
+
         public string UserName
         {
             get { return userItem.UserName; }
@@ -135,6 +166,30 @@ namespace Solemart.BusinessLib
                 return false;
             }
         }
+
+        /// <summary>
+        /// Set the user head Image
+        /// </summary>
+        /// <param name="imgUrl"></param>
+        /// <returns></returns>
+        public bool SetHeadImage(string imgUrl)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                UserAppendInfoItem tempUserItem = context.UserAppendInfoItems.FirstOrDefault(u => u.UserID == userItem.UserID);
+                if (tempUserItem != null)
+                    tempUserItem.HeadImageUrl = imgUrl;
+
+                if (context.SaveChanges() > 0)
+                {
+                    userItem.AppendInfo.HeadImageUrl = imgUrl;
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
 
         /// <summary>
         /// Change the user's password

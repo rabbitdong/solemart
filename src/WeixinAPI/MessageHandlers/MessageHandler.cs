@@ -29,11 +29,12 @@ using Solemart.WeixinAPI.Base.Exceptions;
 using Solemart.WeixinAPI.Entities.Request;
 using Solemart.WeixinAPI.Helpers;
 using Tencent;
+using Solemart.WeixinAPI.Base;
 
 
 namespace Solemart.WeixinAPI.MessageHandlers
 {
-    public interface IMessageHandler : Weixin.MessageHandlers.IMessageHandler<IRequestMessageBase, IResponseMessageBase>
+    public interface IMessageHandler : Base.MessageHandlers.IMessageHandler<IRequestMessageBase, IResponseMessageBase>
     {
         new IRequestMessageBase RequestMessage { get; set; }
         new IResponseMessageBase ResponseMessage { get; set; }
@@ -44,7 +45,7 @@ namespace Solemart.WeixinAPI.MessageHandlers
     /// 此方法中所有过程，都基于Solemart.WeixinAPI的基础功能，只为简化代码而设。
     /// </summary>
     public abstract class MessageHandler<TC> :
-        Weixin.MessageHandlers.MessageHandler<TC, IRequestMessageBase, IResponseMessageBase>, IMessageHandler
+        Base.MessageHandlers.MessageHandler<TC, IRequestMessageBase, IResponseMessageBase>, IMessageHandler
         where TC : class, IMessageContext<IRequestMessageBase, IResponseMessageBase>, new()
     {
         /// <summary>
@@ -352,7 +353,7 @@ namespace Solemart.WeixinAPI.MessageHandlers
             }
         }
 
-        public virtual void OnExecuting()
+        public override void OnExecuting()
         {
             //消息去重
             if (OmitRepeatedMessage && CurrentMessageContext.RequestMessages.Count > 1)
@@ -378,7 +379,7 @@ namespace Solemart.WeixinAPI.MessageHandlers
             }
         }
 
-        public virtual void OnExecuted()
+        public override void OnExecuted()
         {
             base.OnExecuted();
         }

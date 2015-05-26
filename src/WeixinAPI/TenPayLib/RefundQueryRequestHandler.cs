@@ -4,7 +4,7 @@ using System.Text;
 using System.Web;
 using System.Collections;
 
-namespace Solemart.WebUtil.WeixinPay.TenPayLib
+namespace Solemart.WeixinAPI.TenPayLib
 {
     public class RefundQueryRequestHandler : ClientRequestHandler
     {

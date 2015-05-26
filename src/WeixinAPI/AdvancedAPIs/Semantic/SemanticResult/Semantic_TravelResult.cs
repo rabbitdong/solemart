@@ -30,12 +30,6 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.Semantic
     public class Semantic_Travel : BaseSemanticIntent
     {
         public Semantic_Details_Travel details { get; set; }
-        /// <summary>
-        /// SEARCH 普通查询
-        /// PRICE 价格查询
-        /// GUIDE 攻略查询
-        /// </summary>
-        public string intent { get; set; }
     }
 
     public class Semantic_Details_Travel

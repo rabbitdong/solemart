@@ -41,10 +41,10 @@ namespace Solemart.WeixinAPI.Base
     /// 公众号返回码（JSON）
     /// 应该更名为ReturnCode_MP，但为减少项目中的修改，此处依旧用ReturnCode命名
     /// </summary>
-    public enum ReturnCode
+    public enum WeixinReturnCode
     {
         系统繁忙此时请开发者稍候再试 = -1,
-        请求成功 = 0,
+        Success = 0,
         获取access_token时AppSecret错误或者access_token无效 = 40001,
         不合法的凭证类型 = 40002,
         不合法的OpenID = 40003,

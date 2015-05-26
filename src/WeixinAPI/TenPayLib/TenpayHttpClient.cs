@@ -48,7 +48,7 @@ using System.Web.UI.WebControls.WebParts;
  *
  */
 
-namespace Solemart.WebUtil.WeixinPay.TenPayLib
+namespace Solemart.WeixinAPI.TenPayLib
 {
     public class TenPayHttpClient
     {

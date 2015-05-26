@@ -16,9 +16,9 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Text;
 using System.Web;
-using Solemart.WebUtil.WeixinPay.Helpers;
+using Solemart.WeixinAPI.Helpers;
 
-namespace Solemart.WebUtil.WeixinPay.TenPayLib
+namespace Solemart.WeixinAPI.TenPayLib
 {
     /// <summary>
     /// ResponseHandler 的摘要说明。

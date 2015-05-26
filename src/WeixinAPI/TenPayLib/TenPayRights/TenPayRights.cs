@@ -20,11 +20,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using Solemart.WebUtil.WeixinPay.CommonAPIs;
-using Solemart.WebUtil.WeixinPay.Entities;
-using Solemart.WebUtil.WeixinPay.Base.HttpUtility;
+using Solemart.WeixinAPI.CommonAPIs;
+using Solemart.WeixinAPI.Entities;
+using Solemart.WeixinAPI.Base.HttpUtility;
 
-namespace Solemart.WebUtil.WeixinPay.AdvancedAPIs
+namespace Solemart.WeixinAPI.AdvancedAPIs
 {
     /// <summary>
     /// 微信支付维权接口，官方API：https://mp.weixin.qq.com/htmledition/res/bussiness-course2/wxm-payment-kf-api.pdf
@@ -43,7 +43,7 @@ namespace Solemart.WebUtil.WeixinPay.AdvancedAPIs
             var urlFormat = "https://api.weixin.qq.com/payfeedback/update?access_token={0}&openid={1}&feedbackid={2}";
             var url = string.Format(urlFormat, accessToken, openId, feedBackId);
 
-            return Get.GetJson<WxJsonResult>(url);
+            return GetMethod.GetJson<WxJsonResult>(url);
         }
     }
 }

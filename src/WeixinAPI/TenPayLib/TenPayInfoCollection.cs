@@ -1,8 +1,8 @@
 ﻿/*----------------------------------------------------------------
     Copyright (C) 2015 Senparc
  
-    文件名：TenPayV3InfoCollection.cs
-    文件功能描述：微信支付V3信息集合，Key为商户号（MchId）
+    文件名：TenPayInfoCollection.cs
+    文件功能描述：微信支付信息集合，Key为商户号（PartnerId）
     
     
     创建标识：Senparc - 20150211
@@ -15,36 +15,36 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Solemart.WebUtil.WeixinPay.Base.Exceptions;
+using Solemart.WeixinAPI.Base.Exceptions;
 
-namespace Solemart.WebUtil.WeixinPay.TenPayLibV3
+namespace Solemart.WeixinAPI.TenPayLib
 {
     /// <summary>
-    /// 微信支付信息集合，Key为商户号（MchId）
+    /// 微信支付信息集合，Key为商户号（PartnerId）
     /// </summary>
-    public class TenPayV3InfoCollection : Dictionary<string, TenPayV3Info>
+    public class TenPayInfoCollection : Dictionary<string, TenPayInfo>
     {
         /// <summary>
-        /// 微信支付信息集合，Key为商户号（MchId）
+        /// 微信支付信息集合，Key为商户号（PartnerId）
         /// </summary>
-        public static TenPayV3InfoCollection Data = new TenPayV3InfoCollection();
+        public static TenPayInfoCollection Data = new TenPayInfoCollection();
 
         /// <summary>
-        /// 注册TenPayV3Info信息
+        /// 注册WeixinPayInfo信息
         /// </summary>
-        /// <param name="tenPayV3Info"></param>
-        public static void Register(TenPayV3Info tenPayV3Info)
+        /// <param name="weixinPayInfo"></param>
+        public static void Register(TenPayInfo weixinPayInfo)
         {
-            Data[tenPayV3Info.MchId] = tenPayV3Info;
+            Data[weixinPayInfo.PartnerId] = weixinPayInfo;
         }
 
-        new public TenPayV3Info this[string key]
+        new public TenPayInfo this[string key]
         {
             get
             {
                 if (!base.ContainsKey(key))
                 {
-                    throw new WeixinException(string.Format("TenPayV3InfoCollection尚未注册Mch：{0}", key));
+                    throw new WeixinException(string.Format("WeixinPayInfoCollection尚未注册Partner：{0}", key));
                 }
                 else
                 {
@@ -57,7 +57,7 @@ namespace Solemart.WebUtil.WeixinPay.TenPayLibV3
             }
         }
 
-        public TenPayV3InfoCollection()
+        public TenPayInfoCollection()
             : base(StringComparer.OrdinalIgnoreCase)
         {
 

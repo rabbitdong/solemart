@@ -8,6 +8,7 @@
     创建标识：Senparc - 20150319
 ----------------------------------------------------------------*/
 
+using Solemart.WeixinAPI.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;

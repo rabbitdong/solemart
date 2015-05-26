@@ -17,9 +17,9 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Web;
 using System.Xml;
-using Solemart.WebUtil.WeixinPay.Helpers;
+using Solemart.WeixinAPI.Helpers;
 
-namespace Solemart.WebUtil.WeixinPay.TenPayLib
+namespace Solemart.WeixinAPI.TenPayLib
 {
 
     /** 
@@ -65,8 +65,6 @@ namespace Solemart.WebUtil.WeixinPay.TenPayLib
         /// 原始内容
         /// </summary>
         protected string Content;
-
-        private string Charset = "gb2312";
 
         /// <summary>
         /// 参与签名的参数列表

@@ -23,7 +23,7 @@ using Newtonsoft.Json;
 
 namespace Solemart.WeixinAPI.Base.HttpUtility
 {
-    public static class Get
+    public static class GetMethod
     {
         public static T GetJson<T>(string url, Encoding encoding = null)
         {
@@ -34,7 +34,7 @@ namespace Solemart.WeixinAPI.Base.HttpUtility
             {
                 //可能发生错误
                 WxJsonResult errorResult = JsonConvert.DeserializeObject<WxJsonResult>(returnText);
-                if (errorResult.errcode != ReturnCode.请求成功)
+                if (errorResult.errcode != WeixinReturnCode.Success)
                 {
                     //发生错误
                     throw new ErrorJsonResultException(
@@ -45,7 +45,7 @@ namespace Solemart.WeixinAPI.Base.HttpUtility
                 }
             }
 
-            T result = js.Deserialize<T>(returnText);
+            T result = JsonConvert.DeserializeObject<T>(returnText);
 
             return result;
         }

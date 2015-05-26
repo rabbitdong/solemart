@@ -28,6 +28,7 @@ using System.Text;
 using Solemart.WeixinAPI.Base.HttpUtility;
 using Solemart.WeixinAPI.Entities;
 using Solemart.WeixinAPI.CommonAPIs;
+using Solemart.WeixinAPI.Base;
 
 namespace Solemart.WeixinAPI.AdvancedAPIs.User
 {
@@ -47,7 +48,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.User
         {
             string url = string.Format("https://api.weixin.qq.com/cgi-bin/user/info?access_token={0}&openid={1}&lang={2}",
                 accessToken, openId, lang.ToString());
-            return HttpUtility.Get.GetJson<UserInfoJson>(url);
+            return GetMethod.GetJson<UserInfoJson>(url);
 
             //错误时微信会返回错误码等信息，JSON数据包示例如下（该示例为AppID无效错误）:
             //{"errcode":40013,"errmsg":"invalid appid"}
@@ -67,7 +68,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.User
             {
                 url += "&next_openid=" + nextOpenId;
             }
-            return HttpUtility.Get.GetJson<OpenIdResultJson>(url);
+            return GetMethod.GetJson<OpenIdResultJson>(url);
         }
 
         /// <summary>

@@ -2,7 +2,7 @@
     Copyright (C) 2015 Senparc
  
     文件名：RequestHandler.cs
-    文件功能描述：微信支付 请求处理
+    文件功能描述：微信支付V3 请求处理
     
     
     创建标识：Senparc - 20150211
@@ -19,9 +19,9 @@ using System.Xml;
 using System.Security.Cryptography;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Solemart.WebUtil.WeixinPay.Helpers;
+using Solemart.WeixinAPI.Helpers;
 
-namespace Solemart.WebUtil.WeixinPay.TenPayLib
+namespace Solemart.WeixinAPI.TenPayLibV3
 {
     /**
     '签名工具类
@@ -116,39 +116,13 @@ namespace Solemart.WebUtil.WeixinPay.TenPayLib
 
 
         /// <summary>
-        /// 获取package带参数的签名包
-        /// </summary>
-        /// <returns></returns>
-        public string GetRequestURL()
-        {
-            this.CreateSign();
-            StringBuilder sb = new StringBuilder();
-            ArrayList akeys = new ArrayList(Parameters.Keys);
-            akeys.Sort();
-            foreach (string k in akeys)
-            {
-                string v = (string)Parameters[k];
-                if (null != v && "key".CompareTo(k) != 0)
-                {
-                    sb.Append(k + "=" + TenPayUtil.UrlEncode(v, GetCharset()) + "&");
-                }
-            }
-
-            //去掉最后一个&
-            if (sb.Length > 0)
-            {
-                sb.Remove(sb.Length - 1, 1);
-            }
-
-
-            return sb.ToString();
-
-        }
-
-        /// <summary>
         /// 创建md5摘要,规则是:按参数名称a-z排序,遇到空值的参数不参加签名
         /// </summary>
-        protected virtual void CreateSign()
+        /// <param name="key">参数名</param>
+        /// <param name="value">参数值</param>
+        /// key和value通常用于填充最后一组参数
+        /// <returns></returns>
+        public virtual string CreateMd5Sign(string key, string value)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -165,75 +139,11 @@ namespace Solemart.WebUtil.WeixinPay.TenPayLib
                 }
             }
 
-            sb.Append("key=" + this.GetKey());
+            sb.Append(key + "=" + value);
             string sign = MD5UtilHelper.GetMD5(sb.ToString(), GetCharset()).ToUpper();
 
-            this.SetParameter("sign", sign);
-
-            //debug信息
-            this.SetDebugInfo(sb.ToString() + " => sign:" + sign);
-        }
-
-
-        /// <summary>
-        /// 创建package签名
-        /// </summary>
-        /// <returns></returns>
-        public virtual string CreateMd5Sign()
-        {
-            StringBuilder sb = new StringBuilder();
-            ArrayList akeys = new ArrayList(Parameters.Keys);
-            akeys.Sort();
-
-            foreach (string k in akeys)
-            {
-                string v = (string)Parameters[k];
-                if (null != v && "".CompareTo(v) != 0
-                    && "sign".CompareTo(k) != 0 && "".CompareTo(v) != 0)
-                {
-                    sb.Append(k + "=" + v + "&");
-                }
-            }
-            string sign = MD5UtilHelper.GetMD5(sb.ToString(), GetCharset()).ToLower();
-
-            this.SetParameter("sign", sign);
             return sign;
         }
-
-
-        /// <summary>
-        /// 创建sha1签名
-        /// </summary>
-        /// <returns></returns>
-        public string CreateSHA1Sign()
-        {
-            StringBuilder sb = new StringBuilder();
-            ArrayList akeys = new ArrayList(Parameters.Keys);
-            akeys.Sort();
-
-            foreach (string k in akeys)
-            {
-                string v = (string)Parameters[k];
-                if (null != v && "".CompareTo(v) != 0
-                       && "sign".CompareTo(k) != 0 && "key".CompareTo(k) != 0)
-                {
-                    if (sb.Length == 0)
-                    {
-                        sb.Append(k + "=" + v);
-                    }
-                    else
-                    {
-                        sb.Append("&" + k + "=" + v);
-                    }
-                }
-            }
-            string paySign = SHA1UtilHelper.GetSha1(sb.ToString()).ToString().ToLower();
-
-            //debug信息
-            this.SetDebugInfo(sb.ToString() + " => sign:" + paySign);
-            return paySign;
-        }
-
 
         /// <summary>
         /// 输出XML

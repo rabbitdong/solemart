@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Solemart.WebUtil.WeixinPay.TenPayLibV3
+namespace Solemart.WeixinAPI.TenPayLibV3
 {
     /// <summary>
     /// 微信支付基础信息储存类

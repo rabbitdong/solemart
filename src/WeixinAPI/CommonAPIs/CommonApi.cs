@@ -31,7 +31,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Web.Script.Serialization;
 using Solemart.WeixinAPI.Base.Helpers;
 using Solemart.WeixinAPI.Entities;
 using Solemart.WeixinAPI.Entities.Menu;
@@ -58,7 +57,7 @@ namespace Solemart.WeixinAPI.CommonAPIs
             var url = string.Format("https://api.weixin.qq.com/cgi-bin/token?grant_type={0}&appid={1}&secret={2}",
                                     grant_type, appid, secret);
 
-            AccessTokenResult result = Get.GetJson<AccessTokenResult>(url);
+            AccessTokenResult result = GetMethod.GetJson<AccessTokenResult>(url);
             return result;
         }
 
@@ -72,7 +71,7 @@ namespace Solemart.WeixinAPI.CommonAPIs
         {
             var url = string.Format("http://api.weixin.qq.com/cgi-bin/user/info?access_token={0}&openid={1}",
                                     accessToken, openId);
-            WeixinUserInfoResult result = Get.GetJson<WeixinUserInfoResult>(url);
+            WeixinUserInfoResult result = GetMethod.GetJson<WeixinUserInfoResult>(url);
             return result;
         }
 
@@ -117,7 +116,7 @@ namespace Solemart.WeixinAPI.CommonAPIs
             var url = string.Format("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={0}&type={1}",
                                     accessToken, type);
 
-            JsApiTicketResult result = Get.GetJson<JsApiTicketResult>(url);
+            JsApiTicketResult result = GetMethod.GetJson<JsApiTicketResult>(url);
             return result;
         }
     }

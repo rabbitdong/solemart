@@ -8,6 +8,7 @@
     创建标识：Senparc - 20150319
 ----------------------------------------------------------------*/
 
+using Solemart.WeixinAPI.Base.HttpUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace Solemart.WeixinAPI.AppStore.Api
             formData["openid"] = openId;
             formData["weixinId"] = weixinId.ToString();
 
-            var result = HttpUtility.Post.PostGetJson<GetMemberResult>(url, formData: formData);
+            var result = PostMethod.PostGetJson<GetMemberResult>(url, formData: formData);
             return result;
         }
 

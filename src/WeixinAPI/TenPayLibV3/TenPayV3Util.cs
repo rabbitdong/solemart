@@ -1,8 +1,8 @@
 /*----------------------------------------------------------------
     Copyright (C) 2015 Senparc
  
-    文件名：TenPayUtil.cs
-    文件功能描述：微信支付配置文件
+    文件名：TenPayV3Util.cs
+    文件功能描述：微信支付V3配置文件
     
     
     创建标识：Senparc - 20150211
@@ -15,15 +15,16 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Web;
-using Solemart.WebUtil.WeixinPay.Helpers;
+using Solemart.WeixinAPI.Helpers;
+using SimLogLib;
 
-namespace Solemart.WebUtil.WeixinPay.TenPayLib
+namespace Solemart.WeixinAPI.TenPayLibV3
 {
     /// <summary>
     /// TenpayUtil 的摘要说明。
     /// 配置文件
     /// </summary>
-    public class TenPayUtil
+    public class TenPayV3Util
     {
         /// <summary>
         /// 随机生成Noncestr
@@ -63,6 +64,7 @@ namespace Solemart.WebUtil.WeixinPay.TenPayLib
                 }
                 catch (Exception ex)
                 {
+                    Log.Instance.WriteError(ex.ToString());
                     res = System.Web.HttpUtility.UrlEncode(instr, Encoding.GetEncoding("GB2312"));
                 }
 
@@ -90,7 +92,7 @@ namespace Solemart.WebUtil.WeixinPay.TenPayLib
                     res = System.Web.HttpUtility.UrlDecode(instr, Encoding.GetEncoding(charset));
 
                 }
-                catch (Exception ex)
+                catch
                 {
                     res = System.Web.HttpUtility.UrlDecode(instr, Encoding.GetEncoding("GB2312"));
                 }

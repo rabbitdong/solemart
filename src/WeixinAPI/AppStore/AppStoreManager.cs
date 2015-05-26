@@ -89,7 +89,7 @@ namespace Solemart.WeixinAPI.AppStore
             var formData = new Dictionary<string, string>();
             formData["appKey"] = passportBag.AppKey;
             formData["secret"] = passportBag.AppSecret;
-            var result = Solemart.WeixinAPI.Base.HttpUtility.Post.PostGetJson<PassportResult>(getPassportUrl, formData: formData);
+            var result = Solemart.WeixinAPI.Base.HttpUtility.PostMethod.PostGetJson<PassportResult>(getPassportUrl, formData: formData);
             if (result.Result != AppResultKind.成功)
             {
                 throw new WeixinException("获取Passort失败！错误信息：" + result.Result, null);

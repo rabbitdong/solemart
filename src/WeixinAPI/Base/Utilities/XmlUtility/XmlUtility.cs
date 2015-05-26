@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimLogLib;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,9 +31,9 @@ namespace Solemart.WeixinAPI.Base.XmlUtility
                     return xmldes.Deserialize(sr);
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-
+                Log.Instance.WriteError(ex.ToString());
                 return null;
             }
         }

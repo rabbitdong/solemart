@@ -8,6 +8,8 @@ using Solemart.BusinessLib;
 using System.Threading;
 using Solemart.DataProvider.Entity;
 using SimLogLib;
+using Solemart.SystemUtil;
+using Solemart.WeixinAPI.AdvancedAPIs.OAuth;
 
 namespace Solemart.WebUtil
 {
@@ -65,23 +67,19 @@ namespace Solemart.WebUtil
         /// <summary>
         /// Login util for the user with id(used for weixin client).
         /// </summary>
-        /// <param name="userID">用户的ID, if the value is 0, it indicate the first login. then generate a user for it.</param>
+        /// <param name="openID">The user's openID of weixin.</param>
         /// <remarks>
         /// 
         /// </remarks>
-        public static void WeixinLogin(int userID)
+        public static void WeixinLogin(string accessToken, string openID)
         {
-            SolemartUser user = null;
-            if (userID == 0)
+            SolemartUser user = new SolemartUser(openID, LoginType.Weixin);
+            if (string.IsNullOrEmpty(user.UserName))
             {
-                user = new SolemartUser(UserManager.AddWeixinUser(""));
+                OAuthUserInfo userInfo = OAuthApi.GetUserInfo(accessToken, openID);
+                user.SetUserName(userInfo.nickname);
+                user.SetHeadImage(userInfo.headimgurl);
             }
-            else
-                user = SolemartUserCache.GetUser(userID);
-
-            HttpCookie useridCookie = new HttpCookie(UserIDCookieName, user.UserID.ToString());
-            useridCookie.Expires = DateTime.Now.AddYears(1);
-            HttpContext.Current.Response.Cookies.Add(useridCookie);
 
             Log.Instance.WriteLog(string.Format("AccountUtil::WeixinLogin userid[{0}], username[{1}]", user.UserID, user.UserName));
             //use Login to make user session.

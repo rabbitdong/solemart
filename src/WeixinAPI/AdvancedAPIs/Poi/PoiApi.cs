@@ -18,6 +18,8 @@ using System.Linq;
 using System.Text;
 using Solemart.WeixinAPI.Base.Entities;
 using Solemart.WeixinAPI.CommonAPIs;
+using Solemart.WeixinAPI.Base;
+using Solemart.WeixinAPI.Base.HttpUtility;
 
 namespace Solemart.WeixinAPI.AdvancedAPIs.Poi
 {
@@ -62,7 +64,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.Poi
 
             var fileDictionary = new Dictionary<string, string>();
             //fileDictionary["media"] = file;
-            return HttpUtility.Post.PostFileGetJson<UploadImageResultJson>(url, null, fileDictionary, null, timeOut: timeOut);
+            return PostMethod.PostFileGetJson<UploadImageResultJson>(url, null, fileDictionary, null, timeOut: timeOut);
         }
 
         /// <summary>

@@ -15,9 +15,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Solemart.WebUtil.WeixinPay.Entities;
+using Solemart.WeixinAPI.Entities;
 
-namespace Solemart.WebUtil.WeixinPay.AdvancedAPIs
+namespace Solemart.WeixinAPI.AdvancedAPIs
 {
     /// <summary>
     /// 基础返回结果

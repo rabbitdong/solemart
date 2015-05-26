@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Web;
 using System.Xml;
-using Solemart.WebUtil.WeixinPay.Helpers;
+using Solemart.WeixinAPI.Helpers;
 
 /**
  * 后台应答类
@@ -21,7 +21,7 @@ using Solemart.WebUtil.WeixinPay.Helpers;
  *
  */
 
-namespace Solemart.WebUtil.WeixinPay.TenPayLib
+namespace Solemart.WeixinAPI.TenPayLib
 {
     public class ClientResponseHandler
     {

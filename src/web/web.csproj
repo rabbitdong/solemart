@@ -361,6 +361,10 @@
       <Project>{8a4e0f91-43fa-48f9-a3e6-bfb771530c4b}</Project>
       <Name>WebUtil</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WeixinAPI\WeixinAPI.csproj">
+      <Project>{1183a9b3-5a08-43d5-a961-19d473d4983b}</Project>
+      <Name>WeixinAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\commonutil.ts" />

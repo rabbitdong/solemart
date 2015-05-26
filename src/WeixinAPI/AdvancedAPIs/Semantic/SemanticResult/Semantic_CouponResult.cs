@@ -30,10 +30,6 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.Semantic
     public class Semantic_Coupon : BaseSemanticIntent
     {
         public Semantic_Details_Coupon details { get; set; }
-        /// <summary>
-        /// SEARCH 普通查询
-        /// </summary>
-        public string intent { get; set; }
     }
 
     public class Semantic_Details_Coupon

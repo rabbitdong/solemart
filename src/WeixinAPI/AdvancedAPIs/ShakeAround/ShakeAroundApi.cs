@@ -18,6 +18,8 @@ using System.Linq;
 using System.Text;
 using Solemart.WeixinAPI.Base.Entities;
 using Solemart.WeixinAPI.CommonAPIs;
+using Solemart.WeixinAPI.Base;
+using Solemart.WeixinAPI.Base.HttpUtility;
 
 namespace Solemart.WeixinAPI.AdvancedAPIs.ShakeAround
 {
@@ -198,7 +200,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.ShakeAround
             var url = string.Format("https://api.weixin.qq.com/shakearound/material/add?access_token={0}", accessToken);
             var fileDictionary = new Dictionary<string, string>();
             fileDictionary["media"] = file;
-            return HttpUtility.Post.PostFileGetJson<UploadImageResultJson>(url, null, fileDictionary, null, timeOut: timeOut);
+            return PostMethod.PostFileGetJson<UploadImageResultJson>(url, null, fileDictionary, null, timeOut: timeOut);
         }
 
         /// <summary>

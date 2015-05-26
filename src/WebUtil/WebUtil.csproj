@@ -55,29 +55,6 @@
     <Compile Include="MD5.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebResultCode.cs" />
-    <Compile Include="WeixinPay\TenPayLibV3\RequestHandler.cs" />
-    <Compile Include="WeixinPay\TenPayLibV3\ResponseHandler.cs" />
-    <Compile Include="WeixinPay\TenPayLibV3\TenPayV3Info.cs" />
-    <Compile Include="WeixinPay\TenPayLibV3\TenPayV3InfoCollection.cs" />
-    <Compile Include="WeixinPay\TenPayLibV3\TenPayV3Util.cs" />
-    <Compile Include="WeixinPay\TenPayLibV3\TenPayV3\TenPayV3.cs" />
-    <Compile Include="WeixinPay\TenPayLibV3\TenPayV3\TenPayV3Result.cs" />
-    <Compile Include="WeixinPay\TenPayLib\CheckRequestHandler.cs" />
-    <Compile Include="WeixinPay\TenPayLib\ClientRequestHandler.cs" />
-    <Compile Include="WeixinPay\TenPayLib\ClientResponseHandler.cs" />
-    <Compile Include="WeixinPay\TenPayLib\QRCode.cs" />
-    <Compile Include="WeixinPay\TenPayLib\RefundQueryRequestHandler.cs" />
-    <Compile Include="WeixinPay\TenPayLib\RefundRequestHandler.cs" />
-    <Compile Include="WeixinPay\TenPayLib\RefundResponseHandler.cs" />
-    <Compile Include="WeixinPay\TenPayLib\RequestHandler.cs" />
-    <Compile Include="WeixinPay\TenPayLib\ResponseHandler.cs" />
-    <Compile Include="WeixinPay\TenPayLib\TenpayHttpClient.cs" />
-    <Compile Include="WeixinPay\TenPayLib\TenPayInfo.cs" />
-    <Compile Include="WeixinPay\TenPayLib\TenPayInfoCollection.cs" />
-    <Compile Include="WeixinPay\TenPayLib\TenPayRights\TenPayRights.cs" />
-    <Compile Include="WeixinPay\TenPayLib\TenPayUtil.cs" />
-    <Compile Include="WeixinPay\TenPayLib\TenPay\TenPay.cs" />
-    <Compile Include="WeixinPay\TenPayLib\TenPay\TenPayResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLib\BusinessLib.csproj">

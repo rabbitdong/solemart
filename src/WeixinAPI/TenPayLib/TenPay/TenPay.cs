@@ -20,10 +20,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using Solemart.WebUtil.WeixinPay.CommonAPIs;
-using Solemart.WebUtil.WeixinPay.Entities;
+using Solemart.WeixinAPI.CommonAPIs;
+using Solemart.WeixinAPI.Entities;
 
-namespace Solemart.WebUtil.WeixinPay.AdvancedAPIs
+namespace Solemart.WeixinAPI.AdvancedAPIs
 {
     /// <summary>
     /// 微信支付接口，官方API：https://mp.weixin.qq.com/paymch/readtemplate?t=mp/business/course2_tmpl&lang=zh_CN&token=25857919#4

@@ -24,6 +24,7 @@ using System.Linq;
 using System.Text;
 using Solemart.WeixinAPI.CommonAPIs;
 using Solemart.WeixinAPI.Entities;
+using Solemart.WeixinAPI.Base;
 
 namespace Solemart.WeixinAPI.AdvancedAPIs.GroupMessage
 {
@@ -117,10 +118,8 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.GroupMessage
                     break;
                 case GroupMessageType.text:
                     throw new Exception("发送文本信息请使用SendTextGroupMessageByGroupId方法。");
-                    break;
                 default:
                     throw new Exception("参数错误。");
-                    break;
             }
 
             return CommonJsonSend.Send<SendResult>(accessToken, urlFormat, baseData, timeOut: timeOut);
@@ -208,13 +207,10 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.GroupMessage
                     break;
                 case GroupMessageType.video:
                     throw new Exception("发送视频信息请使用SendVideoGroupMessageByOpenId方法。");
-                    break;
                 case GroupMessageType.text:
                     throw new Exception("发送文本信息请使用SendTextGroupMessageByOpenId方法。");
-                    break;
                 default:
                     throw new Exception("参数错误。");
-                    break;
             }
             return CommonJsonSend.Send<SendResult>(accessToken, urlFormat, baseData, timeOut: timeOut);
         }
@@ -357,10 +353,8 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.GroupMessage
                     break;
                 case GroupMessageType.text:
                     throw new Exception("发送文本信息请使用SendTextGroupMessagePreview方法。");
-                    break;
                 default:
                     throw new Exception("参数错误。");
-                    break;
             }
             return CommonJsonSend.Send<SendResult>(accessToken, urlFormat, baseData, timeOut: timeOut);
         }

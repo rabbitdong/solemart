@@ -24,6 +24,7 @@ using System.Linq;
 using System.Text;
 using Solemart.WeixinAPI.CommonAPIs;
 using Solemart.WeixinAPI.Entities;
+using Solemart.WeixinAPI.Base;
 
 namespace Solemart.WeixinAPI.AdvancedAPIs.TemplateMessage
 {

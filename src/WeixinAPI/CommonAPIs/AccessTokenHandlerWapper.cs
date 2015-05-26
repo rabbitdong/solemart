@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using Solemart.WeixinAPI.Base.Exceptions;
 using Solemart.WeixinAPI.Entities;
+using Solemart.WeixinAPI.Base;
 
 namespace Solemart.WeixinAPI.CommonAPIs
 {
@@ -41,7 +42,7 @@ namespace Solemart.WeixinAPI.CommonAPIs
             }
             catch (ErrorJsonResultException ex)
             {
-                if (retryIfFaild && ex.JsonResult.errcode == ReturnCode.获取access_token时AppSecret错误或者access_token无效)
+                if (retryIfFaild && ex.JsonResult.errcode == WeixinReturnCode.获取access_token时AppSecret错误或者access_token无效)
                 {
                     //尝试重新验证
                     var accessToken = AccessTokenContainer.TryGetToken(appId, appSecret, true);

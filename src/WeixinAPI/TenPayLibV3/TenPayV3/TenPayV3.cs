@@ -21,11 +21,11 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using Solemart.WebUtil.WeixinPay.CommonAPIs;
-using Solemart.WebUtil.WeixinPay.Entities;
-using Solemart.WebUtil.WeixinPay.Helpers;
+using Solemart.WeixinAPI.CommonAPIs;
+using Solemart.WeixinAPI.Entities;
+using Solemart.WeixinAPI.Helpers;
 
-namespace Solemart.WebUtil.WeixinPay.AdvancedAPIs
+namespace Solemart.WeixinAPI.AdvancedAPIs
 {
     /// <summary>
     /// 微信支付接口，官方API：https://mp.weixin.qq.com/paymch/readtemplate?t=mp/business/course2_tmpl&lang=zh_CN&token=25857919#4
@@ -46,7 +46,7 @@ namespace Solemart.WebUtil.WeixinPay.AdvancedAPIs
             MemoryStream ms = new MemoryStream();
             ms.Write(formDataBytes, 0, formDataBytes.Length);
             ms.Seek(0, SeekOrigin.Begin);//设置指针读取位置
-            return Solemart.WebUtil.WeixinPay.Base.HttpUtility.RequestUtility.HttpPost(urlFormat, null, ms);
+            return Solemart.WeixinAPI.Base.HttpUtility.RequestUtility.HttpPost(urlFormat, null, ms);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Solemart.WebUtil.WeixinPay.AdvancedAPIs
             MemoryStream ms = new MemoryStream();
             ms.Write(formDataBytes, 0, formDataBytes.Length);
             ms.Seek(0, SeekOrigin.Begin);//设置指针读取位置
-            return Solemart.WebUtil.WeixinPay.Base.HttpUtility.RequestUtility.HttpPost(urlFormat, null, ms);
+            return Solemart.WeixinAPI.Base.HttpUtility.RequestUtility.HttpPost(urlFormat, null, ms);
         }
 
         /// <summary>
@@ -95,10 +95,10 @@ namespace Solemart.WebUtil.WeixinPay.AdvancedAPIs
             MemoryStream ms = new MemoryStream();
             ms.Write(formDataBytes, 0, formDataBytes.Length);
             ms.Seek(0, SeekOrigin.Begin);//设置指针读取位置
-            return Solemart.WebUtil.WeixinPay.Base.HttpUtility.RequestUtility.HttpPost(urlFormat, null, ms);
+            return Solemart.WeixinAPI.Base.HttpUtility.RequestUtility.HttpPost(urlFormat, null, ms);
         }
 
-        //退款申请请直接参考Solemart.WebUtil.WeixinPay.Sample中的退款demo
+        //退款申请请直接参考Solemart.WeixinAPI.Sample中的退款demo
         ///// <summary>
         ///// 退款申请接口
         ///// </summary>
@@ -112,7 +112,7 @@ namespace Solemart.WebUtil.WeixinPay.AdvancedAPIs
         //    MemoryStream ms = new MemoryStream();
         //    ms.Write(formDataBytes, 0, formDataBytes.Length);
         //    ms.Seek(0, SeekOrigin.Begin);//设置指针读取位置
-        //    return Solemart.WebUtil.WeixinPay.Base.HttpUtility.RequestUtility.HttpPost(urlFormat, null, ms);
+        //    return Solemart.WeixinAPI.Base.HttpUtility.RequestUtility.HttpPost(urlFormat, null, ms);
         //}
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Solemart.WebUtil.WeixinPay.AdvancedAPIs
             MemoryStream ms = new MemoryStream();
             ms.Write(formDataBytes, 0, formDataBytes.Length);
             ms.Seek(0, SeekOrigin.Begin);//设置指针读取位置
-            return Solemart.WebUtil.WeixinPay.Base.HttpUtility.RequestUtility.HttpPost(urlFormat, null, ms);
+            return Solemart.WeixinAPI.Base.HttpUtility.RequestUtility.HttpPost(urlFormat, null, ms);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Solemart.WebUtil.WeixinPay.AdvancedAPIs
             MemoryStream ms = new MemoryStream();
             ms.Write(formDataBytes, 0, formDataBytes.Length);
             ms.Seek(0, SeekOrigin.Begin);//设置指针读取位置
-            return Solemart.WebUtil.WeixinPay.Base.HttpUtility.RequestUtility.HttpPost(urlFormat, null, ms);
+            return Solemart.WeixinAPI.Base.HttpUtility.RequestUtility.HttpPost(urlFormat, null, ms);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace Solemart.WebUtil.WeixinPay.AdvancedAPIs
             MemoryStream ms = new MemoryStream();
             ms.Write(formDataBytes, 0, formDataBytes.Length);
             ms.Seek(0, SeekOrigin.Begin);//设置指针读取位置
-            return Solemart.WebUtil.WeixinPay.Base.HttpUtility.RequestUtility.HttpPost(urlFormat, null, ms);
+            return Solemart.WeixinAPI.Base.HttpUtility.RequestUtility.HttpPost(urlFormat, null, ms);
         }
     }
 }

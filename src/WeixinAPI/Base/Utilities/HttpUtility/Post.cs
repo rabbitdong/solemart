@@ -27,13 +27,13 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Script.Serialization;
 using Solemart.WeixinAPI.Base.Entities;
 using Solemart.WeixinAPI.Base.Exceptions;
+using Newtonsoft.Json;
 
 namespace Solemart.WeixinAPI.Base.HttpUtility
 {
-    public static class Post
+    public static class PostMethod
     {
         #region 同步方法
 
@@ -45,13 +45,11 @@ namespace Solemart.WeixinAPI.Base.HttpUtility
         /// <returns></returns>
         public static T GetResult<T>(string returnText)
         {
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
             if (returnText.Contains("errcode"))
             {
                 //可能发生错误
-                WxJsonResult errorResult = js.Deserialize<WxJsonResult>(returnText);
-                if (errorResult.errcode != ReturnCode.请求成功)
+                WxJsonResult errorResult = JsonConvert.DeserializeObject<WxJsonResult>(returnText);
+                if (errorResult.errcode != WeixinReturnCode.Success)
                 {
                     //发生错误
                     throw new ErrorJsonResultException(
@@ -62,7 +60,7 @@ namespace Solemart.WeixinAPI.Base.HttpUtility
                 }
             }
 
-            T result = js.Deserialize<T>(returnText);
+            T result = JsonConvert.DeserializeObject<T>(returnText);
             return result;
         }
 

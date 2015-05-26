@@ -26,7 +26,7 @@ namespace Solemart.WeixinAPI.Base.Entities
     /// </summary>
     public class WxJsonResult
     {
-        public  ReturnCode errcode { get; set; }
+        public  WeixinReturnCode errcode { get; set; }
         public string errmsg { get; set; }
         /// <summary>
         /// 为P2P返回结果做准备

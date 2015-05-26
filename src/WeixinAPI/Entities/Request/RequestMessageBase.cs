@@ -19,17 +19,16 @@ using Solemart.WeixinAPI.Base.Entities;
 
 namespace Solemart.WeixinAPI.Entities
 {
-    public interface IRequestMessageBase : IRequestMessageBase
+    public interface IRequestMessageBase : Base.Entities.IRequestMessageBase
     {
         RequestMsgType MsgType { get; }
         string Encrypt { get; set; }
-        long MsgId { get; set; }
     }
 
     /// <summary>
     /// 接收到请求的消息
     /// </summary>
-    public class RequestMessageBase : Weixin.Entities.RequestMessageBase, IRequestMessageBase
+    public class RequestMessageBase : Base.Entities.RequestMessageBase, IRequestMessageBase
     {
         public virtual RequestMsgType MsgType
         {
@@ -42,12 +41,5 @@ namespace Solemart.WeixinAPI.Entities
         {
 
         }
-
-        //public override RequestMsgType MsgType
-        //{
-        //    get { return RequestMsgType.Text; }
-        //}
-
-        public long MsgId { get; set; }
     }
 }
