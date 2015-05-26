@@ -72,17 +72,17 @@
                 <ul id="addressInput">
                     <li>
                         <label for="receiver">收货人:</label>
-                        <input type="text" id="receiver" name="receiver" value="@((MyAddrInfo!=null||MyAddrInfo.Receiver==null)?MyAddrInfo.Receiver:"")" />
+                        <input type="text" id="receiver" name="receiver" required value="@((MyAddrInfo!=null||MyAddrInfo.Receiver==null)?MyAddrInfo.Receiver:"")" />
                         <span class="err_tip" id="err_for_receiver">收货人姓名不能为空</span>
                     </li>
                     <li>
                         <label for="address">收货地址:</label>
-                        <input type="text" id="address" name="address" value="@((MyAddrInfo!=null&&MyAddrInfo.Address!=null&&MyAddrInfo.Address!="")?MyAddrInfo.Address:"罗源县")" />
+                        <input type="text" id="address" name="address" required value="@((MyAddrInfo!=null&&MyAddrInfo.Address!=null&&MyAddrInfo.Address!="")?MyAddrInfo.Address:"罗源县")" />
                         <span class="err_tip" id="err_for_address">收货人地址不合法，目前只能送达罗源城关区域</span>
                     </li>
                     <li>
                         <label for="phone">手机联系:</label>
-                        <input type="text" id="phone" name="phone" value="@(MyAddrInfo != null?MyAddrInfo.Phone:"")" />
+                        <input type="text" id="phone" name="phone" required value="@(MyAddrInfo != null?MyAddrInfo.Phone:"")" />
                         <span class="err_tip" id="err_for_phone">收货人电话号码不合法</span>
                     </li>
                 </ul>
