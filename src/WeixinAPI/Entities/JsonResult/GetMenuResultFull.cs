@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using Solemart.WeixinAPI.Entities;
 using Solemart.WeixinAPI.Entities.Menu;
+using Solemart.WeixinAPI.Base.Entities;
 
 namespace Solemart.WeixinAPI
 {

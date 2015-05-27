@@ -73,6 +73,7 @@ namespace Solemart.Web
         void Application_Error(object sender, EventArgs e)
         {
             // Code that runs when an unhandled error occurs
+            //Log.Instance.WriteError(Server.GetLastError().ToString());
         }
 
         void Session_End(object sender, EventArgs e)

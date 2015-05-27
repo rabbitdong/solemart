@@ -57,7 +57,9 @@ namespace Solemart.Web.Controllers
             SolemartUser user = User as SolemartUser;
             if (!string.IsNullOrEmpty(code))
             {
+                Log.Instance.WriteLog(string.Format("Request from weixin, code[{0}]", code));
                 OAuthAccessTokenResult ret = OAuthApi.GetAccessToken(ConfigSettings.WeixinAppID, ConfigSettings.WeixinAppSecret, code);
+                Log.Instance.WriteLog(string.Format("Reqeust GetAccessToken return[errcode[{0}], openid[{1}]]", ret.errcode, ret.openid));
                 if (ret.errcode == WeixinReturnCode.Success)
                 {
                     AccountUtil.WeixinLogin(ret.access_token, ret.openid);

@@ -35,6 +35,7 @@ using Solemart.WeixinAPI.Base.HttpUtility;
 using Solemart.WeixinAPI.Base;
 using Newtonsoft.Json;
 using SimLogLib;
+using Solemart.WeixinAPI.Base.Entities;
 
 namespace Solemart.WeixinAPI.CommonAPIs
 {

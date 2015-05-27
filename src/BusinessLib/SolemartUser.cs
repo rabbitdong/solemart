@@ -6,6 +6,7 @@ using Solemart.DataProvider.Entity;
 using System.Security.Principal;
 using Solemart.DataProvider;
 using Solemart.SystemUtil;
+using SimLogLib;
 
 namespace Solemart.BusinessLib
 {
@@ -81,20 +82,25 @@ namespace Solemart.BusinessLib
                 //如果useritem为空，用户曾经登陆过，直接取数据库中的数据
                 if (useritem != null)
                 {
+                    Log.Instance.WriteLog(string.Format("the user[openid:[{0}], type:[{1}]] has login before.", openID, type));
                     this.userItem = useritem;
                     //不管是不是匿名用户，都用购物车
                     cart = GetUserCart();
-                    isAnonymous = false;
                 }
                 else
                 {
-                    useritem = new UserItem { OpenID = openID, LoginType = type, Roles = Role.NormalUser.ToString() };
-                    context.UserItems.Add(useritem);
-                    context.UserAppendInfoItems.Add(new UserAppendInfoItem { Sex = SystemUtil.Sex.Unknown });
-
+                    Log.Instance.WriteLog(string.Format("the user[openid:[{0}], type:[{1}]] is first login.", openID, type));
+                    this.userItem = new UserItem { OpenID = openID, LoginType = type, Roles = Role.NormalUser.RoleID.ToString(), RegTime=DateTime.Now };
+                    context.UserItems.Add(this.userItem);
+                    context.UserAppendInfoItems.Add(new UserAppendInfoItem { UserID = this.userItem.UserID, BirthDay = new DateTime(1970, 1, 1), Address = "", Phone = "", Sex = SystemUtil.Sex.Unknown });
+                    cart = new Cart(this);
                     //写入数据库
-                    context.SaveChanges();
+                    if (context.SaveChanges() <= 0)
+                    {
+                        Log.Instance.WriteWarn(string.Format("SolemartUser save failed. userid[{0}]", this.userItem.UserID));
+                    }
                 }
+                isAnonymous = false;
             }
         }
 

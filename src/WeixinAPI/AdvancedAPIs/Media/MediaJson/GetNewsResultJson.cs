@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using Solemart.WeixinAPI.AdvancedAPIs.GroupMessage;
 using Solemart.WeixinAPI.Entities;
+using Solemart.WeixinAPI.Base.Entities;
 
 namespace Solemart.WeixinAPI.AdvancedAPIs.Media
 {

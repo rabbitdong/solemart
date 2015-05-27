@@ -25,6 +25,7 @@ using System.Text;
 using Solemart.WeixinAPI.CommonAPIs;
 using Solemart.WeixinAPI.Entities;
 using Solemart.WeixinAPI.Base;
+using Solemart.WeixinAPI.Base.Entities;
 
 namespace Solemart.WeixinAPI.AdvancedAPIs.GroupMessage
 {

@@ -23,6 +23,8 @@ using Solemart.WeixinAPI.CommonAPIs;
 using Solemart.WeixinAPI.Entities;
 using Solemart.WeixinAPI.Base.HttpUtility;
 using Solemart.WeixinAPI.Base;
+using SimLogLib;
+using Solemart.WeixinAPI.Base.Entities;
 
 namespace Solemart.WeixinAPI.AdvancedAPIs.OAuth
 {
@@ -64,6 +66,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.OAuth
                 string.Format("https://api.weixin.qq.com/sns/oauth2/access_token?appid={0}&secret={1}&code={2}&grant_type={3}",
                                 appId, secret, code, grantType);
 
+            Log.Instance.WriteLog(string.Format("GetAccessToken send request[{0}]", url));
             return CommonJsonSend.Send<OAuthAccessTokenResult>(null, url, null, CommonJsonSendType.GET);
         }
 
@@ -93,6 +96,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.OAuth
         public static OAuthUserInfo GetUserInfo(string accessToken, string openId, Language lang = Language.zh_CN)
         {
             var url = string.Format("https://api.weixin.qq.com/sns/userinfo?access_token={0}&openid={1}&lang={2}", accessToken, openId, lang);
+            Log.Instance.WriteLog(string.Format("GetUserInfo url[{0}]", url));
             return CommonJsonSend.Send<OAuthUserInfo>(null, url, null, CommonJsonSendType.GET);
         }
 

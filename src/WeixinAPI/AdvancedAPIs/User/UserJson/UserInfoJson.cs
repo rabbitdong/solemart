@@ -20,6 +20,7 @@
     修改描述：增加个人分组信息 
 ----------------------------------------------------------------*/
 
+using Solemart.WeixinAPI.Base.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.User
     /// <summary>
     /// 高级接口获取的用户信息
     /// </summary>
-    public class UserInfoJson
+    public class UserInfoJson : WxJsonResult
     {
         public int subscribe { get; set; }
         public string openid { get; set; }

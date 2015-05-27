@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using Solemart.WeixinAPI.AdvancedAPIs.GroupMessage;
 using Solemart.WeixinAPI.Entities;
+using Solemart.WeixinAPI.Base.Entities;
 
 namespace Solemart.WeixinAPI.AdvancedAPIs.ShakeAround
 {
@@ -63,7 +64,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.ShakeAround
         public SearchPages_Data data { get; set; }
     }
 
-    public class SearchPages_Data
+    public class SearchPages_Data : WxJsonResult
     {
         /// <summary>
         /// 页面基本信息
@@ -75,7 +76,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.ShakeAround
         public int total_count { get; set; }
     }
 
-    public class SearchPages_Data_Page
+    public class SearchPages_Data_Page : WxJsonResult
     {
         /// <summary>
         /// 页面的备注信息

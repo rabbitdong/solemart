@@ -11,6 +11,7 @@
     修改描述：整理接口
 ----------------------------------------------------------------*/
 
+using Solemart.WeixinAPI.Base.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Solemart.WeixinAPI.Entities
     /// <summary>
     /// access_token请求后的JSON返回格式
     /// </summary>
-    public class AccessTokenResult
+    public class AccessTokenResult : WxJsonResult
     {
         /// <summary>
         /// 获取到的凭证

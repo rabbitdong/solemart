@@ -25,28 +25,25 @@ namespace Solemart.WeixinAPI.Base.HttpUtility
 {
     public static class GetMethod
     {
-        public static T GetJson<T>(string url, Encoding encoding = null)
+        public static T GetJson<T>(string url, Encoding encoding = null) where T : WxJsonResult
         {
-            string returnText = HttpUtility.RequestUtility.HttpGet(url, encoding);
+            string returnText = RequestUtility.HttpGet(url, encoding);
 
-
+            T result = default(T);
             if (returnText.Contains("errcode"))
             {
                 //可能发生错误
                 WxJsonResult errorResult = JsonConvert.DeserializeObject<WxJsonResult>(returnText);
-                if (errorResult.errcode != WeixinReturnCode.Success)
-                {
-                    //发生错误
-                    throw new ErrorJsonResultException(
-                        string.Format("微信请求发生错误！错误代码：{0}，说明：{1}",
-                                        (int)errorResult.errcode,
-                                        errorResult.errmsg),
-                                      null, errorResult);
-                }
+                result.errcode = errorResult.errcode;
+                result.errmsg = errorResult.errmsg;                
             }
-
-            T result = JsonConvert.DeserializeObject<T>(returnText);
-
+            else
+            {
+                result = JsonConvert.DeserializeObject<T>(returnText);
+                result.errcode = WeixinReturnCode.Success;
+                result.errmsg = "ok";
+            }
+            
             return result;
         }
 

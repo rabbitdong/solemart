@@ -11,6 +11,7 @@
     修改描述：整理接口
 ----------------------------------------------------------------*/
 
+using Solemart.WeixinAPI.Base.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.OAuth
     /// <summary>
     /// 通过OAuth的获取到的用户信息（snsapi_userinfo=scope）
     /// </summary>
-    public class OAuthUserInfo
+    public class OAuthUserInfo : WxJsonResult
     {
         public string openid { get; set; }
         public string nickname { get; set; }
