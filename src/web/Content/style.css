@@ -11,9 +11,9 @@ a,a:link,a:visited,a:active { outline: none; text-decoration: none; }
 .appNav { position: fixed; height:36px; left: 0; width: 100%; bottom: 0px; z-index: 30; text-align: center; border-top: 1px solid #cfcfcf; background-color:#cfcfcf; }
     .appNav .wrapper { }
     .appNav .appLink { background-color: #16a085; margin:3px; border-bottom: 1px solid #7f7f7f; display:inline-block; height: 30px; border-radius:8px; text-align: center; }    
-    .appNav .shoppingCart { background: url(/Images/ledao_icons_small_white.png) no-repeat; color:#ddd; padding:3px 5px 3px 30px; background-position: 0px -56px; }
-        .appNav .shoppingCart .roundIndicator { background-color: #c0392b; border-radius: 5px; font-size: 12px; padding: 4px; margin-left: 5px; margin-bottom:2px; }
-    .appNav .myAccount {padding:3px 5px 3px 30px; color:#ddd; background: url(/Images/ledao_icons_small_white.png) no-repeat; background-position: 0px -115px; }
+    .appNav .shoppingCart { display:inline-block; line-height:30px; background: url(/Images/ledao_icons_small_white.png) no-repeat; color:#ddd; padding:0px 5px 0px 30px; background-position: 0px -58px; }
+        .appNav .shoppingCart .roundIndicator { background-color: #c0392b; border-radius: 5px; font-size: 12px; padding: 4px; margin-left: 5px; }
+    .appNav .myAccount {display:inline-block; line-height:30px; padding:3px 5px 3px 30px; color:#ddd; background: url(/Images/ledao_icons_small_white.png) no-repeat; background-position: 0px -116px; }
 
 /*
 用户信息面板内容
