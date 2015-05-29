@@ -18,7 +18,7 @@
         </StackPanel>
         <Grid Name="gdOrerDetailContent" Margin="10" Width="600" Height="352" Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="32" />
+                <RowDefinition Height="28" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="20" />
@@ -32,6 +32,7 @@
                 <StackPanel Grid.Column="0">
                     <TextBlock Name="txtOrderID" />
                     <TextBlock Name="txtUserInfo" DockPanel.Dock="Left" />
+                    <TextBlock Name="txtPhone" />
                 </StackPanel>     
                 <StackPanel Grid.Column="1">
                     <TextBlock Name="txtReceiver" />

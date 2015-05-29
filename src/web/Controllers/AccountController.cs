@@ -25,10 +25,21 @@ namespace Solemart.Web.Controllers
 
         public ActionResult Index()
         {
-            if (User == null)
-                return RedirectToAction("", "Home");
+            SolemartUser user = User as SolemartUser;
 
-            return View(User as SolemartUser);
+            return View(user);
+        }
+
+        public ActionResult Info()
+        {
+            SolemartUser user = User as SolemartUser;
+            string imgUrl = "/Images/common/anonymous_header_image_small.jpg";
+            if (!string.IsNullOrEmpty(user.HeaderImageUrl))
+                imgUrl = user.HeaderImageUrl;
+
+            var userInfo = new { UserName = user.UserName, HeadImage = imgUrl, Point = user.PointAmount };
+
+            return Json(userInfo, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

@@ -5,7 +5,7 @@
 
 @{
     ViewBag.Title = Model.ProductName;    
-    int AverageLevel = 5;
+    //int AverageLevel = 5;
     int TotalCount = 0;
     IList<ProductCommentItem> Comments = ProductManager.GetProductComment(Model.ProductID, 0, 10, out TotalCount);
 }
@@ -74,7 +74,7 @@
 </div>
 <div class="bottomShoppingCart">
     <p class="amountText">
-        <span>@Model.Price.ToString("C2")/@Model.Unit </span> <span>剩余 @Model.RemainAmount@Model.Unit </span>
+        <span>@Model.Price.ToString("C2")/@Model.Unit </span>
     </p>
     <div class="bottomNav">
         <a class="backLink" href="/">&lt;</a>
@@ -83,7 +83,7 @@
         <a href="javascript:void;" data-action="sub" class="addSubButton">-</a>
     </div>
 </div>
-
+@Html.Partial("TopAppNav")
 <script type="text/javascript">
     var star_level = 5; //默认的评价级别
     var cur_pid = @Model.ProductID ;

@@ -406,6 +406,16 @@ namespace Solemart.BusinessLib
             }
         }
 
+        public string HeaderImageUrl
+        {
+            get
+            {
+                if (userItem.AppendInfo == null)
+                    LoadAppendInfo();
+                return userItem.AppendInfo.HeadImageUrl;
+            }
+        }
+
         /// <summary>
         /// Get the user's point
         /// </summary>

@@ -1,8 +1,30 @@
 ﻿<div class="appNav">
     <div class="wrapper">
-        <a href="/Cart" title="查看购物车" class="appLink shoppingCart">下单<span class="roundIndicator">￥0.00</span></a>
-        @*<div class="seperateLine"></div>
-        <a href="/Account" title="我的订单、消费等" class="appLink myAccount">我的</a>*@
+        <div class="appLink">
+            <a href="/Cart" title="查看购物车" class="shoppingCart">下单<span class="roundIndicator">￥0.00</span></a>
+        </div>
+        <div class="appLink">
+            <a href="javascript:void;" title="我的订单、消费等" class="myAccount">我的</a>
+        </div>
+    </div>
+</div>
+
+<div class="userPanel" style="display:none;">
+    <div>
+        <div class="userTitle">
+            <img id="userHeader" />
+            <span id="userName">Hi Adon</span>
+        </div>
+        <div >
+            <div id="userPoint">0</div>
+        </div>
+    </div>
+    <div class="userInfo">
+        <ul>
+            <li id="order">我的订单</li>
+            <li id="coupon">我的优惠券</li>
+            <li id="point">我的积分</li>
+        </ul>
     </div>
 </div>
 <script type="text/javascript">
@@ -22,5 +44,28 @@
                     //}
                 }
             });
+
+        $(".userPanel").hide();
+
+        $(".myAccount").bind("click", function (e) {
+            e.preventDefault();
+
+            if ($(".userPanel").is(":hidden")){
+                $.post("/Account/Info", {},
+                    function (result) {
+                        $("#userName").html('Hi ' + result.UserName);
+                        $("#userHeader").attr("src", result.HeadImage);
+                        $("#userPoint").html("积分：" + result.Point);
+                    });
+
+                $(".userPanel").show("slide", { direction: "right" });
+            }
+            else
+                $(".userPanel").hide("slide", { direction: "right" });
+        })
+
+        $("#order").bind("click", function (e) {
+            window.location.href = "/Account/Order";
+        });
     })
 </script>
