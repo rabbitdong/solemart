@@ -51,7 +51,12 @@ namespace Solemart.Web.Controllers
                     pmodel.ProductImageUrl = imageItem.ImageUrl;
                 else
                     pmodel.ProductImageUrl = "no-img.png";
-                model.ProductList.Add(pmodel);
+
+                //如果是推荐销售物品，就放置在推荐销售列表
+                if (product.SetTop)
+                    model.TopSaledProductList.Add(pmodel);
+                else
+                    model.NormalProductList.Add(pmodel);
             }
 
             SolemartUser user = User as SolemartUser;

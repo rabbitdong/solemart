@@ -78,7 +78,7 @@ namespace Solemart.Web.Models
         public int CommentCount { get; set; }
 
         /// <summary>
-        /// The images list of the product
+        /// The images list of the product(no include logo picture)
         /// </summary>
         public List<ProductImageItem> Images { get; set; }
     }

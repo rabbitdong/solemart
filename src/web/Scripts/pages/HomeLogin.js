@@ -21,7 +21,7 @@ var HomeLogin = (function () {
         }, function (result) {
             var webreturn = new WebReturn(result);
             if (webreturn.success)
-                window.location.href = webreturn.content;
+                window.location.href = decodeURIComponent(webreturn.content);
             else {
                 alert(webreturn.message);
             }

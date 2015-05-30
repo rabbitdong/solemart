@@ -67,7 +67,10 @@
                 {
                     foreach (ProductImageItem img in Images)
                     {
-                    <div class="editable"><img class="mainpic" src="/Images/product/normal/@img.ImageUrl" alt="@img.ImageID" /></div>
+                    <div class="editable">
+                        <img class="mainpic" src="/Images/product/normal/@img.ImageUrl" alt="@img.ImageID" />
+                        <div class="flow_tool" data-iid="@img.ImageID" data-pid="@Model.ProductID"><span>删除</span><span @(img.ForLogo ? "class=tooldisable" : "")>首页LOGO</span></div>
+                    </div>
                     }
                 }
             </div>
@@ -108,23 +111,39 @@
             resize: { cssclass: 'resize' }
         });
 
-        $("div.editable").bind("mousedown", function () {
-            var rashimg = $("<img src='/Images/common/trash64.png' title='删除本图片' />");
-            $(this).append(rashimg).unbind("mousedown");
-            rashimg.addClass("flow_tool");
-            var iid = $(this).children("img[src^='/Images/product/']").attr("alt");
-            rashimg.bind("click", function () {
-                if (window.confirm("确实删除吗?")) {
-                    $.post("/Manager/Product/DeleteProductImage/" + $("#prod_id").val(),
-                        {
-                            imageID: iid
-                        },
-                        function (result) {
-                            alert(result);
+        $("div.flow_tool").bind("click", "span", function (e) {
+            e.preventDefault();
+            var pid = $(this).data("pid");
+            var iid = $(this).data("iid");
+
+            if (e.target.innerText == "删除") {
+                if (!confirm("确定删除该图片？"))
+                    return false;
+
+                $.post("/Manager/Product/DeleteProductImage",
+                    {"pid": pid, "iid": iid},
+                    function (result) {
+                        var ret = new WebReturn(result);
+                        if (ret.success)
                             window.location.reload();
-                        });
-                }
-            });
+                        else
+                            alert(ret.message);
+                    });
+            }
+            else {
+                if ($(e.target).hasClass("tooldisable"))
+                    return false;
+
+                $.post("/Manager/Product/SetImageLogo",
+                    {"pid": pid, "iid":iid}, 
+                    function (result) {
+                        ret = new WebReturn(result);
+                        if (ret.success)
+                            window.location.reload();
+                        else
+                            alert(ret.message);
+                    });
+            }
         });
 
         var btnUpload = $('#upload');

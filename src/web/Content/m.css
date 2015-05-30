@@ -19,6 +19,8 @@ table td a { margin: 0px 5px 0px 5px; }
 div#img_list div.editable { position: relative; }
     div#img_list div.editable .mainpic { border: 2px solid #808080; }
     div#img_list div.editable .flow_tool { position: absolute; top: 2px; left: 2px; }
+.flow_tool span{background-color:#2ecc71; margin:2px; display:inline-block; padding:3px; border:1px solid rgb(85, 138, 190); cursor:pointer;}
+.flow_tool span.tooldisable{background-color: #808080; color:#ccc; }
 
 .myclosethick { background-image: url(/images/jquery-ui/ui-icons_888888_256x240.png); background-position: -96px -128px; }
 

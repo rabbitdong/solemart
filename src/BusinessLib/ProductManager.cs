@@ -166,6 +166,45 @@ namespace Solemart.BusinessLib
             }
         }
 
+        /// <summary>
+        /// Set the saled product to Top.(recommend the product to user)
+        /// </summary>
+        /// <param name="productID">The product id</param>
+        /// <returns></returns>
+        public static bool SetTop(int productID)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                SaledProductItem saledProductItem = context.SaledProductItems.Find(productID);
+                if (saledProductItem != null)
+                {
+                    saledProductItem.SetTop = true;
+                    return context.SaveChanges() > 0;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Drawback the recommend product.
+        /// </summary>
+        /// <param name="productID">The product id</param>
+        /// <returns></returns>
+        public static bool DrawbackTop(int productID)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                SaledProductItem saledProductItem = context.SaledProductItems.Find(productID);
+                if (saledProductItem != null)
+                {
+                    saledProductItem.SetTop = false;
+                    return context.SaveChanges() > 0;
+                }
+
+                return false;
+            }
+        }
         #endregion
 
         #region 商品的图片处理
@@ -280,11 +319,11 @@ namespace Solemart.BusinessLib
         /// </summary>
         /// <param name="productID"></param>
         /// <returns></returns>
-        public static List<ProductImageItem> GetProductImage(int productID)
+        public static List<ProductImageItem> GetProductNoLogoImage(int productID)
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                return context.ProductImageItems.Where(p => (p.ProductID == productID)).OrderBy(p=>p.ImageID).ToList();
+                return context.ProductImageItems.Where(p => (p.ProductID == productID && !p.ForLogo)).OrderBy(p=>p.ImageID).ToList();
             }
         }
 
@@ -313,6 +352,37 @@ namespace Solemart.BusinessLib
             using (SolemartDBContext context = new SolemartDBContext())
             {
                 return context.ProductImageItems.FirstOrDefault(p => (p.ProductID == productID && p.ForLogo));
+            }
+        }
+
+        /// <summary>
+        /// Set the logo image for product.
+        /// </summary>
+        /// <param name="productID"></param>
+        /// <param name="imageID"></param>
+        /// <returns></returns>
+        public static bool SetProductLogImage(int productID, int imageID)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                ProductImageItem imageItem = context.ProductImageItems.FirstOrDefault(p => (p.ProductID == productID && p.ImageID == imageID));
+
+                ProductImageItem logoImageItem = context.ProductImageItems.FirstOrDefault(p => (p.ProductID == productID && p.ForLogo));
+                //如果已经是LOGO的图片
+                if (imageItem != null && imageItem.ForLogo)
+                    return true;
+
+                //设置的图片不是原来的LOGO图片
+                if (imageItem != null)
+                {
+                    imageItem.ForLogo = true;
+                    if (logoImageItem != null)
+                        logoImageItem.ForLogo = false;
+
+                    return context.SaveChanges() > 0;
+                }
+
+                return false;
             }
         }
         #endregion

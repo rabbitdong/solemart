@@ -58,18 +58,32 @@ namespace Solemart.Web.Areas.Manager.Controllers
         /// <summary>
         /// Delete the product image
         /// </summary>
-        /// <param name="id">product ID</param>
-        /// <param name="imageID">the image id to delete</param>
+        /// <param name="pid">product ID</param>
+        /// <param name="iid">the image id to delete</param>
         /// <returns>删除图片的结果</returns>
-        public ActionResult DeleteProductImage(int id, int imageID)
+        public ActionResult DeleteProductImage(int pid, int iid)
         {
-            ProductImageItem img = ProductManager.GetProductImage(id, imageID);
-            if (img != null && ProductManager.DeleteProductImage(id, imageID))
+            ProductImageItem img = ProductManager.GetProductImage(pid, iid);
+            if (img != null && ProductManager.DeleteProductImage(pid, iid))
             {
                 System.IO.File.Delete(Server.MapPath("~/images/product/normal/" + img.ImageUrl));
                 System.IO.File.Delete(Server.MapPath("~/images/product/thumb/" + img.ImageUrl));
                 return Content(WebResult<string>.SuccessResult.ResponseString);
             }
+
+            return Content(WebResult<string>.NormalErrorResult.ResponseString);
+        }
+
+        /// <summary>
+        /// Set the image logo.
+        /// </summary>
+        /// <param name="pid"></param>
+        /// <param name="iid"></param>
+        /// <returns></returns>
+        public ActionResult SetImageLogo(int pid, int iid)
+        {
+            if (ProductManager.SetProductLogImage(pid, iid))
+                return Content(WebResult<string>.SuccessResult.ResponseString);
 
             return Content(WebResult<string>.NormalErrorResult.ResponseString);
         }
@@ -218,6 +232,32 @@ namespace Solemart.Web.Areas.Manager.Controllers
                 return Content(WebResult<string>.SuccessResult.ResponseString);
 
             return Content(WebResult<string>.NormalErrorResult.ResponseString);
+        }
+
+        /// <summary>
+        /// Set the product to Top(recommend the product)
+        /// </summary>
+        /// <param name="ProductID"></param>
+        /// <returns></returns>
+        public ActionResult SetTop(int ProductID)
+        {
+            if (ProductManager.SetTop(ProductID))
+                return Content(WebResult<string>.SuccessResult.ResponseString);
+            else
+                return Content(WebResult<string>.NormalErrorResult.ResponseString);
+        }
+
+        /// <summary>
+        /// Drawback the product(unrecommend the product)
+        /// </summary>
+        /// <param name="ProductID"></param>
+        /// <returns></returns>
+        public ActionResult DrawbackTop(int ProductID)
+        {
+            if (ProductManager.DrawbackTop(ProductID))
+                return Content(WebResult<string>.SuccessResult.ResponseString);
+            else
+                return Content(WebResult<string>.NormalErrorResult.ResponseString);
         }
     }
 }

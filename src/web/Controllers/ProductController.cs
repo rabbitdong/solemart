@@ -57,7 +57,7 @@ namespace Solemart.Web.Controllers
         {
             SaledProductItem saleInfo = ProductManager.GetSaledProductByID(id);
             ProductItem product = ProductManager.GetProductWithBrandByID(id);
-            List<ProductImageItem> images = ProductManager.GetProductImage(id);
+            List<ProductImageItem> images = ProductManager.GetProductNoLogoImage(id);
             int commentCount = ProductManager.GetProductCommentCount(id);
 
             Cart cart = (User as SolemartUser).Cart;

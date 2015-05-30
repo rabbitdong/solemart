@@ -314,6 +314,16 @@ namespace Solemart.DataProvider.Entity
         /// Indicate the saled product is special or not.
         /// </summary>
         public bool SpecialFlag { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public decimal SaledPrice { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool SetTop { get; set; }
     }
     #endregion
 

@@ -12,12 +12,15 @@ namespace Solemart.Web.Models
     {
         public ProductListViewModel()
         {
-            ProductList = new List<ProductForListViewModel>();
+            NormalProductList = new List<ProductForListViewModel>();
+            TopSaledProductList = new List<ProductForListViewModel>();
         }
 
         public int PageIndex { get; set; }
         public int TotalPageCount { get; set; }
-        public IList<ProductForListViewModel> ProductList { get; set; }
+        public IList<ProductForListViewModel> NormalProductList { get; set; }
+
+        public IList<ProductForListViewModel> TopSaledProductList { get; set; }
     }
 
     /// <summary>
