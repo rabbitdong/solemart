@@ -1,20 +1,26 @@
 /* 通用样式(全局样式) */
-* { padding: 0px; margin: 0px; vertical-align: baseline; }
+* { padding: 0px; margin: 0px; vertical-align: baseline; font-size:14px; }
 body { background: #f5f5f5; font-family: "Microsoft YaHei",Arial,Helvetica,sans-serif; }
-footer { text-align: center; margin-bottom: 100px; padding-top:5px; border-top:1px solid #1abc9c; color: #8f8f8f; }
+footer { text-align: center; margin-bottom: 100px; margin-top:5px; padding-top:5px; border-top:1px solid #1abc9c; color: #8f8f8f; }
 .viewport { min-width: 330px; max-width: 640px; padding: 0px; margin: 0px; display: block; }
 a,a:link,a:visited,a:active { outline: none; text-decoration: none; }
 
 header{width:100%;height:120px; margin:0px;padding:0px; background:url(/Images/bg-01_small.jpg); background-size:cover;}
+
 /*  
-导航栏的UI
+底部导航栏的UI
 */
-.appNav { position: fixed; height:36px; left: 0; width: 100%; bottom: 0px; z-index: 30; text-align: center; border-top: 1px solid #cfcfcf; background-color:#cfcfcf; }
+.appNav { position: fixed; height:36px; left: 0; width: 100%; bottom: 0px; z-index: 30; text-align: center; border-top: 1px solid #cfcfcf; background-color:#cfcfcf; vertical-align:middle; }
     .appNav .wrapper { }
-    .appNav .appLink { display:inline-block; line-height:30px; margin-top:3px; background-color: #16a085; border-bottom: 1px solid #7f7f7f; display:inline-block; height: 30px; border-radius:8px; text-align: center; }    
-    .appNav .shoppingCart { background: url(/Images/ledao_icons_small_white.png) no-repeat; color:#ddd; padding:3px 5px 3px 30px; background-position: 0px -58px; }
-        .appNav .shoppingCart .roundIndicator { background-color: #c0392b; border-radius: 5px; font-size: 12px; padding: 4px; margin-left: 5px; }
-    .appNav .myAccount { padding:3px 5px 3px 30px; color:#ddd; background: url(/Images/ledao_icons_small_white.png) no-repeat; background-position: 0px -116px; }
+    .appNav .appLink { display:inline-block; line-height:30px; margin:3px 5px 0 5px; background-color: #16a085; border-bottom: 1px solid #7f7f7f; display:inline-block; height: 30px; border-radius:8px; text-align: center; }    
+
+.appNav .commonNavLink{display:inline-block; border-radius: 15px; color: #fff; text-align: center; }
+.appNav .backNav{width:50px; font-family:Verdana, Geneva, Tahoma, sans-serif; }
+.appNav .normalNav{width:80px;}
+.appNav .shoppingCart { background: url(/Images/ledao_icons_small_white.png) no-repeat; color:#ddd; padding:3px 5px 3px 30px; background-position: 0px -58px; }
+    .appNav .shoppingCart .roundIndicator { background-color: #c0392b; border-radius: 5px; font-size: 12px; padding: 4px; margin-left: 5px; }
+.appNav .myAccount { padding:3px 5px 3px 30px; color:#ddd; background: url(/Images/ledao_icons_small_white.png) no-repeat; background-position: 0px -116px; }
+
 
 /*
 用户信息面板内容
@@ -66,14 +72,18 @@ input#txtSearch { margin-left: 0px; border: 1px solid #ddd; width: 12em; backgro
 .product2List .product2Item{ width:46%; display:inline-block;}
 .product2List .product2Item img.product2Image{width:88%;}
 
+/*
+    操作指示样式（Ajax）请求
+*/
+.successNotify{position:fixed; top:45%; left:25%; width:50%; vertical-align:middle; padding:10px; background-color:rgba(46, 204, 113,0.5); text-align:center;}
+
 /*  购物车的样式*/
 table.cart { width: 100%; border: 1px solid #ccc; border-collapse: collapse; }
-    table.cart th { background-color: rgb(249, 249, 249); margin: 0px; padding: 5px 0px; }
-        table.cart th:first-child { width: 32%; }
-        table.cart th:last-child { text-align: right; }
-    table.cart td { padding: 3px; background-color: #fff; }
-        table.cart td:first-child { width: 32%; }
-        table.cart td:last-child { text-align: right; }
+    table.cart th { background-color: #16a085; margin: 0px; padding: 5px 0px; color:#fff; }
+        table.cart th{text-align:right;}
+        table.cart th:first-child { width: 35%; text-align:left; }
+    table.cart td { padding: 3px; background-color: #fff; text-align:right;}
+        table.cart td:first-child { width: 35%; text-align:left;}
     table.cart caption.cart_caption { background-color: rgb(85, 138, 190); text-align: left; padding: 10px 5px; }
     table.cart tbody h3 { margin: 0px 0px 5px 5px; }
     table.cart tbody td { border-bottom: 1px solid rgb(221, 221, 221); }
@@ -87,6 +97,7 @@ table.cart { width: 100%; border: 1px solid #ccc; border-collapse: collapse; }
     .bottomShoppingCart a.backLink { display: inline-block; width: 50px; background-color: #2ecc71; border-radius: 15px; font-size: 1.5em; color: #333; margin-right: 20px; text-align: center; }
     .bottomShoppingCart p.amountText { text-align: center; padding: 5px 0; float: right; margin-right: 10px; color:#e74c3c; font-weight:bold; font-size:12px; }
     .bottomShoppingCart input { width: 1.5em; font-size: 1.4em; border: 1px solid #808080; }
+
 /* 产品详细页的样式 */
 .productDetail { width:100%; }
     .productDetail h2 { text-align: center; margin:5px 0px; }
@@ -344,32 +355,19 @@ div.cart_content { text-align: left; }
 
 
 div.sendinfo { text-align: left; margin: 0px; padding: 5px 0px 5px 15px; border: 1px solid #eee; border-radius: 2px; background-color: #fff; }
-
-
     div.sendinfo .info_head { clear: both; border-bottom: 2px solid #eee; }
-
     div.sendinfo span.caption { font-weight: bold; font-size: 20px; }
-
     div.sendinfo span.subCaption { font-weight: bold; font-size: 16px; }
-
     div.sendinfo ul { clear: both; }
-
     div.sendinfo li { margin: 10px 0px 0px 0px; list-style: none; }
-
-    div.sendinfo label { padding: 4px 10px 2px 0px; float: left; clear: left; min-width: 100px; width: 20%; text-align: right; }
-
+    div.sendinfo label { padding: 4px 10px 2px 0px; float: left; clear: left; min-width: 80px; width: 15%; text-align: right; }
     div.sendinfo a.pwTip { background-color: rgb(221, 221, 221); border-radius: 7px; display: inline-block; width: 16px; text-align: center; font-weight: bold; }
-
     div.sendinfo input { margin: 0px 5px 0px 0px; height: 21px; min-width: 180px; width: 60%; }
-
     div.sendinfo span.fOption label { float: none; }
-
     div.sendinfo span.fOption input { width: auto; display: inline; margin: 1px 0px 0px 0px; }
-
     div.sendinfo p.fNote { margin-left: 210px; color: gray; }
 
 div#orderlist { text-align: left; }
-
     div#orderlist li { margin: 10px 5px 5px 5px; border: 1px solid #eef; border-radius: 5px; }
 
         div#orderlist li.unsend { background-color: #f3dbd3; }

@@ -8,14 +8,7 @@
 }
 
 <div class="cart_content">
-    <div class="cart_head">
-        <div class="comm_btn l">
-            <a href="/Cart">返回购物车</a>
-        </div>
-    </div>
-
     <table class="cart">
-        <caption class="cart_caption">订单的商品:</caption>
         <thead>
             <tr>
                 <th>商品名称</th>
@@ -98,9 +91,15 @@
             </li>
         </ul>
     </div>
-    <div>
-        <div class="comm_btn r">
-            <a href="javascript:;" class="comm_btn" id="submitOrder">提交订单</a>
+</div>
+
+<div class="appNav">
+    <div class="wrapper">
+        <div class="appLink">
+            <a href="/Cart" title="返回购物车" class="commonNavLink backNav">&lt;</a>
+        </div>
+        <div class="appLink">
+            <a href="javascript:void(0);" title="提交订单" id="submitOrder" class="commonNavLink normalNav">提交订单</a>
         </div>
     </div>
 </div>

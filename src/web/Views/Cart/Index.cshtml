@@ -8,15 +8,9 @@
 
 <div class="cart_content">
     <div class="cart_head">
-        <h3>您的购物车中有 @Model.CartItems.Count 件物品:</h3>
-        <div class="comm_btn l"><a href="/">继续购物</a></div>
-        @if(Model.CartItems.Count>0){
-            <div class="comm_btn r"><a href="javascript:void(0);" onclick="javascript:checkout(this);">下单</a></div>
-        }
+        <p>您已选购下面水果：</p>
     </div>
-
     <table class="cart">
-        <caption class="cart_caption">当前购物车中的货品:</caption>
         <thead>
             <tr>
                 <th>货品</th>
@@ -31,7 +25,7 @@
                 <tr>
                     <td>
                         @*<img class="prodimg" src="/images/product/no-img.png" />*@
-                        <h3>@cartItem.Product.ProductName</h3>
+                        <p>@cartItem.Product.ProductName</p>
                     </td>
                     <td>@(cartItem.UnitPrice.ToString("C2"))</td>
                     <td data-pid="@cartItem.ProductID">
@@ -51,21 +45,38 @@
 
         <tfoot>
             <tr>
-                <td colspan="3">货品总价</td>
+                <td></td>
+                <td></td>
+                <td>货品总价</td>
                 <td>@Model.TotalPrice.ToString("C2")</td>
             </tr>
             <tr>
-                <td colspan="3">运输费用</td>
+                <td></td>
+                <td></td>
+                <td>运输费用</td>
                 <td>￥0.00</td>
             </tr>
             <tr>
-                <td colspan="3">总计:</td>
+                <td></td>
+                <td></td>
+                <td>总计:</td>
                 <td>@Model.TotalPrice.ToString("C2")</td>
             </tr>
         </tfoot>
     </table>
 
     <div class="cart_foot">
+    </div>
+</div>
+
+<div class="appNav">
+    <div class="wrapper">
+        <div class="appLink">
+            <a href="/" title="返回继续购物" class="commonNavLink backNav">&lt;</a>
+        </div>
+        <div class="appLink">
+            <a href="javascript:void(0);" title="提交订单" onclick="checkout(this);" class="commonNavLink normalNav">提交订单</a>
+        </div>
     </div>
 </div>
 

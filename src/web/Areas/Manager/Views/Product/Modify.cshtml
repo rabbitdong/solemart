@@ -6,7 +6,7 @@
     ViewBag.Title = "修改商品信息";
     Layout = "~/Areas/Manager/Views/Shared/_ManagerLayout.cshtml";
     IList<CategoryItem> Categories = CategoryManager.Instance.Categories;
-    IList<ProductImageItem> Images = ProductManager.GetProductImage(Model.ProductID);
+    IList<ProductImageItem> Images = ProductManager.GetProductAllImage(Model.ProductID);
 }
 
 <h1>修改商品，如修改图片、商品规格、说明信息等:</h1>

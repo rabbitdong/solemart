@@ -59,7 +59,7 @@ namespace Solemart.WeixinAPI.CommonAPIs
         /// <param name="data">如果是Get方式，可以为null</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static T Send<T>(string accessToken, string urlFormat, object data, CommonJsonSendType sendType = CommonJsonSendType.POST, int timeOut = Config.TIME_OUT) where T:WxJsonResult
+        public static T Send<T>(string accessToken, string urlFormat, object data, CommonJsonSendType sendType = CommonJsonSendType.POST, int timeOut = Config.TIME_OUT) where T:WxJsonResult, new()
         {
             var url = string.IsNullOrEmpty(accessToken) ? urlFormat : string.Format(urlFormat, accessToken);
             switch (sendType)

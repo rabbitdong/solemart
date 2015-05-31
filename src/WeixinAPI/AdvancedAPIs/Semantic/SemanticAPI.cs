@@ -47,7 +47,7 @@ namespace Solemart.WeixinAPI.AdvancedAPIs.Semantic
         /// <param name="semanticPostData">语义理解请求需要post的数据</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static T SemanticSend<T>(string accessToken, SemanticPostData semanticPostData, int timeOut = Config.TIME_OUT) where T : WxJsonResult
+        public static T SemanticSend<T>(string accessToken, SemanticPostData semanticPostData, int timeOut = Config.TIME_OUT) where T : WxJsonResult, new()
         {
             var urlFormat = "https://api.weixin.qq.com/semantic/semproxy/search?access_token={0}";
 

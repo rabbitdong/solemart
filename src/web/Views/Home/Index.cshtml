@@ -51,12 +51,14 @@
         }
     </ul>
 </div>
-
+<div class="successNotify" style="display:none;">操作成功...</div>
 <script type="text/javascript">
     $(function () {
         $(".productInfo").bind("click", "a.addToCart", function (e) {
             e.preventDefault();
 
+            $(".successNotify").html("操作中...");
+            $(".successNotify").show();
             $.post("/Cart/Add/" + $(this).data("pid"),
                 {"addition":"parameter"},
                 function (result) {
@@ -65,6 +67,9 @@
                         alert(ret.message);
                         return;
                     }
+
+                    $(".successNotify").html("操作成功");
+                    $(".successNotify").hide(1000);
 
                     var retData = JSON.parse(ret.content);
                     var indicator = $(".roundIndicator");

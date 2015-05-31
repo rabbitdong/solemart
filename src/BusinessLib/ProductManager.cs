@@ -347,6 +347,20 @@ namespace Solemart.BusinessLib
         /// <param name="productID"></param>
         /// <param name="imageID"></param>
         /// <returns></returns>
+        public static IList<ProductImageItem> GetProductAllImage(int productID)
+        {
+            using (SolemartDBContext context = new SolemartDBContext())
+            {
+                return context.ProductImageItems.Where(p => (p.ProductID == productID)).OrderBy(p => p.ImageID).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Get the product image of the product
+        /// </summary>
+        /// <param name="productID"></param>
+        /// <param name="imageID"></param>
+        /// <returns></returns>
         public static ProductImageItem GetProductLogoImage(int productID)
         {
             using (SolemartDBContext context = new SolemartDBContext())
