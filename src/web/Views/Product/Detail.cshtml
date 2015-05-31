@@ -12,7 +12,7 @@
 
 @Html.Partial("TopAppNav")
 <div class="productDetail">
-    <h2>@Model.ProductName </h2>
+    <h2>@Model.ProductName</h2>
 
     @*<div class="vote_area">
         <span class="comment_star" title="@AverageLevel 星">
@@ -68,8 +68,6 @@
             } 
         </div>
     </div>*@
-
-    <div style="clear:both;"></div>
     
 </div>
 <div class="bottomShoppingCart">
@@ -83,7 +81,6 @@
         <a href="javascript:void;" data-action="sub" class="addSubButton">-</a>
     </div>
 </div>
-@Html.Partial("TopAppNav")
 <script type="text/javascript">
     var star_level = 5; //默认的评价级别
     var cur_pid = @Model.ProductID ;

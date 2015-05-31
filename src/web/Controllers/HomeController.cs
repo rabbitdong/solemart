@@ -204,7 +204,7 @@ namespace Solemart.Web.Controllers
                 if (redirect_url == null || redirect_url == "")
                     redirect_url = "/";
 
-                returnUrl = string.Format("/{0}", returnUrl);
+                returnUrl = string.Format("{0}", returnUrl);
                 return Content(new WebResult<string> { ResultCode = WebResultCode.Success, ResultData = returnUrl }.ResponseString);
             }
             else

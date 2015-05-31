@@ -19,9 +19,9 @@
                 <div class="productImage">
                     <a href="/Product/Detail/@product.ProductID" title="查看水果详情"><img class="productImg" style="width:90%" src="~/Images/product/normal/@product.ProductImageUrl" /></a>
                 </div>
-                <div class="productInfo">
+                <div class="productInfo" data-pid="@product.ProductID">
                     <p class="productTitle">
-                        <span class="ellipsis" title="@product.ProductName">@product.ProductName</span>
+                        <span class="titleSpan ellipsis" title="@product.ProductName">@product.ProductName</span>
                         <a class="addToCart" data-pid="@product.ProductID" href="javascript:void;"></a>
                     </p>
                     <p class="productPrice">
@@ -34,13 +34,13 @@
     <ul class="product2List">
         @foreach (ProductForListViewModel product in Model.NormalProductList)
         {
-            <li id="product_@product.ProductID" data-pid="@product.ProductID" class="productItem product2Item">
+            <li id="product_@product.ProductID" class="productItem product2Item">
                 <div class="product2Image">
                     <a href="/Product/Detail/@product.ProductID" title="查看水果详情"><img class="productImg" style="width:90%;" src="/Images/product/normal/@product.ProductImageUrl" /></a>
                 </div>
-                <div class="productInfo">
+                <div class="productInfo" data-pid="@product.ProductID">
                     <p class="productTitle">
-                        <span class="ellipsis" title="@product.ProductName">@product.ProductName</span>
+                        <span class="titleSpan ellipsis" title="@product.ProductName">@product.ProductName</span>
                         <a class="addToCart" href="javascript:void;"></a>
                     </p>
                     <p class="productPrice">
@@ -54,7 +54,7 @@
 
 <script type="text/javascript">
     $(function () {
-        $(".productItem").bind("click", "a.addToCart", function (e) {
+        $(".productInfo").bind("click", "a.addToCart", function (e) {
             e.preventDefault();
 
             $.post("/Cart/Add/" + $(this).data("pid"),

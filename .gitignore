@@ -8,5 +8,6 @@ tools/*/obj/*
 *.user
 release/*
 src/*/Log/*
+src/web/Images/product/*/*
 *.cache
 src/BusinessLib/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
