@@ -119,6 +119,35 @@ namespace Solemart.Web.Areas.Manager.Controllers
             return Content("ok");
         }
 
+        /// <summary>
+        /// Cancel the order by operator
+        /// </summary>
+        /// <param name="id">The order's id</param>
+        /// <returns></returns>
+        public ActionResult CancelOrder(int id)
+        {
+            OrderItem oi = OrderManager.GetOrderInfo(id);
+            if (oi == null)
+                return Content("error-order no found!");
+            if (oi.Status == OrderStatus.Cancel || oi.Status == OrderStatus.Received)
+            {
+                return Content(WebResult<string>.NormalErrorResult.ResponseString);
+            }
+
+            SolemartUser user = SolemartUserCache.GetUser(oi.UserID);
+            if (OrderManager.CancelOrder(oi.OrderID))
+            {
+                //由于退货，扣除积分
+                if (!user.IsAnonymous)
+                {
+                    user.TakeOffPoint((int)oi.TotalPrice);
+                }
+                return Content(WebResult<string>.SuccessResult.ResponseString);
+            }
+
+            return Content(WebResult<string>.NormalErrorResult.ResponseString);
+        }
+
         /// <summary>支付宝确认发货
         /// </summary>
         /// <param name="oi"></param>

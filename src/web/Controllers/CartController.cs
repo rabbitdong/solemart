@@ -190,8 +190,12 @@ namespace Solemart.Web.Controllers
             {
                 // 已进入订单后，临时购物车上物品需要清除
                 user.Cart.ClearAndSave(user.UserID);
+
                 //先保存用户的积分(目前的积分按购物的价格计算)。
-                user.AddPoint((int)oi.TotalPrice);
+                if (!user.IsAnonymous)
+                {
+                    user.AddPoint((int)oi.TotalPrice);
+                }
 #if false //支付宝暂时不支持
                 if (oi.PaymentType == PaymentType.OnLine)
                 {
@@ -360,7 +364,10 @@ namespace Solemart.Web.Controllers
             if (OrderManager.CancelOrder(order_id))
             {
                 //由于退货，扣除积分
-                user.TakeOffPoint((int)order.TotalPrice);
+                if (!user.IsAnonymous)
+                {
+                    user.TakeOffPoint((int)order.TotalPrice);
+                }
                 return Content(WebResult<string>.SuccessResult.ResponseString);
             }
             return Content(WebResult<string>.NormalErrorResult.ResponseString);

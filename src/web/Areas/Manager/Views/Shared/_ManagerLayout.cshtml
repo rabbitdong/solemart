@@ -1,62 +1,119 @@
 ﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "";
     int NewOrderCount = Solemart.BusinessLib.OrderManager.GetNewOrderCount();
 }
 
-@section managerHeader{
+@using Solemart.BusinessLib;
+
+@{
+    SolemartUser CurrentUser = HttpContext.Current.User as SolemartUser;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="author" content="www.51bdg.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <title>@(ViewBag.Title == null ? "乐道" : ViewBag.Title)</title>
+    <link rel="stylesheet" href="~/Content/jquery-ui-1.10.3.custom.min.css" />
     <link rel="stylesheet" href="/Content/m.css" />
+    @RenderSection("managerHeader", false)
+    <script src="/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="/Scripts/jquery-ui-1.10.3.custom.min.js"></script>
+    @*<script src="/Scripts/iscroll.js"></script>*@
+    <script src="/Scripts/commonutil.js"></script>
     <link rel="stylesheet" href="~/Content/tinyeditor.css" />
     <script type="text/javascript" src="/Scripts/ajaxupload.3.5.js"></script>
     <script type="text/javascript" src="~/Scripts/tiny.editor.packed.js"></script>
-}
+    <script type="text/javascript">
+        function search_product() {
+            var key = $("#txtSearch").val();
+            window.location.href = "/Home/Search/" + window.encodeURI(key);
+        }
 
-<div id="cate">
-    <h2>货品管理</h2>
-    <div class="subcls">
-        <ul>
-            <li><a href="/Manager/Product/InStock">新商品进货</a></li>
-            <li><a href="/Manager/Product">库存商品浏览</a></li>
-        </ul>
-    </div>
-    <h2>订单管理</h2>
-    <div class="subcls">
-        <ul>
-            <li><a href="/Manager/Orders/New">查看新订单<span id="m_neworder" class="m_notify">@NewOrderCount</span></a></li>
-            <li><a href="/Manager/Orders/Sending">查看在发送中订单</a></li>
-            <li><a href="/Manager/Orders/Received">查看已收货的订单</a></li>
-        </ul>
-    </div>
-    <h2>用户管理</h2>
-    <div class="subcls">
-        <ul>
-            <li><a href="/Manager/Users">用户查看</a></li>
-            <li><a href="/Manager/Advise">评论管理</a></li>
-        </ul>
-    </div>
-    <h2>类别管理</h2>
-    <div class="subcls">
-        <ul>
-            <li><a href="/Manager/Category/New">添加类别</a></li>
-            <li><a href="/Manager/Category/Modify">修改类别</a></li>
-        </ul>
-    </div>
+        function logout() {
+            @*@if(CurrentUser.IsLoginQQ){
+                <text>
+                QC.Login.signOut();
+                </text>
+            }*@
+            $.post("/Home/Logout",
+                {},
+                function (result) {
+                    var ret = new WebReturn(result);
+                    if (ret.success)
+                        window.location.reload();
+                    else
+                        alert(ret.message);
+                });
+        }
+    </script>
+</head>
+<body>
+    <div class="viewport">
+        <header>
+            <div></div>
+        </header>
+        <div id="cate">
+            <h2>货品管理</h2>
+            <div class="subcls">
+                <ul>
+                    <li><a href="/Manager/Product/InStock">新商品进货</a></li>
+                    <li><a href="/Manager/Product">库存商品浏览</a></li>
+                </ul>
+            </div>
+            <h2>订单管理</h2>
+            <div class="subcls">
+                <ul>
+                    <li><a href="/Manager/Orders/New">查看新订单<span id="m_neworder" class="m_notify">@NewOrderCount</span></a></li>
+                    <li><a href="/Manager/Orders/Sending">查看在发送中订单</a></li>
+                    <li><a href="/Manager/Orders/Received">查看已收货的订单</a></li>
+                </ul>
+            </div>
+            <h2>用户管理</h2>
+            <div class="subcls">
+                <ul>
+                    <li><a href="/Manager/Users">用户查看</a></li>
+                    <li><a href="/Manager/Advise">评论管理</a></li>
+                </ul>
+            </div>
+            <h2>类别管理</h2>
+            <div class="subcls">
+                <ul>
+                    <li><a href="/Manager/Category/New">添加类别</a></li>
+                    <li><a href="/Manager/Category/Modify">修改类别</a></li>
+                </ul>
+            </div>
 
-    <h2>供应商管理</h2>
-    <div class="subcls">
-        <ul>
-            <li><a href="/Manager/Vendor">查看供应商</a></li>
-            <li><a href="/Manager/Vendor/New">新供应商</a></li>
-        </ul>
-    </div>
+            <h2>供应商管理</h2>
+            <div class="subcls">
+                <ul>
+                    <li><a href="/Manager/Vendor">查看供应商</a></li>
+                    <li><a href="/Manager/Vendor/New">新供应商</a></li>
+                </ul>
+            </div>
 
-    <h2>公告管理</h2>
-    <div class="subcls">
-        <ul>
-            <li><a href="/Manager/BillBoard">公告列表</a></li>
-        </ul>
-    </div>
-</div>
+            <h2>公告管理</h2>
+            <div class="subcls">
+                <ul>
+                    <li><a href="/Manager/BillBoard">公告列表</a></li>
+                </ul>
+            </div>
+        </div>
 
-<div class="edit_area">
-    @RenderBody()
-</div>
+        <div class="edit_area">
+            @RenderBody()
+        </div>
+        <footer>
+            <p>罗源乐道贸易有限公司 版权所有&copy;2015</p>
+            <p>订购热线：400-899-0918  0591-26980918</p>
+        </footer>
+    </div>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

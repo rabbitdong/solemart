@@ -26,8 +26,9 @@
                     @if(oi.Status == OrderStatus.Ordered){
                     <p class="r">
                         <a href="/Manager/Orders/SendOrder/@oi.OrderID" target="_blank" class="comm_btn">发货</a>
+                        <a href="javascript:void(0);" class="comm_btn cancelOrder" data-oid="@oi.OrderID">取消</a>
                     </p>
-                    }
+                    }                    
                     <p>
                         <span class="order_subhead">总价:</span>
                         <span>@oi.TotalPrice.ToString("C2")</span>
@@ -73,3 +74,25 @@
         </ul>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        $(".cancelOrder").on("click", function (e) {
+            e.preventDefault();
+            if (!confirm("确定取消订单？"))
+                return false;
+
+            var oid=$(e.target).data("oid");
+            $.post("/Manager/Orders/CancelOrder/" + oid,
+                {},
+                function (result) {
+                    var ret = new WebReturn(result);
+                    if (ret.success) {
+                        window.location.reload();
+                    }
+                    else
+                        alert(ret.message);
+                });
+        })
+    });
+</script>
