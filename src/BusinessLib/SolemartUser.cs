@@ -383,6 +383,14 @@ namespace Solemart.BusinessLib
         }
 
         /// <summary>
+        /// Indicate is weixin user or not.
+        /// </summary>
+        public bool IsLoginWeixin
+        {
+            get { return userItem.LoginType == LoginType.Weixin; }
+        }
+
+        /// <summary>
         /// Get the user's email address.
         /// </summary>
         public string Email

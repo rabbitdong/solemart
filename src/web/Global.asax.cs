@@ -63,7 +63,7 @@ namespace Solemart.Web
         void Application_BeginRequest(object sender, EventArgs e)
         {
             //请求js，css，.jpg, .png等忽略
-            if (Request.RawUrl.Contains(".js") || Request.RawUrl.Contains(".css") || Request.RawUrl.Contains("jpg"))
+            if (Request.RawUrl.Contains(".js") || Request.RawUrl.Contains(".css") || Request.RawUrl.Contains(".jpg") || Request.RawUrl.Contains(".png"))
                 return;
 
             bool isFromWeixin = WebUtil.RequestUtil.IsWeixinRequest(Request.ServerVariables);

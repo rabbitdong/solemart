@@ -16,6 +16,7 @@ using SimLogLib;
 using LogUtil = SimLogLib.Util;
 using Solemart.WeixinAPI.AdvancedAPIs.OAuth;
 using Solemart.WeixinAPI.Base;
+using System.Web.Caching;
 
 namespace Solemart.Web.Controllers
 {
@@ -27,40 +28,50 @@ namespace Solemart.Web.Controllers
         /// </summary>
         public ActionResult Index(int? p, string code)
         {
-            int pi = p ?? 0; //表示页索引
-            int totalPageCount = 0;
-            List<SaledProductItem> products = ProductManager.GetPagedSaledProducts(pi, 50, out totalPageCount);
-
-            ProductListViewModel model = new ProductListViewModel();
-            model.PageIndex = pi;
-            model.TotalPageCount = totalPageCount;
-            foreach (SaledProductItem product in products)
+            ProductListViewModel model = null;
+            if (this.HttpContext.Cache["index_model"] != null)
             {
-                ProductForListViewModel pmodel = new ProductForListViewModel();
-                ProductItem productItem = product.Product;
-                ProductImageItem imageItem = ProductManager.GetProductLogoImage(product.ProductID);
-                pmodel.ProductID = product.ProductID;
-                pmodel.ProductName = product.Product.ProductName;
-                pmodel.Price = product.Price;
-                pmodel.Discount = product.Discount;
-                pmodel.IsSpecial = product.SpecialFlag;
-                pmodel.Unit = product.Product.Unit;
-                pmodel.IsOutOfStock = (product.Product.StockCount - product.Product.ReserveCount) == 0;
-                pmodel.ProductImageName = productItem.ProductName;
-                if (imageItem != null)
-                    pmodel.ProductImageUrl = imageItem.ImageUrl;
-                else
-                    pmodel.ProductImageUrl = "no-img.png";
+                model = HttpRuntime.Cache["index_model"] as ProductListViewModel;
+            }
+            else
+            {
+                int pi = p ?? 0; //表示页索引
+                int totalPageCount = 0;
+                List<SaledProductItem> products = ProductManager.GetPagedSaledProducts(pi, 50, out totalPageCount);
 
-                //如果是推荐销售物品，就放置在推荐销售列表
-                if (product.SetTop)
-                    model.TopSaledProductList.Add(pmodel);
-                else
-                    model.NormalProductList.Add(pmodel);
+                model = new ProductListViewModel();
+                model.PageIndex = pi;
+                model.TotalPageCount = totalPageCount;
+                foreach (SaledProductItem product in products)
+                {
+                    ProductForListViewModel pmodel = new ProductForListViewModel();
+                    ProductItem productItem = product.Product;
+                    ProductImageItem imageItem = ProductManager.GetProductLogoImage(product.ProductID);
+                    pmodel.ProductID = product.ProductID;
+                    pmodel.ProductName = product.Product.ProductName;
+                    pmodel.Price = product.Price;
+                    pmodel.Discount = product.Discount;
+                    pmodel.IsSpecial = product.SpecialFlag;
+                    pmodel.Unit = product.Product.Unit;
+                    pmodel.IsOutOfStock = (product.Product.StockCount - product.Product.ReserveCount) == 0;
+                    pmodel.ProductImageName = productItem.ProductName;
+                    if (imageItem != null)
+                        pmodel.ProductImageUrl = imageItem.ImageUrl;
+                    else
+                        pmodel.ProductImageUrl = "no-img.png";
+
+                    //如果是推荐销售物品，就放置在推荐销售列表
+                    if (product.SetTop)
+                        model.TopSaledProductList.Add(pmodel);
+                    else
+                        model.NormalProductList.Add(pmodel);
+                }
+                HttpRuntime.Cache.Add("index_model", model, null, DateTime.Now.AddSeconds(600), TimeSpan.Zero, CacheItemPriority.Default, null);
             }
 
             SolemartUser user = User as SolemartUser;
-            if (!string.IsNullOrEmpty(code))
+            //之前没有访问过
+            if (!string.IsNullOrEmpty(code) && !user.IsLoginWeixin)
             {
                 Log.Instance.WriteLog(string.Format("Request from weixin, code[{0}]", code));
                 OAuthAccessTokenResult ret = OAuthApi.GetAccessToken(ConfigSettings.WeixinAppID, ConfigSettings.WeixinAppSecret, code);
