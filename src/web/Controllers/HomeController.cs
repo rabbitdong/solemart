@@ -17,6 +17,7 @@ using LogUtil = SimLogLib.Util;
 using Solemart.WeixinAPI.AdvancedAPIs.OAuth;
 using Solemart.WeixinAPI.Base;
 using System.Web.Caching;
+using System.Diagnostics;
 
 namespace Solemart.Web.Controllers
 {
@@ -28,6 +29,8 @@ namespace Solemart.Web.Controllers
         /// </summary>
         public ActionResult Index(int? p, string code)
         {
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
             ProductListViewModel model = null;
             if (this.HttpContext.Cache["index_model"] != null)
             {
@@ -68,6 +71,8 @@ namespace Solemart.Web.Controllers
                 }
                 HttpRuntime.Cache.Add("index_model", model, null, DateTime.Now.AddSeconds(600), TimeSpan.Zero, CacheItemPriority.Default, null);
             }
+            watch.Stop();
+            Log.Instance.WriteLog(string.Format("Index log for time[{0}]", watch.ElapsedMilliseconds));
 
             SolemartUser user = User as SolemartUser;
             //之前没有访问过
