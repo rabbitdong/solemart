@@ -50,6 +50,7 @@
     <Compile Include="AlipayCore.cs" />
     <Compile Include="AlipayNotify.cs" />
     <Compile Include="AlipaySubmit.cs" />
+    <Compile Include="CacheUtil.cs" />
     <Compile Include="RequestUtil.cs" />
     <Compile Include="WebResult.cs" />
     <Compile Include="MD5.cs" />
@@ -74,9 +75,7 @@
       <Name>WeixinAPI</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

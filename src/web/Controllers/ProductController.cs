@@ -7,6 +7,7 @@ using Solemart.DataProvider.Entity;
 using Solemart.BusinessLib;
 using Solemart.SystemUtil;
 using Solemart.Web.Models;
+using Solemart.WebUtil;
 
 namespace Solemart.Web.Controllers
 {
@@ -55,40 +56,51 @@ namespace Solemart.Web.Controllers
         /// <returns>产品详细页面</returns>
         public ActionResult Detail(int id)
         {
-            SaledProductItem saleInfo = ProductManager.GetSaledProductByID(id);
-            ProductItem product = ProductManager.GetProductWithBrandByID(id);
-            List<ProductImageItem> images = ProductManager.GetProductNoLogoImage(id);
-            int commentCount = ProductManager.GetProductCommentCount(id);
-
-            Cart cart = (User as SolemartUser).Cart;
-            CartItem item = cart.CartItems.FirstOrDefault(c => c.ProductID == id);
-            if (item != null)
-                ViewBag.CartItem = item.Amount;
-            else
-                ViewBag.CartItem = 0;
-
-            string remainAmountString = string.Empty;
-            if (product.Unit == "斤")
-                remainAmountString = string.Format("{0}", product.StockCount - product.ReserveCount);
-            else
-                remainAmountString = string.Format("{0:d}", (int)(product.StockCount - product.ReserveCount));
-            ProductDetailViewModel model = new ProductDetailViewModel
+            string cacheKey = string.Format("product_{0}", id);
+            ProductDetailViewModel model = null;
+            if (CacheUtil.Exist(cacheKey))
             {
-                ProductID = id,
-                ProductName = product.ProductName,
-                ProductDescription = product.Description,
-                Price = saleInfo.Price,
-                Unit = product.Unit,
-                Discount = saleInfo.Discount,
-                SpecialFlag = saleInfo.SpecialFlag,
-                RemainAmount = remainAmountString,
-                BrandDescription = product.Brand.Description,
-                BrandLogo = product.Brand.BrandLogo,
-                BrandUrl = product.Brand.BrandUrl,
-                BrandName = product.Brand.ZhName,
-                CommentCount = commentCount,
-                Images = images
-            };
+                model = CacheUtil.Get<ProductDetailViewModel>(cacheKey);
+            }
+            else
+            {
+                SaledProductItem saleInfo = ProductManager.GetSaledProductByID(id);
+                ProductItem product = ProductManager.GetProductWithBrandByID(id);
+                List<ProductImageItem> images = ProductManager.GetProductNoLogoImage(id);
+                int commentCount = ProductManager.GetProductCommentCount(id);
+
+                Cart cart = (User as SolemartUser).Cart;
+                CartItem item = cart.CartItems.FirstOrDefault(c => c.ProductID == id);
+                if (item != null)
+                    ViewBag.CartItem = item.Amount;
+                else
+                    ViewBag.CartItem = 0;
+
+                string remainAmountString = string.Empty;
+                if (product.Unit == "斤")
+                    remainAmountString = string.Format("{0}", product.StockCount - product.ReserveCount);
+                else
+                    remainAmountString = string.Format("{0:d}", (int)(product.StockCount - product.ReserveCount));
+                model = new ProductDetailViewModel
+                {
+                    ProductID = id,
+                    ProductName = product.ProductName,
+                    ProductDescription = product.Description,
+                    Price = saleInfo.Price,
+                    Unit = product.Unit,
+                    Discount = saleInfo.Discount,
+                    SpecialFlag = saleInfo.SpecialFlag,
+                    RemainAmount = remainAmountString,
+                    BrandDescription = product.Brand.Description,
+                    BrandLogo = product.Brand.BrandLogo,
+                    BrandUrl = product.Brand.BrandUrl,
+                    BrandName = product.Brand.ZhName,
+                    CommentCount = commentCount,
+                    Images = images
+                };
+                CacheUtil.Add<ProductDetailViewModel>(cacheKey, model, 600);
+            }
+
 
             return View(model);
         }
