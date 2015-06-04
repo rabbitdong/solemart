@@ -113,7 +113,7 @@ CREATE TABLE TestPackageItems(
 	Remark 			NVARCHAR(2000),				#套餐说明
 	EndTime			DATETIME,				#销售终止日期
 	Amount 			DECIMAL(10,2) DEFAULT 0.0			#套餐的数量	
-)
+) CHARACTER SET utf8;
 
 #套餐详细信息表
 CREATE TABLE TestPackageDetailItems(
@@ -121,7 +121,7 @@ CREATE TABLE TestPackageDetailItems(
 	ProductID		INTEGER REFERENCES TestProductItems(ProductID),
 	Amount 			DECIMAL(10,2) DEFAULT 0.0,
 	CONSTRAINT PK_TestPackageDetailItems PRIMARY KEY (PackageID, ProductID)	
-)
+) CHARACTER SET utf8;
 
 #销售商品表(在该表中的产品才进行销售)
 CREATE TABLE TestSaledProductItems(
