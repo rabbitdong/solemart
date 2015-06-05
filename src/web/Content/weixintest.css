@@ -1,0 +1,6 @@
+﻿* { padding: 0px; margin: 0px; vertical-align: baseline; font-size:14px; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box;}
+a,a:link,a:visited,a:active { outline: none; text-decoration: none; }
+
+.item { border: 1px solid #0094ff; }
+    .item a{display:inline-block; margin:2px 5px; background-color:#34495e; color:#fff; padding:3px; border-radius:3px;}
+    .item textarea { vertical-align: top; }

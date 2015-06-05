@@ -11,6 +11,7 @@ using Solemart.BusinessLib;
 using Solemart.SystemUtil;
 using Solemart.WebUtil;
 using SimLogLib;
+using Solemart.WeixinAPI.CommonAPIs;
 
 namespace Solemart.Web
 {
@@ -25,6 +26,9 @@ namespace Solemart.Web
             ConfigSettings.LoadAppConfig();
             LogConfig.LogDir = Server.MapPath("~/Log");
             LogConfig.LogCapacityEachBlock = 500;
+
+            //注册微信的AccessToken获取
+            AccessTokenContainer.Register(ConfigSettings.TestWeixinAppID, ConfigSettings.TestWeixinAppSecret);
 
             // Code that runs on application startup
             AreaRegistration.RegisterAllAreas();

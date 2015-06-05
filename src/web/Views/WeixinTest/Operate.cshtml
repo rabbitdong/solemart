@@ -1,0 +1,41 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Operate</title>
+    <link rel="stylesheet" href="~/Content/weixintest.css" />
+    <script src="/Scripts/jquery-1.10.2.min.js"></script>
+</head>
+<body>
+    <div>
+        <div class="item">
+            <a href="javascript:;" id="createMenu">建立自定义菜单</a>
+            <a href="javascript:;" id="getMenu">查询菜单</a>
+            <br />
+            <textarea id="menuContent" rows="15" cols="50"></textarea>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $("#createMenu").on("click", function (e) {
+                e.preventDefault();
+                $.post('/WeixinTest/CreateMenu', { data: $("#menuContent").val() }, function (result) {
+                    alert(result);
+                });
+            });
+
+            $("#getMenu").on("click", function (e) {
+                e.preventDefault();
+                $.post('/WeixinTest/GetMenu', {}, function (result) {
+                    $("#menuContent").val(result);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

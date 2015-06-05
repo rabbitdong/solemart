@@ -32,6 +32,11 @@ namespace Solemart.SystemUtil
         public static string SiteUrl = string.Empty;
 
         /// <summary>
+        /// The token of weixin.
+        /// </summary>
+        public static string WeixinToken = "ledao";
+
+        /// <summary>
         /// The weixin appid.
         /// </summary>
         public static string WeixinAppID = "wx076fc04f7025fe41";

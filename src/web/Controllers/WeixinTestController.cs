@@ -1,10 +1,19 @@
 ﻿using SimLogLib;
+using Solemart.WeixinAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Solemart.SystemUtil;
+using Solemart.WeixinAPI.CommonAPIs;
+using Solemart.WeixinAPI.Entities;
+using Solemart.WeixinAPI.Entities.Menu;
+using Newtonsoft.Json;
+using Solemart.WeixinAPI.Base.Entities;
+using Solemart.WeixinAPI.Base;
+using WeixinAPI.Entities.Menu;
 
 namespace Solemart.Web.Controllers
 {
@@ -23,15 +32,38 @@ namespace Solemart.Web.Controllers
         /// echostr  随机字符串  
         public ActionResult Index(string signature, string timestamp, string nonce, string echostr)
         {
-            string token = "solemart";
-            string[] tmpArr = { token, timestamp, nonce };
-            Array.Sort(tmpArr);
-            string tmpStr = tmpArr[0] + tmpArr[1] + tmpArr[2];
-            string resultStr = FormsAuthentication.HashPasswordForStoringInConfigFile(tmpStr, "SHA1");
-            Log.Instance.WriteLog(string.Format("ValidateWeixin: request[{0}], calculate[{1}]", tmpStr, resultStr));
+            if (!CheckSignature.Check(signature, timestamp, nonce, ConfigSettings.WeixinToken))
+            {
+                Log.Instance.WriteLog(string.Format("Weixin entry failed"));
+            }
 
             return Content(echostr);
         }
 
+        public ActionResult Operate()
+        {            
+            return View();
+        }
+
+        public ActionResult CreateMenu(string data)
+        {
+            string accessToken = AccessTokenContainer.TryGetToken(ConfigSettings.TestWeixinAppID, ConfigSettings.TestWeixinAppSecret);
+            JsonMenu jsonMenu = JsonConvert.DeserializeObject<JsonMenu>(data);
+            MenuJsonResult jsonResult = new MenuJsonResult { menu = jsonMenu };
+
+            jsonResult = CommonApi.GetMenuFromJsonResult(jsonResult);
+            WxJsonResult result = CommonApi.CreateMenu(accessToken, jsonResult.Buttons);
+            if (result.errcode == WeixinReturnCode.Success)
+                return Content("ok");
+            else
+                return Content("error");
+        }
+
+        public ActionResult GetMenu()
+        {
+            string accessToken = AccessTokenContainer.TryGetToken(ConfigSettings.TestWeixinAppID, ConfigSettings.TestWeixinAppSecret);
+            MenuJsonResult menuResult = CommonApi.GetMenu(accessToken);
+            return Json(menuResult);
+        }
     }
 }

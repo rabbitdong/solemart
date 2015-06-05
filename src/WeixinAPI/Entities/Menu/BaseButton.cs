@@ -18,20 +18,90 @@ using System.Text;
 
 namespace Solemart.WeixinAPI.Entities.Menu
 {
-    public interface IBaseButton
+    /// <summary>
+    /// 所有按钮的基类（简单和包含子菜单的按钮）
+    /// </summary>
+    public class BaseButton
     {
-        string name { get; set; }
+        public BaseButton() { }
+
+        public BaseButton(string name)
+        {
+            this.name = name;
+            sub_button = new List<BaseButton>();
+        }
+
+        /// <summary>
+        /// 按钮的名称
+        /// </summary>
+        public string name { get; set; }
+
+        /// <summary>
+        /// Sub button of the button.
+        /// </summary>
+        public List<BaseButton> sub_button { get; set; }
     }
 
     /// <summary>
     /// 所有按钮基类
     /// </summary>
-    public class BaseButton : IBaseButton
+    public class SimpleButton : BaseButton
     {
-        //public ButtonType type { get; set; }
+        public SimpleButton() { }
+
+        public SimpleButton(string name) : base(name) { }
+
         /// <summary>
-        /// 按钮描述，既按钮名字，不超过16个字节，子菜单不超过40个字节
+        /// 按钮的类型
         /// </summary>
-        public string name { get; set; }
+        public ButtonType type { get; set; }
+    }
+
+    /// <summary>
+    /// click按钮类
+    /// </summary>
+    public class ClickButton : SimpleButton
+    {
+        public ClickButton() 
+        {
+            this.type = ButtonType.click;
+        }
+
+        public string key { get; set; }
+        public ClickButton(string name)
+            : base(name)
+        {
+            this.type = ButtonType.click;
+        }
+
+        public ClickButton(string name, string key)
+            : this(name)
+        {
+            this.key = key;
+        }
+    }
+
+    /// <summary>
+    /// view按钮类
+    /// </summary>
+    public class ViewButton : SimpleButton
+    {
+        public string url { get; set; }
+
+        public ViewButton()
+        {
+            this.type = ButtonType.view;
+        }
+
+        public ViewButton(string name) : base(name)
+        {
+            this.type = ButtonType.view;
+        }
+
+        public ViewButton(string name, string url)
+            : this(name)
+        {
+            this.url = url;
+        }
     }
 }
