@@ -35,6 +35,7 @@ namespace Solemart.Web.Controllers
             if (!CheckSignature.Check(signature, timestamp, nonce, ConfigSettings.WeixinToken))
             {
                 Log.Instance.WriteLog(string.Format("Weixin entry failed"));
+                
             }
 
             return Content(echostr);

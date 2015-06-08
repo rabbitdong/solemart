@@ -32,7 +32,7 @@
             $("#getMenu").on("click", function (e) {
                 e.preventDefault();
                 $.post('/WeixinTest/GetMenu', {}, function (result) {
-                    $("#menuContent").val(result);
+                    $("#menuContent").val(JSON.stringify(result));
                 });
             });
         });

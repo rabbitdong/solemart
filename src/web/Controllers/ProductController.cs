@@ -56,6 +56,13 @@ namespace Solemart.Web.Controllers
         /// <returns>产品详细页面</returns>
         public ActionResult Detail(int id)
         {
+            Cart cart = (User as SolemartUser).Cart;
+            CartItem item = cart.CartItems.FirstOrDefault(c => c.ProductID == id);
+            if (item != null)
+                ViewBag.CartItem = item.Amount;
+            else
+                ViewBag.CartItem = 0;
+
             string cacheKey = string.Format("product_{0}", id);
             ProductDetailViewModel model = null;
             if (CacheUtil.Exist(cacheKey))
@@ -68,13 +75,6 @@ namespace Solemart.Web.Controllers
                 ProductItem product = ProductManager.GetProductWithBrandByID(id);
                 List<ProductImageItem> images = ProductManager.GetProductNoLogoImage(id);
                 int commentCount = ProductManager.GetProductCommentCount(id);
-
-                Cart cart = (User as SolemartUser).Cart;
-                CartItem item = cart.CartItems.FirstOrDefault(c => c.ProductID == id);
-                if (item != null)
-                    ViewBag.CartItem = item.Amount;
-                else
-                    ViewBag.CartItem = 0;
 
                 string remainAmountString = string.Empty;
                 if (product.Unit == "斤")

@@ -32,6 +32,8 @@
     修改描述：添加摇一摇周边【关联操作标志位】、【新增操作标志位】枚举类型
 ----------------------------------------------------------------*/
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -195,6 +197,7 @@ namespace Solemart.WeixinAPI
     /// <summary>
     /// 菜单按钮类型
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum ButtonType
     {
         /// <summary>
