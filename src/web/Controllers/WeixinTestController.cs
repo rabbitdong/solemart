@@ -14,6 +14,12 @@ using Newtonsoft.Json;
 using Solemart.WeixinAPI.Base.Entities;
 using Solemart.WeixinAPI.Base;
 using WeixinAPI.Entities.Menu;
+using Solemart.WeixinAPI.Entities.Request;
+using System.Xml.Linq;
+using Solemart.WeixinAPI.Base.XmlUtility;
+using System.IO;
+using System.Text;
+using System.Net;
 
 namespace Solemart.Web.Controllers
 {
@@ -30,15 +36,64 @@ namespace Solemart.Web.Controllers
         /// timestamp  时间戳  
         /// nonce  随机数  
         /// echostr  随机字符串  
-        public ActionResult Index(string signature, string timestamp, string nonce, string echostr)
+        [HttpGet]
+        [ActionName("Index")]
+        public ActionResult Get(PostModel postModel, string echostr)
         {
-            if (!CheckSignature.Check(signature, timestamp, nonce, ConfigSettings.WeixinToken))
+            if (!CheckSignature.Check(postModel.Signature, postModel.Timestamp, postModel.Nonce, ConfigSettings.WeixinToken))
             {
-                Log.Instance.WriteLog(string.Format("Weixin entry failed"));
-                
+                Log.Instance.WriteLog(string.Format("Weixin get entry failed"));
+                return Content("Parameter error!");
             }
 
             return Content(echostr);
+        }
+
+        [HttpPost]
+        [ActionName("Index")]
+        public ActionResult Post(PostModel postModel)
+        {
+            if (!CheckSignature.Check(postModel.Signature, postModel.Timestamp, postModel.Nonce, ConfigSettings.WeixinToken))
+            {
+                Log.Instance.WriteLog(string.Format("Weixin post entry failed"));
+                return Content("Parameter error!");
+            }
+
+            postModel.Token = ConfigSettings.WeixinToken;
+            postModel.EncodingAESKey = "";//根据自己后台的设置保持一致
+            postModel.AppId = ConfigSettings.TestWeixinAppID;//根据自己后台的设置保持一致
+
+            //v4.2.2之后的版本，可以设置每个人上下文消息储存的最大数量，防止内存占用过多，如果该参数小于等于0，则不限制
+            //var maxRecordCount = 10;  
+            Request.InputStream.Position = 0;
+            long dataLength = Request.InputStream.Length;
+            var bytes = new byte[dataLength];
+            Request.InputStream.Read(bytes, 0, (int)dataLength);
+            string xmlContent = Request.ContentEncoding.GetString(bytes, 0, (int)dataLength);
+
+            Log.Instance.WriteLog(string.Format("Weixin post data[{0}]", WebUtility.HtmlEncode(xmlContent)));
+            return Content("");
+
+            //自定义MessageHandler，对微信请求的详细判断操作都在这里面。
+            //var messageHandler = new CustomMessageHandler(Request.InputStream, postModel, maxRecordCount);
+            //try
+            //{
+
+            //    /* 如果需要添加消息去重功能，只需打开OmitRepeatedMessage功能，SDK会自动处理。
+            //     * 收到重复消息通常是因为微信服务器没有及时收到响应，会持续发送2-5条不等的相同内容的RequestMessage*/
+            //    messageHandler.OmitRepeatedMessage = true;
+
+            //    //执行微信处理过程
+            //    messageHandler.Execute();
+
+            //    //return Content(messageHandler.ResponseDocument.ToString());//v0.7-
+            //    return new FixWeixinBugWeixinResult(messageHandler);//为了解决官方微信5.0软件换行bug暂时添加的方法，平时用下面一个方法即可
+            //    //return new WeixinResult(messageHandler);//v0.8+
+            //}
+            //catch (Exception ex)
+            //{
+            //    return Content("");
+            //}
         }
 
         public ActionResult Operate()

@@ -195,6 +195,8 @@
     <Compile Include="Base\Entities\Request\EncryptPostModel.cs" />
     <Compile Include="Base\Entities\Request\RequestMessageBase.cs" />
     <Compile Include="Base\Entities\Response\ResponseMessageBase.cs" />
+    <Compile Include="Base\Entities\VxMessage.cs" />
+    <Compile Include="Base\Entities\VxMessageBase.cs" />
     <Compile Include="Base\Enums.cs" />
     <Compile Include="Base\Exceptions\ErrorJsonResultException.cs" />
     <Compile Include="Base\Exceptions\MessageHandlerException.cs" />
@@ -238,7 +240,6 @@
     <Compile Include="Entities\Request\Event\RequestMessageEvent_Card_Not_Pass_Check.cs" />
     <Compile Include="Entities\Request\Event\RequestMessageEvent_Card_Pass_Check.cs" />
     <Compile Include="Entities\Request\Event\RequestMessageEvent_Click.cs" />
-    <Compile Include="Entities\Request\Event\RequestMessageEvent_Enter.cs" />
     <Compile Include="Entities\Request\Event\RequestMessageEvent_Kf_Close_Session.cs" />
     <Compile Include="Entities\Request\Event\RequestMessageEvent_Kf_Create_Session.cs" />
     <Compile Include="Entities\Request\Event\RequestMessageEvent_Kf_Switch_Session.cs" />

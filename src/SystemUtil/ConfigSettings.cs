@@ -57,6 +57,11 @@ namespace Solemart.SystemUtil
         public static string TestWeixinAppSecret = "a84c7803c508474c4936c7942bd1f8e0";
 
         /// <summary>
+        /// The AES encrypt key used by weixin.
+        /// </summary>
+        public static string WeixinEncodingAESKey = "A0KBv3U8ixCBNlsHuIQzOBTZ4TNQJKCGWLub23tNPkK";
+
+        /// <summary>
         /// The time out of the weixin
         /// </summary>
         public static readonly int WeixinPostTimeOut = 30;

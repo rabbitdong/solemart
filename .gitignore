@@ -11,3 +11,5 @@ src/*/Log/*
 src/web/Images/product/*/*
 *.cache
 src/BusinessLib/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+tools/encryptor/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+*.cache

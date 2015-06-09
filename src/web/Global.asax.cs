@@ -71,7 +71,7 @@ namespace Solemart.Web
                 return;
 
             bool isFromWeixin = WebUtil.RequestUtil.IsWeixinRequest(Request.ServerVariables);
-            Log.Instance.WriteLog(string.Format("url[{0}],form[{1}],from[{2}],FromWeixin[{3}]", Request.RawUrl, Request.Form.GetLogString(), Request.UserHostAddress, isFromWeixin));
+            Log.Instance.WriteLog(string.Format("[{0}],url[{1}],form[{2}],from[{3}],FromWeixin[{4}]",Request.HttpMethod, Request.RawUrl, Request.Form.GetLogString(), Request.UserHostAddress, isFromWeixin));
         }
 
         void Application_Error(object sender, EventArgs e)
