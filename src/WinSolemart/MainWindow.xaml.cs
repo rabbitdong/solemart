@@ -25,6 +25,10 @@ namespace WinSolemart
     {
         public MainWindow()
         {
+            SplashScreen splash = new SplashScreen("SplashScreen.png");
+            splash.Show(true);
+
+            this.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
         }
     }
 }

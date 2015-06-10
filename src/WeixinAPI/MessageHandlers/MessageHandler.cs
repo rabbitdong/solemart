@@ -478,9 +478,6 @@ namespace Solemart.WeixinAPI.MessageHandlers
             IResponseMessageBase responseMessage = null;
             switch (strongRequestMessage.Event)
             {
-                case Event.ENTER:
-                    responseMessage = OnEvent_EnterRequest(RequestMessage as RequestMessageEvent_Enter);
-                    break;
                 case Event.LOCATION://自动发送的用户当前位置
                     responseMessage = OnEvent_LocationRequest(RequestMessage as RequestMessageEvent_Location);
                     break;
@@ -555,13 +552,6 @@ namespace Solemart.WeixinAPI.MessageHandlers
 
         #region Event 下属分类
 
-        /// <summary>
-        /// Event事件类型请求之ENTER
-        /// </summary>
-        public virtual IResponseMessageBase OnEvent_EnterRequest(RequestMessageEvent_Enter requestMessage)
-        {
-            return DefaultResponseMessage(requestMessage);
-        }
 
         /// <summary>
         /// Event事件类型请求之LOCATION

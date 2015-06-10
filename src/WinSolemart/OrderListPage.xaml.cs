@@ -26,16 +26,18 @@ namespace WinSolemart
     {
         private DispatcherTimer timer;
         IEnumerable<OrderListViewModel> model = null;
+        private int currentPageIndex = 0;
+        private int countEachPage = 20;
 
         public OrderListPage()
         {
-            InitializeComponent();
+            InitializeComponent();            
 
             cmbOrderStatus.ItemsSource = EnumConstantList.OrderStatusList;
             cmbOrderStatus.SelectedIndex = 0;
 
             int totalCount = 0;
-            List<OrderItem> orders = OrderManager.GetPagedOrders(OrderStatus.Ordered, 0, 10, out totalCount);
+            List<OrderItem> orders = OrderManager.GetPagedOrders(OrderStatus.Ordered, currentPageIndex, countEachPage, out totalCount);
             model = orders.Select(o => new OrderListViewModel
             {
                 OrderID = o.OrderID,
@@ -50,11 +52,37 @@ namespace WinSolemart
             });
 
             dgOrder.ItemsSource = model;
+            txtTotalCount.Text = string.Format("总订单数：{0}", totalCount);
+            SetPagedButtonState(totalCount);
 
             timer = new DispatcherTimer();
             timer.Tick += dispatcherTimer_Tick;
             timer.Interval = new TimeSpan(0,0,5);
             timer.Start();
+        }
+
+        /// <summary>
+        /// 计算总页数
+        /// </summary>
+        /// <param name="totalCount"></param>
+        /// <returns></returns>
+        private int CalcTotalPageCount(int totalCount)
+        {
+            return (totalCount + countEachPage - 1) / countEachPage;
+        }
+
+        private void SetPagedButtonState(int totalCount)
+        {
+            int totalPageCount = CalcTotalPageCount(totalCount);
+            if (currentPageIndex > 0)
+                btnPreviousPage.IsEnabled = true;
+            else
+                btnPreviousPage.IsEnabled = false;
+
+            if (currentPageIndex == totalPageCount - 1)
+                btnNextPage.IsEnabled = false;
+            else
+                btnNextPage.IsEnabled = true;
         }
 
         private void DG_Hyperlink_Click(object sender, RoutedEventArgs e)
@@ -72,7 +100,7 @@ namespace WinSolemart
                 return;
 
             int totalCount = 0;
-            List<OrderItem> orders = OrderManager.GetPagedOrders(OrderStatus.Ordered, 0, 10, out totalCount);
+            List<OrderItem> orders = OrderManager.GetPagedOrders(OrderStatus.Ordered, currentPageIndex, countEachPage, out totalCount);
             model = orders.Select(o => new OrderListViewModel
             {
                 OrderID = o.OrderID,
@@ -86,6 +114,8 @@ namespace WinSolemart
                 OrderDetails = o.OrderDetails
             });
 
+            txtTotalCount.Text = string.Format("总订单数：{0}", totalCount);
+            SetPagedButtonState(totalCount);
             dgOrder.ItemsSource = model;
             dgOrder.Items.Refresh();
         }
@@ -95,7 +125,7 @@ namespace WinSolemart
             BindedEnumItem item = cmbOrderStatus.SelectedItem as BindedEnumItem;
 
             int totalCount = 0;
-            List<OrderItem> orders = OrderManager.GetPagedOrders((OrderStatus)item.enumValue, 0, 10, out totalCount);
+            List<OrderItem> orders = OrderManager.GetPagedOrders((OrderStatus)item.enumValue, currentPageIndex, countEachPage, out totalCount);
             model = orders.Select(o => new OrderListViewModel
             {
                 OrderID = o.OrderID,
@@ -109,18 +139,25 @@ namespace WinSolemart
                 OrderDetails = o.OrderDetails
             });
 
+            txtTotalCount.Text = string.Format("总订单数：{0}", totalCount);
             dgOrder.ItemsSource = model;
             dgOrder.Items.Refresh();
+            SetPagedButtonState(totalCount);
         }
 
         private void btnNextPage_Click(object sender, RoutedEventArgs e)
-        {
-
+        {   
+            currentPageIndex++;
+            btnGetOrder_Click(sender, e);
         }
 
         private void btnPreviousPage_Click(object sender, RoutedEventArgs e)
         {
+            if (currentPageIndex == 0)
+                return;
 
+            currentPageIndex--;
+            btnGetOrder_Click(sender, e);
         }
     }
 }

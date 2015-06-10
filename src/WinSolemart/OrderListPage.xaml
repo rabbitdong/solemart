@@ -38,6 +38,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="2">
             <Button Name="btnPreviousPage" Margin="5,2" Click="btnPreviousPage_Click">上一页</Button>
             <Button Name="btnNextPage" Margin="5,2" Click="btnNextPage_Click">下一页</Button>
+            <TextBlock Name="txtTotalCount" />
         </StackPanel>
     </Grid>
 </Page>

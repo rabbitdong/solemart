@@ -83,9 +83,6 @@ namespace Solemart.WeixinAPI
                         //判断Event类型
                         switch (doc.Root.Element("Event").Value.ToUpper())
                         {
-                            case "ENTER"://进入会话
-                                requestMessage = new RequestMessageEvent_Enter();
-                                break;
                             case "LOCATION"://地理位置
                                 requestMessage = new RequestMessageEvent_Location();
                                 break;

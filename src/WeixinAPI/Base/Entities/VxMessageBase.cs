@@ -22,11 +22,47 @@ namespace WeixinAPI.Base.Entities
     }
 
     /// <summary>
+    /// Weixin事件的类型
+    /// </summary>
+    public enum VxEventType
+    {
+        /// <summary>
+        /// 订阅
+        /// </summary>
+        subscribe,
+
+        /// <summary>
+        /// 取消订阅
+        /// </summary>
+        unsubscribe,
+
+        /// <summary>
+        /// 自定义菜单点击事件
+        /// </summary>
+        CLICK,
+
+        /// <summary>
+        /// 上报地理位置事件
+        /// </summary>
+        LOCATION,
+
+        /// <summary>
+        /// 二维码扫描
+        /// </summary>
+        SCAN,
+
+        /// <summary>
+        /// URL跳转
+        /// </summary>
+        VIEW
+    }
+
+    /// <summary>
     /// 所有Request和Response消息的基类
     /// </summary>
     public class VxMessageBase
     {
-        private const DateTime BeginDateTime = new DateTime(1970, 1, 1);
+        private static DateTime BeginDateTime = new DateTime(1970, 1, 1);
 
         public string ToUserName { get; set; }
         public string FromUserName { get; set; }
@@ -44,10 +80,45 @@ namespace WeixinAPI.Base.Entities
             return doc;
         }
 
-        public static virtual VxMessageBase FromXml(XDocument xml)
+        /// <summary>
+        /// 从XDocument解析消息实体
+        /// </summary>
+        /// <param name="xml"></param>
+        /// <returns></returns>
+        public static VxMessageBase FromXml(XDocument xml)
         {
-            VxMessageBase msg=new VxMessageBase();
-            msg.MsgType = (VxMessageType)Enum.Parse(typeof(VxMessageType), xml.Root.Element("MsgType").Value, true);
+            VxMessageBase msg = null;
+            VxMessageType msgType = (VxMessageType)Enum.Parse(typeof(VxMessageType), xml.Root.Element("MsgType").Value, true);
+
+            //进行消息的解析
+            switch (msgType)
+            {
+                case VxMessageType.Text:
+                    msg = new VxMessageText();
+                    break;
+                case VxMessageType.Image:
+                    msg = new VxMessageImage();
+                    break;
+                case VxMessageType.Location:
+                    msg = new VxMessageLocation();
+                    break;
+                case VxMessageType.Link:
+                    msg = new VxMessageLink();
+                    break;
+                case VxMessageType.ShortVideo:
+                    msg = new VxMessageShortVideo();
+                    break;
+                case VxMessageType.Video:
+                    msg = new VxMessageVideo();
+                    break;
+                case VxMessageType.Voice:
+                    msg = new VxMessageVoice();
+                    break;
+                case VxMessageType.Event:
+                    
+                    break;
+            }
+
             msg.ToUserName = xml.Root.Element("ToUserName").Value;
             msg.FromUserName = xml.Root.Element("FromUserName").Value;
             int sec = int.Parse(xml.Root.Element("CreateTime").Value);
