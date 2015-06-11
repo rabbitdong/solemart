@@ -45,5 +45,7 @@ namespace Solemart.Web.Models
         public string Unit { get; set; }
 
         public bool IsOutOfStock { get; set; }
+
+        public string Specification { get; set; }
     }
 }

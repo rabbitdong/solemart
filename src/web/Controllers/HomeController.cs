@@ -55,8 +55,9 @@ namespace Solemart.Web.Controllers
                     pmodel.Price = product.Price;
                     pmodel.Discount = product.Discount;
                     pmodel.IsSpecial = product.SpecialFlag;
+                    pmodel.Specification = product.Product.Specification;
                     pmodel.Unit = product.Product.Unit;
-                    pmodel.IsOutOfStock = (product.Product.StockCount - product.Product.ReserveCount) == 0;
+                    pmodel.IsOutOfStock = (product.Product.StockCount - product.Product.ReserveCount) == 0;                    
                     pmodel.ProductImageName = productItem.ProductName;
                     if (imageItem != null)
                         pmodel.ProductImageUrl = imageItem.ImageUrl;

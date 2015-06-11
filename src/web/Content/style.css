@@ -67,6 +67,7 @@ input#txtSearch { margin-left: 0px; border: 1px solid #ddd; width: 12em; backgro
 .productItem .productTitle .titleSpan{display:inline-block; width:50%; font-size:12px;}
 .productItem .productInfo{margin:3px; text-align:left;}
 .productItem .productPrice{color:#e74c3c;}
+.productItem .productSpec{color:#95a5a6; font-size:12px;}
 /* 首页产品列表区（2列）*/
 .product2List { }
 .product2List .product2Item{ width:49%; display:inline-block;}
