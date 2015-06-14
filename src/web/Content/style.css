@@ -21,7 +21,7 @@ header{width:100%;height:120px; margin:0px;padding:0px; background:url(/Images/b
     .appNav .shoppingCart .roundIndicator { background-color: #c0392b; border-radius: 5px; font-size: 12px; padding: 4px; margin-left: 5px; }
 .appNav .myAccount { padding:3px 5px 3px 30px; color:#ddd; background: url(/Images/ledao_icons_small_white.png) no-repeat; background-position: 0px -116px; }
 
-
+.appNav2 {margin:10px 5px 5px 5px; padding:2px;text-align:left; text-align-last:right;}
 /*
 用户信息面板内容
 */
@@ -181,7 +181,7 @@ div.dlg_comm { text-align: left; }
 div.section { margin-bottom: 1.5em; }
 
     /* 首页的样式  */
-    div.section h2 { width: 5em; font-size: 1.5em; text-align: center; border: 1px solid #b5bdc9; border-bottom: none; background-color: #b5bdc9; border-top-left-radius: 5px; border-top-right-radius: 5px; }
+    div.section h2 { width: 5em; font-size: 1.2em; text-align: center; border: 1px solid #b5bdc9; border-bottom: none; background-color: #b5bdc9; border-top-left-radius: 5px; border-top-right-radius: 5px; }
 
     div.section div.p-section { text-align: left; padding: 3px 3px 3px 1px; border: 1px solid #b5bdc9; background-color: #fff; border-radius: 5px; }
 

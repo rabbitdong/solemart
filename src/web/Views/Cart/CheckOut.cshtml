@@ -6,7 +6,7 @@
 @{
     SendAddressItem MyAddrInfo = (User as SolemartUser).SendAddressInfo;
 }
-
+<div class="successNotify" style="display:none;">操作成功...</div>
 <div class="cart_content">
     <table class="cart">
         <thead>
@@ -127,6 +127,10 @@
                 return false;
             }
 
+            $(".successNotify").html("提交订单中...");
+            $(".successNotify").show();
+            $(this).attr('disabled', "true");
+
             $.post("/Cart/CheckoutOrder",
                 {
                     Receiver: $("#receiver").val(),
@@ -138,6 +142,8 @@
                     paytype: $("#paytype").val()
                 },
                 function (result) {
+                    $(".successNotify").html("操作成功");
+                    $(".successNotify").hide(1000);
                     var ret = new WebReturn(result);
                     if (ret.success) {
                         window.location.href = "/Cart/CheckOutCompleted/" + ret.content;

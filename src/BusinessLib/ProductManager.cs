@@ -12,6 +12,9 @@ namespace Solemart.BusinessLib
     /// </summary>
     public class ProductManager
     {
+        private static List<SaledProductItem> allSaledProducts;
+        private static List<ProductImageItem> allProductLogoImages;
+
         #region 商品的查询处理
         /// <summary>
         /// Get the total amount of the saled products.
@@ -94,14 +97,20 @@ namespace Solemart.BusinessLib
         /// <returns></returns>
         public static List<SaledProductItem> GetPagedSaledProducts(int pageIndex, int pageSize, out int totalCount)
         {
-            using (SolemartDBContext context = new SolemartDBContext())
+            if (allSaledProducts == null || allSaledProducts.Count == 0)
             {
-                var q = from p in context.SaledProductItems.Include("Product")
-                        orderby p.ProductID
-                        select p;
-                totalCount = q.Count();
-                return q.Skip(pageIndex * pageSize).Take(pageSize).ToList();
+                using (SolemartDBContext context = new SolemartDBContext())
+                {
+                    var q = from p in context.SaledProductItems.Include("Product")
+                            orderby p.ProductID
+                            select p;
+                    totalCount = q.Count();
+                    allSaledProducts = q.Skip(pageIndex * pageSize).Take(pageSize).ToList();
+                }
             }
+
+            totalCount = allSaledProducts.Count;
+            return allSaledProducts;
         }
         #endregion
 
@@ -125,7 +134,14 @@ namespace Solemart.BusinessLib
                 else
                     context.SaledProductItems.Add(newSaledProductItem);
 
-                return context.SaveChanges() > 0;
+                if(context.SaveChanges() > 0)
+                {
+                    if(allSaledProducts != null)
+                        allSaledProducts.Clear();
+                    return true;
+                }
+
+                return false;
             }
         }
 
@@ -142,7 +158,12 @@ namespace Solemart.BusinessLib
                 if (saledProductItem != null)
                 {
                     context.SaledProductItems.Remove(saledProductItem);
-                    return context.SaveChanges() > 0;
+                    if (context.SaveChanges() > 0)
+                    {
+                        if (allSaledProducts != null)
+                            allSaledProducts.Clear();
+                        return true;
+                    }                    
                 }
 
                 return false;
@@ -179,7 +200,12 @@ namespace Solemart.BusinessLib
                 if (saledProductItem != null)
                 {
                     saledProductItem.SetTop = true;
-                    return context.SaveChanges() > 0;
+                    if (context.SaveChanges() > 0)
+                    {
+                        if (allSaledProducts != null)
+                            allSaledProducts.Clear();
+                        return true;
+                    }
                 }
 
                 return false;
@@ -199,7 +225,12 @@ namespace Solemart.BusinessLib
                 if (saledProductItem != null)
                 {
                     saledProductItem.SetTop = false;
-                    return context.SaveChanges() > 0;
+                    if (context.SaveChanges() > 0)
+                    {
+                        if (allSaledProducts != null)
+                            allSaledProducts.Clear();
+                        return true;
+                    }
                 }
 
                 return false;
@@ -219,7 +250,13 @@ namespace Solemart.BusinessLib
             {
                 image.AddTime = DateTime.Now;
                 context.ProductImageItems.Add(image);
-                return context.SaveChanges() > 0;
+                if (context.SaveChanges() > 0)
+                {
+                    if (allProductLogoImages != null)
+                        allProductLogoImages.Clear();
+                    return true;
+                }
+                return false;
             }
         }
 
@@ -308,7 +345,12 @@ namespace Solemart.BusinessLib
                 if (image != null)
                 {
                     context.ProductImageItems.Remove(image);
-                    return context.SaveChanges() > 0;
+                    if (context.SaveChanges() > 0)
+                    {
+                        if (allProductLogoImages != null)
+                            allProductLogoImages.Clear();
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -363,10 +405,34 @@ namespace Solemart.BusinessLib
         /// <returns></returns>
         public static ProductImageItem GetProductLogoImage(int productID)
         {
-            using (SolemartDBContext context = new SolemartDBContext())
+            if (allProductLogoImages == null || allProductLogoImages.Count == 0)
             {
-                return context.ProductImageItems.FirstOrDefault(p => (p.ProductID == productID && p.ForLogo));
+                using (SolemartDBContext context = new SolemartDBContext())
+                {
+                    return context.ProductImageItems.FirstOrDefault(p => (p.ProductID == productID && p.ForLogo));
+                }
             }
+            else
+            {
+                return allProductLogoImages.Find(i => i.ProductID == productID);
+            }
+        }
+
+        /// <summary>
+        /// 获取所有商品的图像（缓存使用）
+        /// </summary>
+        /// <returns></returns>
+        public static List<ProductImageItem> GetAllProductLogoImage()
+        {
+            if (allProductLogoImages == null || allProductLogoImages.Count == 0)
+            {
+                using (SolemartDBContext context = new SolemartDBContext())
+                {
+                    allProductLogoImages = context.ProductImageItems.Where(p => (p.ForLogo == true)).ToList();
+                }
+            }
+
+            return allProductLogoImages;
         }
 
         /// <summary>
@@ -393,7 +459,12 @@ namespace Solemart.BusinessLib
                     if (logoImageItem != null)
                         logoImageItem.ForLogo = false;
 
-                    return context.SaveChanges() > 0;
+                    if (context.SaveChanges() > 0)
+                    {
+                        if (allProductLogoImages != null)
+                            allProductLogoImages.Clear();
+                        return true;
+                    }
                 }
 
                 return false;
@@ -429,7 +500,13 @@ namespace Solemart.BusinessLib
 
                 InStockItem stockItem = new InStockItem { ProductID = product.ProductID, Price = price, Amount = amount, InStockTime = DateTime.Now, Remark = remark };
                 context.InStockItems.Add(stockItem);
-                return context.SaveChanges() > 0;
+                if (context.SaveChanges() > 0)
+                {
+                    if (allSaledProducts != null)
+                        allSaledProducts.Clear();
+                    return true;
+                }
+                return false;
             }
         }
 
@@ -606,7 +683,13 @@ namespace Solemart.BusinessLib
                     oldProduct.ProducingArea = product.ProducingArea;
                 oldProduct.CategoryID = product.CategoryID;
 
-                return context.SaveChanges() > 0;
+                if (context.SaveChanges() > 0)
+                {
+                    if (allSaledProducts != null)
+                        allSaledProducts.Clear();
+                    return true;
+                }
+                return false;
             }
         }
     }

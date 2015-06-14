@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Solemart.DataProvider;
 using Solemart.DataProvider.Entity;
+using SimLogLib;
 
 namespace Solemart.BusinessLib
 {
@@ -81,6 +82,7 @@ namespace Solemart.BusinessLib
         private void Clear()
         {
             cartItems.Clear();
+            Log.Instance.WriteLog(string.Format("Clear the all cart items for user[{0}]", User.UserID));
         }
 
         /// <summary>清除购物车中的所有商品并保存入库
@@ -91,13 +93,10 @@ namespace Solemart.BusinessLib
         {
             using (SolemartDBContext context = new SolemartDBContext())
             {
-                if (context.ClearCartForUser(userID))
-                {
-                    Clear();
-                    return true;
-                }
-
-                return false;
+                ///可能临时库中没有产品，会返回false
+                context.ClearCartForUser(userID);
+                Clear();
+                return true;
             }
         }
 

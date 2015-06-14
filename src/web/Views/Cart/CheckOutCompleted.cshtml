@@ -6,13 +6,15 @@
     ViewBag.Title = "结账完成 —— 乐道";
 }
 
-<a class="comm_btn r" href="/Account/Order">查看历史订单列表</a>
-<h2 id="order_title">您好，下订单成功!</h2>
+<div class="appNav2">
+    <span><a href="/" class="comm_btn">返回继续购物</a></span>
+    <span class="r"><a href="javascript:void;" class="comm_btn" onclick="cancel_order(@Model.OrderID, this)">取消本订单</a></span>
+</div>
+<h3 id="order_title">您好，下订单成功!</h3>
 <div class="section">
     <h2>送货信息</h2>
     <div class="p-section">
         我们会在半天内送货到您家，请保持联系.
-        <span class="r"><a href="javascript:void;" class="comm_btn" onclick="cancel_order(@Model.OrderID, this);">取消本订单</a></span>
     </div>
 </div>
 <div class="section">
