@@ -32,6 +32,7 @@
                         <a href="javascript:void;" data-action="add" class="addSubButton">+</a>
                         <input type="text" class="prodamount" value="@cartItem.Amount" />
                         <a href="javascript:void;" data-action="sub" class="addSubButton">-</a>
+                        <a href="javascript:void" data-action="confirm" class="confirmLink">确认</a>
                     </td>
                     <td>@((cartItem.UnitPrice * cartItem.Amount).ToString("C2"))</td>
                 </tr>
@@ -90,6 +91,8 @@
     }
 
     $(function () {
+        $(".cart a.confirmLink").hide();
+
         $(".cart td").bind("click", "a", function (e) {
             e.preventDefault();
             var tr = $(this);
@@ -128,30 +131,54 @@
                         }
                     });
             }
-        });
-
-        $("input.prodamount").focusout(function (e) {
-            e.preventDefault();
-            var amnt = parseFloat($(this).val());
-            var prod_id = $(this).parent().data("pid");
-            if (amnt < 0) {
-                alert("数量不能小于0，等于0是删除该商品");
-                return;
+            else if(action == "confirm"){
+                var amount = parseFloat(input.val());
+                $.post("/Cart/Modify/" + pid,
+                    {
+                        'amount': amount
+                    },
+                    function (result) {
+                        var ret = new WebReturn(result);
+                        if (!ret.success)
+                            alert(ret.message);
+                        else{
+                            updateUI(ret.content, tr);
+                        }
+                        tr.children("a.addSubButton").show();
+                        tr.children("a.confirmLink").hide();
+                    });
             }
-
-            $.post("/Cart/Modify/" + prod_id,
-                {
-                    amount: amnt
-                },
-                function (result) {
-                    var webreturn = new WebReturn(result);
-
-                    if (webreturn.success)
-                        window.location.reload();
-                    else
-                        alert(webreturn.message);
-                });
         });
+
+        $(".cart input.prodamount").on("focus", function (e) {
+            var tr = $(this).parent();
+            tr.children("a.confirmLink").show();
+            tr.children("a.addSubButton").hide();
+        });
+
+
+        //$("input.prodamount").focusout(function (e) {
+        //    e.preventDefault();
+        //    var amnt = parseFloat($(this).val());
+        //    var prod_id = $(this).parent().data("pid");
+        //    if (amnt < 0) {
+        //        alert("数量不能小于0，等于0是删除该商品");
+        //        return;
+        //    }
+
+        //    $.post("/Cart/Modify/" + prod_id,
+        //        {
+        //            amount: amnt
+        //        },
+        //        function (result) {
+        //            var webreturn = new WebReturn(result);
+
+        //            if (webreturn.success)
+        //                window.location.reload();
+        //            else
+        //                alert(webreturn.message);
+        //        });
+        //});
     });
 
     function checkout(link) {

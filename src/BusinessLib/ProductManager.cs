@@ -37,10 +37,7 @@ namespace Solemart.BusinessLib
         /// <returns></returns>
         public static SaledProductItem GetSaledProductByID(int productID)
         {
-            using (SolemartDBContext context = new SolemartDBContext())
-            {
-                return context.SaledProductItems.Find(productID);
-            }
+            return allSaledProducts.FirstOrDefault(p => p.ProductID == productID);
         }
 
         /// <summary>
@@ -407,15 +404,14 @@ namespace Solemart.BusinessLib
         {
             if (allProductLogoImages == null || allProductLogoImages.Count == 0)
             {
-                using (SolemartDBContext context = new SolemartDBContext())
-                {
-                    return context.ProductImageItems.FirstOrDefault(p => (p.ProductID == productID && p.ForLogo));
-                }
+                //using (SolemartDBContext context = new SolemartDBContext())
+                //{
+                //    return context.ProductImageItems.FirstOrDefault(p => (p.ProductID == productID && p.ForLogo));
+                //}
+                GetAllProductLogoImage();
             }
-            else
-            {
-                return allProductLogoImages.Find(i => i.ProductID == productID);
-            }
+
+            return allProductLogoImages.Find(i => i.ProductID == productID);
         }
 
         /// <summary>

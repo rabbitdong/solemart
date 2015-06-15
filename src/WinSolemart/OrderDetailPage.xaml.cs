@@ -45,6 +45,7 @@ namespace WinSolemart
             detailModel.TotalPrice = model.TotalAmount;
             detailModel.Address = model.Address;
             detailModel.OrderTime = model.OrderTime;
+            detailModel.Remark = model.Remark;
             detailModel.DetailItems = new List<OrderDetailItemViewModel>();
 
             string amountString = string.Empty;
@@ -84,6 +85,7 @@ namespace WinSolemart
             txtSendAddress.Text = string.Format("送货地址：{0}", detailModel.Address);
             txtPhone.Text = string.Format("客户电话：{0}", detailModel.ReceiverPhone);
             txtTotalPrice.Text = string.Format("总金额：{0}元", detailModel.TotalPrice);
+            txtRemark.Text = string.Format("备注：{0}", detailModel.Remark);
         }
 
         /// <summary>

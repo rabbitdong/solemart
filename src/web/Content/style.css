@@ -91,13 +91,15 @@ table.cart { width: 100%; border: 1px solid #ccc; border-collapse: collapse; }
     table.cart tfoot td { font-weight: bold; padding: 5px; text-align: right; }
     table.cart input#order_remark { width: 60%; }
     table.cart tbody img.prodimg { width: 85px; height: 85px; }
-    table.cart input.prodamount { line-height: 1.2em; height: 18px; width: 24px; }
+    table.cart input.prodamount { width: 2em; font-size: 1.4em; }
 
 /* 底部购物车（如产品详细页等） */
 .bottomShoppingCart { position: fixed; left: 0px; width: 100%; bottom: 36px; z-index: 10; background-color: #ecf0f1; padding: 5px; margin-left: 2px; margin-right: 2px; }
     .bottomShoppingCart a.backLink { display: inline-block; width: 50px; background-color: #2ecc71; border-radius: 15px; font-size: 1.5em; color: #333; margin-right: 20px; text-align: center; }
     .bottomShoppingCart p.amountText { text-align: center; padding: 5px 0; float: right; margin-right: 10px; color:#e74c3c; font-weight:bold; font-size:12px; }
-    .bottomShoppingCart input { width: 1.5em; font-size: 1.4em; border: 1px solid #808080; }
+    .bottomShoppingCart input { width: 2em; font-size: 1.4em; border: 1px solid #808080; }
+a.addSubButton { display: inline-block; text-align: center; font-weight: bold; vertical-align: central; width: 2em; font-size: 1.5em; background-color: #27ae60; color: #333; border-radius: 15px; }
+a.confirmLink{display: inline-block; width: 50px; height:24px; line-height:24px; background-color: #2ecc71; border-radius: 15px; font-size: 14px; color: #333; margin-right: 20px; text-align: center;}
 
 /* 产品详细页的样式 */
 .productDetail { width:100%; }
@@ -128,7 +130,6 @@ div.main_text p { margin: 0.5em 1em 0.5em 1em; }
 
 div.main_text li { list-style: decimal; margin-left: 3em; color: #2e26e9; font-weight: bold; }
 
-a.addSubButton { display: inline-block; text-align: center; font-weight: bold; vertical-align: central; width: 1em; font-size: 1.5em; background-color: #27ae60; color: #333; border-radius: 15px; }
 
 
 /*

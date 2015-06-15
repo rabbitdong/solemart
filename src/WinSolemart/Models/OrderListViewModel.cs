@@ -16,6 +16,7 @@ namespace WinSolemart.Models
         public string Receiver { get; set; }
         public string ReceiverPhone { get; set; }
         public string Address { get; set; }
+        public string Remark { get; set; }
         public DateTime OrderTime { get; set; }
         public string ActionViewString { 
             get { return "查看"; } 
@@ -41,6 +42,7 @@ namespace WinSolemart.Models
         public string Receiver { get; set; }
         public string ReceiverPhone { get; set; }
         public string Address { get; set; }
+        public string Remark { get; set; }
         public DateTime OrderTime { get; set; }
 
         public ICollection<OrderDetailItemViewModel> DetailItems { get; set; }

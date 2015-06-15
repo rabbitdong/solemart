@@ -77,6 +77,29 @@ namespace Solemart.BusinessLib
         }
 
         /// <summary>
+        /// Add a product to shopping cart
+        /// </summary>
+        /// <param name="productID">The product want to add to shopping cart</param>
+        /// <param name="count">该商品的数量</param>
+        public void AddToCart(int productID, int count)
+        {
+            CartItem cartItem = cartItems.Find(p => p.ProductID == productID);
+            if (cartItem != null)
+            {
+                cartItem.Amount += count;
+            }
+            else
+            {
+                SaledProductItem saledProduct = ProductManager.GetSaledProductByID(productID);
+                if (saledProduct == null)
+                    throw new ArgumentException(string.Format("该ID={0}的商品不存在", saledProduct.ProductID));
+                CartItem pi = new CartItem { ProductID = productID, Product = saledProduct.Product, Amount = count, UnitPrice = saledProduct.Price * saledProduct.Discount / 100 };
+                cartItems.Add(pi);
+            }
+        }
+
+
+        /// <summary>
         /// Clear all the cart items.
         /// </summary>
         private void Clear()
@@ -143,9 +166,16 @@ namespace Solemart.BusinessLib
         {
             CartItem cartItem = cartItems.Find(p => p.ProductID == productID);
             if (cartItem == null)
-                return false;
+            {
+                SaledProductItem saledProduct = ProductManager.GetSaledProductByID(productID);
+                if (saledProduct == null || (saledProduct.Product.Unit != "斤" && decimal.Round(amount) != amount))
+                    return false;
+                CartItem pi = new CartItem { ProductID = productID, Product = saledProduct.Product, Amount = amount, UnitPrice = saledProduct.Price * saledProduct.Discount / 100 };
+                cartItems.Add(pi);
+                return true;
+            }
 
-            if ((cartItem.Product.Unit == "个" || cartItem.Product.Unit == "粒") && decimal.Round(amount) != amount)
+            if (cartItem.Product.Unit != "斤" && decimal.Round(amount) != amount)
                 return false;
 
             if (amount <= 0)

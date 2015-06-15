@@ -22,6 +22,7 @@
                 <RowDefinition Height="50" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="20" />
+                <RowDefinition Height="20" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" TextAlignment="Center" VerticalAlignment="Top" FontSize="20">乐道(水果君)水果订单</TextBlock>
             <Grid Grid.Row="1">
@@ -84,10 +85,14 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                    <TextBlock TextAlignment="Right" FontSize="16" FontWeight="Bold" Name="txtTotalPrice" Margin="5"></TextBlock>
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Left" FontSize="12" Name="txtRemark">备注：</TextBlock>
+                        <TextBlock TextAlignment="Right" FontSize="16" FontWeight="Bold" Name="txtTotalPrice" Margin="5"></TextBlock>
+                    </DockPanel>
                 </StackPanel>
             </DockPanel>
-            <TextBlock TextAlignment="Center" Grid.Row="3">罗源乐道贸易有限公司. 400-899-0918</TextBlock>
+            <TextBlock TextAlignment="Center" Grid.Row="3">微信公众号：gladtao</TextBlock>
+            <TextBlock TextAlignment="Center" Grid.Row="4">罗源乐道贸易有限公司. 400-899-0918</TextBlock>
         </Grid>    
         <TextBlock Name="txtMsg" Grid.Row="2" />        
     </Grid>

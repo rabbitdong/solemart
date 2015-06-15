@@ -79,6 +79,7 @@
         <a href="javascript:void;" data-action="add" class="addSubButton">+</a>
         <input type="text" value="@ViewBag.CartItem" />
         <a href="javascript:void;" data-action="sub" class="addSubButton">-</a>
+        <a href="javascript:void" data-action="confirm" class="confirmLink">确认</a>
     </div>
 </div>
 <script type="text/javascript">
@@ -110,6 +111,7 @@
         //    mouseWheel: true,
         //    scrollbars: false
         //});
+        $(".bottomShoppingCart a.confirmLink").hide();
 
         $(".bottomNav a.addSubButton").bind("click", function(e){
             e.preventDefault();
@@ -147,6 +149,38 @@
                     });
             }
         });
+
+        $(".bottomShoppingCart input[type=text]").on("focus", function(e){
+            $(".bottomShoppingCart a.confirmLink").show();
+            $(".bottomShoppingCart a.addSubButton").hide();
+        });
+
+        //$(".bottomShoppingCart input[type=text]").on("blur", function(e){
+        //    $(".bottomShoppingCart a.addSubButton").show();
+        //    $(".bottomShoppingCart a.confirmLink").hide();
+        //});
+
+        $(".bottomShoppingCart a.confirmLink").on("click", function(e){
+            e.preventDefault();
+            var input = $(".bottomNav input");
+            var count = parseFloat(input.val());
+            $.post("/Cart/Modify/" + @Model.ProductID,
+                {
+                    amount:count
+                },
+                function (result) {
+                    var ret = new WebReturn(result);
+                    if (!ret.success)
+                        alert(ret.message);
+                    else{
+                        updateShoppingCartIndicator(ret.content);
+                    }
+                    $(".bottomShoppingCart a.addSubButton").show();
+                    $(".bottomShoppingCart a.confirmLink").hide();
+                });        
+        });
+
+
         //$("#write_comment").hide();
 
         //$("#write_comment .comment_star a").mouseenter(function () {

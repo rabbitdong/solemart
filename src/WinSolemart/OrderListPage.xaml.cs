@@ -47,6 +47,7 @@ namespace WinSolemart
                 Receiver = o.Receiver,
                 OrderTime = o.OrderTime,
                 ReceiverPhone = o.Phone,
+                Remark = o.Remark,
                 TotalAmount = o.TotalPrice,
                 OrderDetails = o.OrderDetails
             });
@@ -111,6 +112,7 @@ namespace WinSolemart
                 OrderTime = o.OrderTime,
                 ReceiverPhone = o.Phone,
                 TotalAmount = o.TotalPrice,
+                Remark = o.Remark,
                 OrderDetails = o.OrderDetails
             });
 
@@ -136,6 +138,7 @@ namespace WinSolemart
                 OrderTime = o.OrderTime,
                 ReceiverPhone = o.Phone,
                 TotalAmount = o.TotalPrice,
+                Remark = o.Remark,
                 OrderDetails = o.OrderDetails
             });
 
