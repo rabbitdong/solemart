@@ -6,67 +6,48 @@
     ViewBag.Title = "购物车 —— 乐道";
 }
 
-<div class="cart_content">
-    <div class="cart_head">
+<div class="cartWrapper">
+    <div class="cartHead">
         <p>您已选购下面水果：</p>
     </div>
-    <table class="cart">
-        <thead>
-            <tr>
-                <th>货品</th>
-                <th>单价(￥)</th>
-                <th>数量</th>
-                <th>总价(￥)</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.CartItems.Count > 0) {                
-                foreach (CartItem cartItem in Model.CartItems) {
-                <tr>
-                    <td>
-                        @*<img class="prodimg" src="/images/product/no-img.png" />*@
-                        <p>@cartItem.Product.ProductName</p>
-                    </td>
-                    <td>@(cartItem.UnitPrice.ToString("C2"))</td>
-                    <td data-pid="@cartItem.ProductID">
-                        <a href="javascript:void;" data-action="add" class="addSubButton">+</a>
-                        <input type="text" class="prodamount" value="@cartItem.Amount" />
-                        <a href="javascript:void;" data-action="sub" class="addSubButton">-</a>
-                        <a href="javascript:void" data-action="confirm" class="confirmLink">确认</a>
-                    </td>
-                    <td>@((cartItem.UnitPrice * cartItem.Amount).ToString("C2"))</td>
-                </tr>
-                }
-            } else {
-                <tr>
-                    <td colspan="4">没有商品</td>
-                </tr>
-            }
-        </tbody>
-
-        <tfoot>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>货品总价</td>
-                <td>@Model.TotalPrice.ToString("C2")</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>运输费用</td>
-                <td>￥0.00</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>总计:</td>
-                <td>@Model.TotalPrice.ToString("C2")</td>
-            </tr>
-        </tfoot>
-    </table>
-
-    <div class="cart_foot">
+    <div class="cartContent">
+    @if (Model.CartItems.Count > 0)
+    {
+        foreach (CartItem cartItem in Model.CartItems)
+        {
+        <div class="cartItem">
+            <img class="prodimg" src="/images/product/thumb/(@cartItem.ProductID)_0.jpg" />
+            <p>@cartItem.Product.ProductName</p>
+            <p><span>单价：@(cartItem.UnitPrice.ToString("C2"))</span></p>
+            <div data-pid="@cartItem.ProductID">
+                <a href="javascript:void;" data-action="add" class="addSubButton">+</a>
+                <input type="text" class="prodamount" value="@cartItem.Amount" />
+                <a href="javascript:void;" data-action="sub" class="addSubButton">-</a>
+                <a href="javascript:void" data-action="confirm" class="confirmLink">确认</a>
+            </div>
+            <p>@((cartItem.UnitPrice * cartItem.Amount).ToString("C2"))</p>
+        </div>
+        }
+    }
+    else{
+        <p>没有商品 :(</p>
+    }            
+    </div>
+    <div class="cartPrice">
+        <p>
+            <div class="priceTitle">商品总价：</div>
+            <div class="priceAmount">@Model.TotalPrice.ToString("C2")</div>
+        </p>
+        <p>
+            <div class="priceTitle">运输费用：</div>
+            <div class="priceAmount">￥0.00</div>
+        </p>
+        <p>
+            <div class="priceTitle">总　　计：</div>
+            <div class="priceAmount">@Model.TotalPrice.ToString("C2")</div>
+        </p>
+    </div>
+    <div class="cartFoot">
     </div>
 </div>
 
@@ -91,7 +72,7 @@
     }
 
     $(function () {
-        $(".cart a.confirmLink").hide();
+        $(".cartItem a.confirmLink").hide();
 
         $(".cart td").bind("click", "a", function (e) {
             e.preventDefault();

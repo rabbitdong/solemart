@@ -238,11 +238,11 @@ namespace Solemart.Web.Controllers
 
             if (OrderManager.ConfirmOrder(order_id))
             {
-                return Content("ok");
+                return Content(WebResult<string>.SuccessResult.ResponseString);
             }
             else
             {
-                return Content("error");
+                return Content(WebResult<string>.NormalErrorResult.ResponseString);
             }
         }
 

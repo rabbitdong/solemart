@@ -89,7 +89,8 @@
     function confirm_order(oid, btn) {
         $.post("/Account/ConfirmOrder/" + oid, {},
             function (result) {
-                if (result == "ok") {
+                var ret = new WebReturn(result);
+                if (ret.success) {
                     $("#order_state_" + oid).html("已收货");
                     $("#pay_status_" + oid).html("已付款");
                     $(btn).remove();
