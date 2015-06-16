@@ -94,8 +94,19 @@ table.cart { width: 100%; border: 1px solid #ccc; border-collapse: collapse; }
     table.cart input.prodamount { width: 2em; font-size: 1.4em; }
 
 /*购物车样式（新）*/
-.cartWrapper { }
+.cartWrapper { text-align:left; }
     .cartWrapper .cartHead { color:#1abc9c; }
+    .cartWrapper .cartItem{ font-size:12px; border-top:1px solid #1abc9c; padding-top:5px;}
+    .cartWrapper .cartItem .imgthumb{width:50px; height:50px; display:inline-block;}
+    .cartWrapper .cartItem .cartTitle{ display:inline-block; width:100px; color: #1abc9c; margin:5px;}
+    .cartWrapper .cartItem .cartOper{display:inline-block; width:50%; text-align:right;}
+    .cartWrapper .cartItem .cartOper input.prodamount{width: 2em; font-size: 1.4em;}
+    .cartWrapper .cartItem .cartOper {display:inline-block; width:50%;}
+    .cartWrapper .cartItem .cartOper .cartEachPrice { color: #e74c3c; margin-top:10px;}
+
+    .cartWrapper .cartPrice{border-top:1px solid #1abc9c; padding-top:5px;}
+    .cartWrapper .cartPrice .priceTitle{display:inline-block; width:70%; text-align:right;}
+    .cartWrapper .cartPrice .priceAmount{display:inline-block; width:28%; text-align:right;}
 
 
 /* 底部购物车（如产品详细页等） */

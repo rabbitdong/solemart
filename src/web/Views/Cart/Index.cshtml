@@ -16,16 +16,20 @@
         foreach (CartItem cartItem in Model.CartItems)
         {
         <div class="cartItem">
-            <img class="prodimg" src="/images/product/thumb/(@cartItem.ProductID)_0.jpg" />
-            <p>@cartItem.Product.ProductName</p>
-            <p><span>单价：@(cartItem.UnitPrice.ToString("C2"))</span></p>
-            <div data-pid="@cartItem.ProductID">
-                <a href="javascript:void;" data-action="add" class="addSubButton">+</a>
-                <input type="text" class="prodamount" value="@cartItem.Amount" />
-                <a href="javascript:void;" data-action="sub" class="addSubButton">-</a>
-                <a href="javascript:void" data-action="confirm" class="confirmLink">确认</a>
+            <img class="imgthumb" src="/images/product/thumb/@(ProductManager.GetProductLogoImage(cartItem.ProductID).ImageUrl)" />
+            <div class="cartTitle">
+                <p>@cartItem.Product.ProductName</p>
+                <p><span>单价：@(cartItem.UnitPrice.ToString("C2"))</span></p>
             </div>
-            <p>@((cartItem.UnitPrice * cartItem.Amount).ToString("C2"))</p>
+            <div class="cartOper" data-pid="@cartItem.ProductID">
+                <div data-pid="@cartItem.ProductID">
+                    <a href="javascript:void;" data-action="add" class="addSubButton">+</a>
+                    <input type="text" class="prodamount" value="@cartItem.Amount" />
+                    <a href="javascript:void;" data-action="sub" class="addSubButton">-</a>
+                    <a href="javascript:void" data-action="confirm" class="confirmLink">确认</a>
+                </div>
+                <p class="cartEachPrice">小计：@((cartItem.UnitPrice * cartItem.Amount).ToString("C2"))</p>
+            </div>
         </div>
         }
     }
@@ -36,7 +40,7 @@
     <div class="cartPrice">
         <p>
             <div class="priceTitle">商品总价：</div>
-            <div class="priceAmount">@Model.TotalPrice.ToString("C2")</div>
+            <div class="priceAmount" id="totalProductAmount">@Model.TotalPrice.ToString("C2")</div>
         </p>
         <p>
             <div class="priceTitle">运输费用：</div>
@@ -44,7 +48,7 @@
         </p>
         <p>
             <div class="priceTitle">总　　计：</div>
-            <div class="priceAmount">@Model.TotalPrice.ToString("C2")</div>
+            <div class="priceAmount" id="totalAmount">@Model.TotalPrice.ToString("C2")</div>
         </p>
     </div>
     <div class="cartFoot">
@@ -65,19 +69,19 @@
 <script type="text/javascript">
     function updateUI(cartResult, tr) {
         var ret = JSON.parse(cartResult);
-        tr.next().html(ret.TheAmount);
-        $("tfoot tr:first td:last").html(ret.TotalAmount);
-        $("tfoot tr:last td:last").html(ret.TotalAmount);
-        tr.children("input").val(ret.TheCount);
+        tr.children(".cartEachPrice").html(ret.TheAmount);
+        $("#totalProductAmount").html(ret.TotalAmount);
+        $("#totalAmount").html(ret.TotalAmount);
+        tr.find("input").val(ret.TheCount);
     }
 
     $(function () {
-        $(".cartItem a.confirmLink").hide();
+        $(".cartOper a.confirmLink").hide();
 
-        $(".cart td").bind("click", "a", function (e) {
+        $(".cartOper").bind("click", "a", function (e) {
             e.preventDefault();
             var tr = $(this);
-            var input = tr.children("input");
+            var input = tr.find(".prodamount");
             var pid = tr.data("pid");
             var count = window.parseInt(input.val());
             var action = $(e.target).data("action");
@@ -125,13 +129,13 @@
                         else{
                             updateUI(ret.content, tr);
                         }
-                        tr.children("a.addSubButton").show();
-                        tr.children("a.confirmLink").hide();
+                        tr.find("a.addSubButton").show();
+                        tr.find("a.confirmLink").hide();
                     });
             }
         });
 
-        $(".cart input.prodamount").on("focus", function (e) {
+        $(".cartOper input.prodamount").on("focus", function (e) {
             var tr = $(this).parent();
             tr.children("a.confirmLink").show();
             tr.children("a.addSubButton").hide();
@@ -163,7 +167,7 @@
     });
 
     function checkout(link) {
-        if ($("table.cart tbody td").size() == 0) {
+        if ($(".cartItem").size() == 0) {
             alert("购物车中没有物品");
             return;
         }
