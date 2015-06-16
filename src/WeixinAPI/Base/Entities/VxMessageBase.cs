@@ -6,6 +6,7 @@ using System.Xml.Linq;
 
 namespace WeixinAPI.Base.Entities
 {
+    #region Weixin的消息类型
     /// <summary>
     /// 接收消息类型
     /// </summary>
@@ -20,7 +21,9 @@ namespace WeixinAPI.Base.Entities
         ShortVideo,//小视频
         Event, //事件推送
     }
+    #endregion
 
+    #region Weixin的推送事件类型
     /// <summary>
     /// Weixin事件的类型
     /// </summary>
@@ -56,6 +59,7 @@ namespace WeixinAPI.Base.Entities
         /// </summary>
         VIEW
     }
+    #endregion
 
     /// <summary>
     /// 所有Request和Response消息的基类
@@ -80,6 +84,7 @@ namespace WeixinAPI.Base.Entities
             return doc;
         }
 
+        #region 从微信消息中解析实体
         /// <summary>
         /// 从XDocument解析消息实体
         /// </summary>
@@ -95,27 +100,78 @@ namespace WeixinAPI.Base.Entities
             {
                 case VxMessageType.Text:
                     msg = new VxMessageText();
+                    (msg as VxMessageText).MsgId = long.Parse(xml.Root.Element("MsgId").Value);
+                    (msg as VxMessageText).Content = xml.Root.Element("Content").Value;
                     break;
                 case VxMessageType.Image:
                     msg = new VxMessageImage();
+                    (msg as VxMessageImage).MsgId = long.Parse(xml.Root.Element("MsgId").Value);
+                    (msg as VxMessageImage).MediaId = xml.Root.Element("MediaId").Value;
+                    (msg as VxMessageImage).PicUrl = xml.Root.Element("PicUrl").Value;
                     break;
                 case VxMessageType.Location:
                     msg = new VxMessageLocation();
+                    (msg as VxMessageLocation).MsgId = long.Parse(xml.Root.Element("MsgId").Value);
+                    (msg as VxMessageLocation).Label = xml.Root.Element("Label").Value;
+                    (msg as VxMessageLocation).Location_X = double.Parse(xml.Root.Element("Location_X").Value);
+                    (msg as VxMessageLocation).Location_Y = double.Parse(xml.Root.Element("Location_Y").Value);
+                    (msg as VxMessageLocation).Scale = int.Parse(xml.Root.Element("Scale").Value);
                     break;
                 case VxMessageType.Link:
                     msg = new VxMessageLink();
+                    (msg as VxMessageLink).MsgId = long.Parse(xml.Root.Element("MsgId").Value);
+                    (msg as VxMessageLink).Description = xml.Root.Element("Description").Value;
+                    (msg as VxMessageLink).Title = xml.Root.Element("Title").Value;
+                    (msg as VxMessageLink).Url = xml.Root.Element("Url").Value;
                     break;
                 case VxMessageType.ShortVideo:
                     msg = new VxMessageShortVideo();
+                    (msg as VxMessageShortVideo).MsgId = long.Parse(xml.Root.Element("MsgId").Value);
+                    (msg as VxMessageShortVideo).MediaId = xml.Root.Element("MediaId").Value;
+                    (msg as VxMessageShortVideo).ThumbMediaId = xml.Root.Element("ThumbMediaId").Value;
                     break;
                 case VxMessageType.Video:
                     msg = new VxMessageVideo();
+                    (msg as VxMessageVideo).MsgId = long.Parse(xml.Root.Element("MsgId").Value);
+                    (msg as VxMessageVideo).MediaId = xml.Root.Element("MediaId").Value;
+                    (msg as VxMessageVideo).ThumbMediaId = xml.Root.Element("ThumbMediaId").Value;
                     break;
                 case VxMessageType.Voice:
                     msg = new VxMessageVoice();
+                    (msg as VxMessageVoice).MsgId = long.Parse(xml.Root.Element("MsgId").Value);
+                    (msg as VxMessageVoice).MediaId = xml.Root.Element("MediaId").Value;
+                    (msg as VxMessageVoice).Format = xml.Root.Element("Format").Value;
                     break;
                 case VxMessageType.Event:
-                    
+                    VxEventType eventType = (VxEventType)Enum.Parse(typeof(VxEventType), xml.Root.Element("Event").Value, true);
+                    switch (eventType)
+                    {
+                        case VxEventType.CLICK:
+                            msg = new VxMessageEventClick();
+                            (msg as VxMessageEventClick).EventKey = xml.Root.Element("EventKey").Value;
+                            break;
+                        case VxEventType.LOCATION:
+                            msg = new VxMessageEventLocation();
+                            (msg as VxMessageEventLocation).Latitude = double.Parse(xml.Root.Element("Latitude").Value);
+                            (msg as VxMessageEventLocation).Longitude = double.Parse(xml.Root.Element("Longitude").Value);
+                            (msg as VxMessageEventLocation).Precision = double.Parse(xml.Root.Element("Precision").Value);
+                            break;
+                        case VxEventType.SCAN:
+                            msg = new VxMessageEventScan();
+                            (msg as VxMessageEventScan).EventKey = xml.Root.Element("EventKey").Value;
+                            (msg as VxMessageEventScan).Ticket = xml.Root.Element("Ticket").Value;
+                            break;
+                        case VxEventType.subscribe:
+                            msg = new VxMessageEventSubscribe();
+                            break;
+                        case VxEventType.unsubscribe:
+                            msg = new VxMessageEventUnsubscribe();
+                            break;
+                        case VxEventType.VIEW:
+                            msg = new VxMessageEventView();
+                            (msg as VxMessageEventView).EventKey = xml.Root.Element("EventKey").Value;
+                            break;
+                    }
                     break;
             }
 
@@ -126,5 +182,6 @@ namespace WeixinAPI.Base.Entities
             msg.CreateTime = baseTime.AddSeconds(sec);
             return msg;
         }
+        #endregion
     }
 }

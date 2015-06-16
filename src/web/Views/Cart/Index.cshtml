@@ -140,30 +140,6 @@
             tr.children("a.confirmLink").show();
             tr.children("a.addSubButton").hide();
         });
-
-
-        //$("input.prodamount").focusout(function (e) {
-        //    e.preventDefault();
-        //    var amnt = parseFloat($(this).val());
-        //    var prod_id = $(this).parent().data("pid");
-        //    if (amnt < 0) {
-        //        alert("数量不能小于0，等于0是删除该商品");
-        //        return;
-        //    }
-
-        //    $.post("/Cart/Modify/" + prod_id,
-        //        {
-        //            amount: amnt
-        //        },
-        //        function (result) {
-        //            var webreturn = new WebReturn(result);
-
-        //            if (webreturn.success)
-        //                window.location.reload();
-        //            else
-        //                alert(webreturn.message);
-        //        });
-        //});
     });
 
     function checkout(link) {
