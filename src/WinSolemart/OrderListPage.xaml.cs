@@ -37,24 +37,31 @@ namespace WinSolemart
             cmbOrderStatus.SelectedIndex = 0;
 
             int totalCount = 0;
-            List<OrderItem> orders = OrderManager.GetPagedOrders(OrderStatus.Ordered, currentPageIndex, countEachPage, out totalCount);
-            model = orders.Select(o => new OrderListViewModel
+            try
             {
-                OrderID = o.OrderID,
-                UserName = o.User.UserName,
-                OrderStatus = o.Status,
-                Address = o.Address,
-                Receiver = o.Receiver,
-                OrderTime = o.OrderTime,
-                ReceiverPhone = o.Phone,
-                Remark = o.Remark,
-                TotalAmount = o.TotalPrice,
-                OrderDetails = o.OrderDetails
-            });
+                List<OrderItem> orders = OrderManager.GetPagedOrders(OrderStatus.Ordered, currentPageIndex, countEachPage, out totalCount);
+                model = orders.Select(o => new OrderListViewModel
+                {
+                    OrderID = o.OrderID,
+                    UserName = o.User.UserName,
+                    OrderStatus = o.Status,
+                    Address = o.Address,
+                    Receiver = o.Receiver,
+                    OrderTime = o.OrderTime,
+                    ReceiverPhone = o.Phone,
+                    Remark = o.Remark,
+                    TotalAmount = o.TotalPrice,
+                    OrderDetails = o.OrderDetails
+                });
 
-            dgOrder.ItemsSource = model;
-            txtTotalCount.Text = string.Format("总订单数：{0}", totalCount);
-            SetPagedButtonState(totalCount);
+                dgOrder.ItemsSource = model;
+                txtTotalCount.Text = string.Format("总订单数：{0}", totalCount);
+                SetPagedButtonState(totalCount);
+            }
+            catch (Exception)
+            {
+                ;
+            }
 
             timer = new DispatcherTimer();
             timer.Tick += dispatcherTimer_Tick;
@@ -101,25 +108,32 @@ namespace WinSolemart
                 return;
 
             int totalCount = 0;
-            List<OrderItem> orders = OrderManager.GetPagedOrders(OrderStatus.Ordered, currentPageIndex, countEachPage, out totalCount);
-            model = orders.Select(o => new OrderListViewModel
+            try
             {
-                OrderID = o.OrderID,
-                UserName = o.User.UserName,
-                OrderStatus = o.Status,
-                Address = o.Address,
-                Receiver = o.Receiver,
-                OrderTime = o.OrderTime,
-                ReceiverPhone = o.Phone,
-                TotalAmount = o.TotalPrice,
-                Remark = o.Remark,
-                OrderDetails = o.OrderDetails
-            });
+                List<OrderItem> orders = OrderManager.GetPagedOrders(OrderStatus.Ordered, currentPageIndex, countEachPage, out totalCount);
+                model = orders.Select(o => new OrderListViewModel
+                {
+                    OrderID = o.OrderID,
+                    UserName = o.User.UserName,
+                    OrderStatus = o.Status,
+                    Address = o.Address,
+                    Receiver = o.Receiver,
+                    OrderTime = o.OrderTime,
+                    ReceiverPhone = o.Phone,
+                    TotalAmount = o.TotalPrice,
+                    Remark = o.Remark,
+                    OrderDetails = o.OrderDetails
+                });
 
-            txtTotalCount.Text = string.Format("总订单数：{0}", totalCount);
-            SetPagedButtonState(totalCount);
-            dgOrder.ItemsSource = model;
-            dgOrder.Items.Refresh();
+                txtTotalCount.Text = string.Format("总订单数：{0}", totalCount);
+                SetPagedButtonState(totalCount);
+                dgOrder.ItemsSource = model;
+                dgOrder.Items.Refresh();
+            }
+            catch (Exception)
+            {
+                ;
+            }
         }
 
         private void btnGetOrder_Click(object sender, RoutedEventArgs e)
@@ -127,25 +141,33 @@ namespace WinSolemart
             BindedEnumItem item = cmbOrderStatus.SelectedItem as BindedEnumItem;
 
             int totalCount = 0;
-            List<OrderItem> orders = OrderManager.GetPagedOrders((OrderStatus)item.enumValue, currentPageIndex, countEachPage, out totalCount);
-            model = orders.Select(o => new OrderListViewModel
+            try
             {
-                OrderID = o.OrderID,
-                UserName = o.User.UserName,
-                OrderStatus = o.Status,
-                Address = o.Address,
-                Receiver = o.Receiver,
-                OrderTime = o.OrderTime,
-                ReceiverPhone = o.Phone,
-                TotalAmount = o.TotalPrice,
-                Remark = o.Remark,
-                OrderDetails = o.OrderDetails
-            });
+                List<OrderItem> orders = OrderManager.GetPagedOrders((OrderStatus)item.enumValue, currentPageIndex, countEachPage, out totalCount);
+                model = orders.Select(o => new OrderListViewModel
+                {
+                    OrderID = o.OrderID,
+                    UserName = o.User.UserName,
+                    OrderStatus = o.Status,
+                    Address = o.Address,
+                    Receiver = o.Receiver,
+                    OrderTime = o.OrderTime,
+                    ReceiverPhone = o.Phone,
+                    TotalAmount = o.TotalPrice,
+                    Remark = o.Remark,
+                    OrderDetails = o.OrderDetails
+                });
 
-            txtTotalCount.Text = string.Format("总订单数：{0}", totalCount);
-            dgOrder.ItemsSource = model;
-            dgOrder.Items.Refresh();
-            SetPagedButtonState(totalCount);
+                txtTotalCount.Text = string.Format("总订单数：{0}", totalCount);
+                dgOrder.ItemsSource = model;
+                dgOrder.Items.Refresh();
+                SetPagedButtonState(totalCount);
+            }
+            catch (Exception)
+            {
+                ;
+            }
+
         }
 
         private void btnNextPage_Click(object sender, RoutedEventArgs e)

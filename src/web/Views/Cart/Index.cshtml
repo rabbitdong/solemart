@@ -98,8 +98,6 @@
                         }
                     });
             }
-            else if(count == 0)
-                return;
             else if(action == "sub"){
                 $.post("/Cart/Modify/" + pid,
                     {
@@ -133,6 +131,8 @@
                         tr.find("a.confirmLink").hide();
                     });
             }
+            else if (count == 0)
+                return;
         });
 
         $(".cartOper input.prodamount").on("focus", function (e) {

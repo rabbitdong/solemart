@@ -90,7 +90,6 @@ CREATE TABLE ProductItems(
 	CategoryID		INTEGER REFERENCES CategoryItems(CategoryID),
 	ProductName		NVARCHAR(25) NOT NULL,
 	Description 	NVARCHAR(1000),
-	ProducingArea 	NVARCHAR(30),		#产地
 	Specification	NVARCHAR(30),
 	Unit			NVARCHAR(5) DEFAULT N'件',	#单位，如斤、件、套等
 	StockCount	 	DECIMAL(10,2) DEFAULT 0.0, 		#表示库存数量
@@ -102,6 +101,7 @@ CREATE TABLE ProductItems(
 	Color			NVARCHAR(10) DEFAULT '',	#商品的颜色
 	Weight 			INTEGER,		#商品的重量，以kg为单位
 	ExtContent		NVARCHAR(2000) 		#JSON结构的扩展字段
+	ProducingArea 	NVARCHAR(30),		#产地
 ) CHARACTER SET utf8;
 
 #套餐的信息表

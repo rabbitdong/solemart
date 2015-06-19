@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Windows;
@@ -21,6 +22,8 @@ namespace WinSolemart
         {
             ConfigSettings.LoadAppConfig();
 
+            this.DispatcherUnhandledException += MyAppExceptionHandler;
+
             timer.Interval = new TimeSpan(0, 1, 0);
             timer.Tick += GetBdgWeb;
             timer.Start();
@@ -34,6 +37,11 @@ namespace WinSolemart
         private void GetBdgWeb(object sender, EventArgs e)
         {
             client.DownloadDataAsync(new Uri("http://www.51bdg.com"));
+        }
+
+        private void MyAppExceptionHandler(object sender, EventArgs e)
+        {
+            Process.GetCurrentProcess().Kill();
         }
     }
 }
