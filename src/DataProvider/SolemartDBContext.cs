@@ -141,7 +141,7 @@ namespace Solemart.DataProvider
 #if TEST
             string sql="insert into TestUserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();";
 #else
-            string sql="insert into UserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();";
+            string sql="insert into useritems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();";
 #endif
             var q = this.Database.SqlQuery<int>(sql,
                 new MySqlParameter("@UserName", username),
@@ -176,9 +176,9 @@ namespace Solemart.DataProvider
         public bool ClearCartForUser(int userID)
         {
 #if TEST
-            string sql="delete from CartItems where UserID=@userid";
-#else
             string sql="delete from TestCartItems where UserID=@userid";
+#else
+            string sql="delete from cartitems where UserID=@userid";
 #endif
             return this.Database.ExecuteSqlCommand(sql, new MySqlParameter("@userid", userID)) > 0;
         }
