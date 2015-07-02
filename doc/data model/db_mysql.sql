@@ -1,6 +1,28 @@
 
+#下面是所有的表
+#TRUNCATE TABLE adviseritems;
+#TRUNCATE TABLE branditems;
+#TRUNCATE TABLE bulletinitems;
+#TRUNCATE TABLE cartitems;
+#TRUNCATE TABLE categoryitems;
+#TRUNCATE TABLE favoriteitems;
+#TRUNCATE TABLE instockitems;
+#TRUNCATE TABLE orderdetailitems;
+#TRUNCATE TABLE orderitems;
+#TRUNCATE TABLE packageitems;
+#TRUNCATE TABLE packagedetailitems;
+#TRUNCATE TABLE pricehistoryitems;
+#TRUNCATE TABLE productcommentitems;
+#TRUNCATE TABLE productimageitems;
+#TRUNCATE TABLE productitems;
+#TRUNCATE TABLE saledproductitems;
+#TRUNCATE TABLE sendaddressitems;
+#TRUNCATE TABLE userappendinfoitems;
+#TRUNCATE TABLE useritems;
+#TRUNCATE TABLE userpointitems;
+#TRUNCATE TABLE vendoritems;
 
-CREATE TABLE UserItems(
+CREATE TABLE useritems(
 	 UserID  	INTEGER AUTO_INCREMENT PRIMARY KEY,
 	 UserName 	VARCHAR(30),
 	 PASSWORD 	CHAR(128),
@@ -8,20 +30,20 @@ CREATE TABLE UserItems(
 	 LoginType    	INT DEFAULT 0, #登录方式：0-本网站注册登录， 1-qq帐号登录
 	 RegTime    DATETIME,
 	 Roles		VARCHAR(50),	#逗号分隔的RoleID列表
-	 OpenID		VARCHAR(32) DEFAULT '' #外部网站验证时提供的ID信息
+	 OpenID		VARCHAR(32) DEFAULT '', #外部网站验证时提供的ID信息
+	 LastLoginTime DATETIME
 ) CHARACTER SET utf8;
 
-CREATE INDEX idx_email_users ON UserItems(Email);
+CREATE INDEX idx_email_users ON useritems(Email);
 ALTER TABLE UserItems ADD CONSTRAINT uni_username UNIQUE (UserName);
 
 #匿名账户的用户ID(UserID=1固定为匿名用户)
-INSERT INTO UserItems VALUES(1, 'Anonymous', '', '', 0, '0001-01-01 00:00:00', 1, '');
+INSERT INTO useritems VALUES(1, 'Anonymous', '', '', 0, '1970-01-01 00:00:00', 1, '', '1970-01-01');
 
 #User Append Info
-CREATE TABLE UserAppendInfoItems(
+CREATE TABLE userappendinfoitems(
 	UserID 		INTEGER PRIMARY KEY REFERENCES Users(UserID),
 	NickName	VARCHAR(30),
-	PointAmount INTEGER DEFAULT 0,   -- 用户的积分
 	Question  	VARCHAR(100),
 	Answer    	VARCHAR(30),
 	RealName	VARCHAR(30),
@@ -35,11 +57,16 @@ CREATE TABLE UserAppendInfoItems(
 	City		VARCHAR(20),
 	Phone		VARCHAR(12),
 	Address		VARCHAR(120),
-	ExtContent  VARCHAR(2000)    -- 扩展字段，json结构
+	ExtContent  VARCHAR(2000),    -- 扩展字段，json结构
+	PointAmount INTEGER DEFAULT 0   -- 用户的积分
 ) CHARACTER SET utf8;
+#插入匿名用户记录
+INSERT INTO userappendinfoitems(UserID, NickName, Sex,  HeadImageUrl, PointAmount)
+    VALUES(1, '匿名用户', 0, '', 0);
+
 
 #The user point items list.
-CREATE TABLE UserPointItems(
+CREATE TABLE userpointitems(
     AutoID      BIGINT AUTO_INCREMENT PRIMARY KEY,
     UserID      INTEGER NOT NULL REFERENCES UserItems(UserID),
     PointAmount INTEGER NOT NULL,   # positive if in point. negative if out point.
@@ -49,7 +76,7 @@ CREATE TABLE UserPointItems(
 ) CHARACTER SET utf8;
 
 #The product categories
-CREATE TABLE CategoryItems(
+CREATE TABLE categoryitems(
 	CategoryID			INTEGER AUTO_INCREMENT PRIMARY KEY, #类别ID
 	CategoryName		NVARCHAR(10) NOT NULL,
 	Description			NVARCHAR(100),			#类别的描述
@@ -57,7 +84,7 @@ CREATE TABLE CategoryItems(
 ) CHARACTER SET utf8;
 
 #Brand of production
-CREATE TABLE BrandItems(
+CREATE TABLE branditems(
 	BrandID		INTEGER AUTO_INCREMENT PRIMARY KEY,
 	ZhName		NVARCHAR(20),
 	EnName		VARCHAR(40),		#品牌的英文名称
@@ -68,10 +95,10 @@ CREATE TABLE BrandItems(
 ) CHARACTER SET utf8;
 
 #The first record of brand is no brand.
-INSERT INTO BrandItems(ZhName, EnName, Description) VALUES(N'杂牌', N'nobrand', N'无正规的知名品牌，或贴牌商品');
+INSERT INTO branditems(ZhName, EnName, Description) VALUES(N'杂牌', N'nobrand', N'无正规的知名品牌，或贴牌商品');
 
 #The vendor infomation
-CREATE TABLE VendorItems(
+CREATE TABLE vendoritems(
 	VendorID	INTEGER AUTO_INCREMENT PRIMARY KEY,
 	VendorName	NVARCHAR(50) NOT NULL,
 	Address		NVARCHAR(150),
@@ -85,7 +112,7 @@ CREATE TABLE VendorItems(
 )CHARACTER SET utf8;
 
 #The product infomation.
-CREATE TABLE ProductItems(
+CREATE TABLE productitems(
 	ProductID		INTEGER AUTO_INCREMENT PRIMARY KEY,
 	CategoryID		INTEGER REFERENCES CategoryItems(CategoryID),
 	ProductName		NVARCHAR(25) NOT NULL,
@@ -105,7 +132,7 @@ CREATE TABLE ProductItems(
 ) CHARACTER SET utf8;
 
 #套餐的信息表
-CREATE TABLE PackageItems(
+CREATE TABLE packageitems(
 	PackageID 		INTEGER AUTO_INCREMENT PRIMARY KEY,
 	Price 			DECIMAL(10,2) DEFAULT 0.0,		#套餐的销售价格
 	StartTime		DATETIME,				#开始销售日期
@@ -115,7 +142,7 @@ CREATE TABLE PackageItems(
 )CHARACTER SET utf8;
 
 #套餐详细信息表
-CREATE TABLE PackageDetailItems(
+CREATE TABLE packagedetailitems(
 	PackageID 		INTEGER REFERENCES PackageItems(PackageID),
 	ProductID		INTEGER REFERENCES ProductItems(ProductID),
 	Amount 			DECIMAL(10,2) DEFAULT 0,
@@ -123,7 +150,7 @@ CREATE TABLE PackageDetailItems(
 )CHARACTER SET utf8;
 
 #销售商品表(在该表中的产品才进行销售)
-CREATE TABLE SaledProductItems(
+CREATE TABLE saledproductitems(
 	ProductID	INTEGER PRIMARY KEY REFERENCES ProductItems(ProductID),
 	Price		DECIMAL(10,2) DEFAULT 0.0,		#商品的销售价格
 	Discount	INTEGER DEFAULT 100,						#销售的折扣
@@ -131,7 +158,7 @@ CREATE TABLE SaledProductItems(
 ) CHARACTER SET utf8;
 
 #商品的图像信息表
-CREATE TABLE ProductImageItems(
+CREATE TABLE productimageitems(
 	ImageID		INTEGER AUTO_INCREMENT PRIMARY KEY ,
 	ProductID	INTEGER REFERENCES ProductItems(ProductID) ON DELETE CASCADE,
 	MimeType	VARCHAR(20),
@@ -142,7 +169,7 @@ CREATE TABLE ProductImageItems(
 ) CHARACTER SET utf8;
 
 #商品的评价表
-CREATE TABLE ProductCommentItems(
+CREATE TABLE productcommentitems(
 	CommentID	INTEGER AUTO_INCREMENT PRIMARY KEY,
 	ProductID	INTEGER REFERENCES ProductItems(ProductID),
 	UserID		INTEGER REFERENCES UserItems(UserID),
@@ -151,7 +178,7 @@ CREATE TABLE ProductCommentItems(
 	CommentTime	DATETIME 	#评价的时间，默认是记录写入的时间
 )CHARACTER SET utf8;
 
-CREATE TABLE PriceHistoryItems(
+CREATE TABLE pricehistoryitems(
 	HistoryID	INTEGER AUTO_INCREMENT PRIMARY KEY,
 	ProductID	INTEGER REFERENCES ProductItems(ProductID),
 	StartTime	DATETIME,
@@ -160,7 +187,7 @@ CREATE TABLE PriceHistoryItems(
 )CHARACTER SET utf8;
 
 #In stock infomations.
-CREATE TABLE InStockItems(
+CREATE TABLE instockitems(
 	InStockID	INTEGER AUTO_INCREMENT PRIMARY KEY,
 	ProductID	INTEGER REFERENCES ProductItems(ProductID),
 	InStockTime	DATETIME,	#商品入库的时间
@@ -170,7 +197,7 @@ CREATE TABLE InStockItems(
 )CHARACTER SET utf8;
 
 #Temporary order info. There's a Temporary order a user.(some user has no temporary order), in fact, it's the shop cart.
-CREATE TABLE CartItems(
+CREATE TABLE cartitems(
 	UserID		INTEGER REFERENCES UserItems(UserID),
 	ProductID	INTEGER REFERENCES ProductItems(ProductID),
 	Amount		DECIMAL(10,2) NOT NULL DEFAULT 0,
@@ -180,7 +207,7 @@ CREATE TABLE CartItems(
 );
 
 #订单信息表
-CREATE TABLE OrderItems(
+CREATE TABLE orderitems(
 	OrderID		INTEGER AUTO_INCREMENT PRIMARY KEY,
 	UserID		INTEGER,
 	OrderTime	DATETIME,
@@ -196,15 +223,15 @@ CREATE TABLE OrderItems(
 	Phone		VARCHAR(15),
 	PostCode	VARCHAR(10),
 	Receiver	NVARCHAR(20),	#收货人姓名
-	DeliverWay	INTEGER NOT NULL DEFAULT 1,		#送货渠道，1: 送货上门、2: 快递、3: 平邮 4: 特快
-	PaymentType	INTEGER NOT NULL DEFAULT 1,		#支付方式  1: 货到付款、2: 网上支付、3: 银行转账
+	DeliverWay	INTEGER NOT NULL DEFAULT 1,		#送货渠道，0: 送货上门、1: 快递、2: 平邮 
+	PaymentType	INTEGER NOT NULL DEFAULT 1,		#支付方式  0: 货到付款、1: 支付宝、 2: 微信支付、3: 银行转账
 	HasPay		INTEGER NOT NULL DEFAULT 0,    #是否已经付款，1已付款，0未付款
 	TradeNo		VARCHAR(64),
 	Appraise	NVARCHAR(150),	#收货人评价
 	Remark		NVARCHAR(300)	#订单说明，客户对产品的要求
 )CHARACTER SET utf8;
 
-CREATE TABLE OrderDetailItems(
+CREATE TABLE orderdetailitems(
 	OrderID		INTEGER REFERENCES OrderItems(OrderID),
 	ProductID	INTEGER REFERENCES ProductItems(ProductID),
 	Amount		DECIMAL(10,2) NOT NULL,
@@ -214,7 +241,7 @@ CREATE TABLE OrderDetailItems(
 )CHARACTER SET utf8;
 
 #User deliver goods info.
-CREATE TABLE SendAddressItems(
+CREATE TABLE sendaddressitems(
 	UserID 		INTEGER PRIMARY KEY REFERENCES UserItems(UserID),
 	Receiver	NVARCHAR(20) NOT NULL,		#The name of receiver.
 	Address		NVARCHAR(100) NOT NULL,		#The address of delivery.
@@ -226,7 +253,7 @@ CREATE TABLE SendAddressItems(
 ) CHARACTER SET utf8;
 
 #记录用户的诉求和建议
-CREATE TABLE AdviserItems(
+CREATE TABLE adviseritems(
 	AdviseID	INTEGER AUTO_INCREMENT PRIMARY KEY,
 	UserID		INTEGER REFERENCES UserItems(UserID),
 	Content		NVARCHAR(200) NOT NULL,
@@ -235,7 +262,7 @@ CREATE TABLE AdviserItems(
 ) CHARACTER SET utf8;
 
 #system billboards.
-CREATE TABLE BulletinItems(
+CREATE TABLE bulletinitems(
    BulletinID   INTEGER PRIMARY KEY AUTO_INCREMENT,
    Content      NVARCHAR(500),
    PublishTime	DATETIME,
@@ -244,7 +271,7 @@ CREATE TABLE BulletinItems(
 
 
 #User favorite list.
-CREATE TABLE FavoriteItems(
+CREATE TABLE favoriteitems(
 	UserID			INTEGER REFERENCES UserItems(UserID),
 	ProductID		INTEGER REFERENCES Products(ProductID),
 	FavoriteTime		DATETIME,

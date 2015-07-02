@@ -78,7 +78,7 @@ namespace Solemart.DataProvider
 #if TEST
             string sql = "insert into TestUserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();";
 #else
-            string sql = "insert into UserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();";
+            string sql = "insert into useritems(UserName, Email, Password, LoginType, RegTime, Roles, LastLoginTime) values(@UserName, @Email, @Password, 0, @RegTime, '2', @RegTime);select LAST_INSERT_ID();";
 #endif
             var q = this.Database.SqlQuery<int>(sql,
                 new MySqlParameter("@UserName", username),
@@ -100,7 +100,7 @@ namespace Solemart.DataProvider
 #if TEST
             string sql="insert into TestUserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@Email, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();";
 #else
-            string sql="insert into UserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@Email, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();";
+            string sql="insert into useritems(UserName, Email, Password, LoginType, RegTime, Roles, LastLoginTime) values(@Email, @Email, @Password, 0, @RegTime, '2', @RegTime);select LAST_INSERT_ID();";
 #endif
             var q = this.Database.SqlQuery<int>(sql,
                 new MySqlParameter("@Email", email), new MySqlParameter("@Password", password),
@@ -120,7 +120,7 @@ namespace Solemart.DataProvider
 #if TEST
             string sql="insert into TestUserItems(UserName, LoginType, RegTime, Roles) values(@UserName, 2, @RegTime, '2');select LAST_INSERT_ID();";
 #else
-            string sql = "insert into UserItems(UserName, LoginType, RegTime, Roles) values(@UserName, 2, @RegTime, '2');select LAST_INSERT_ID();";
+            string sql = "insert into useritems(UserName, LoginType, RegTime, Roles, LastLoginTime) values(@UserName, 2, @RegTime, '2', @RegTime);select LAST_INSERT_ID();";
 #endif
             var q = this.Database.SqlQuery<int>(sql,
                 new MySqlParameter("@UserName", username),
@@ -139,7 +139,7 @@ namespace Solemart.DataProvider
         {
             password = EncryptUtil.GetHashPwd(password);
 #if TEST
-            string sql="insert into TestUserItems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();";
+            string sql="insert into useritems(UserName, Email, Password, LoginType, RegTime, Roles, LastLoginTime) values(@UserName, @Email, @Password, 0, @RegTime, '2', @RegTime);select LAST_INSERT_ID();";
 #else
             string sql="insert into useritems(UserName, Email, Password, LoginType, RegTime, Roles) values(@UserName, @Email, @Password, 0, @RegTime, '2');select LAST_INSERT_ID();";
 #endif
@@ -162,7 +162,7 @@ namespace Solemart.DataProvider
 #if TEST
             string sql = "update UserItems set PASSWORD=@pwd where userid=@userid";
 #else
-            string sql = "update UserItems set PASSWORD=@pwd where userid=@userid";
+            string sql = "update useritems set PASSWORD=@pwd where userid=@userid";
 #endif
             return this.Database.ExecuteSqlCommand(sql,
                 new MySqlParameter("@pwd", newPassword), new MySqlParameter("@userid", userID)) > 0;

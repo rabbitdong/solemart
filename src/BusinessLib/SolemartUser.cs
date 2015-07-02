@@ -84,13 +84,15 @@ namespace Solemart.BusinessLib
                 {
                     Log.Instance.WriteLog(string.Format("the user[openid:[{0}], type:[{1}]] has login before.", openID, type));
                     this.userItem = useritem;
+                    useritem.LastLoginTime = DateTime.Now;
                     //不管是不是匿名用户，都用购物车
                     cart = GetUserCart();
+                    context.SaveChanges();
                 }
                 else
                 {
                     Log.Instance.WriteLog(string.Format("the user[openid:[{0}], type:[{1}]] is first login.", openID, type));
-                    this.userItem = new UserItem { OpenID = openID, LoginType = type, Roles = Role.NormalUser.RoleID.ToString(), RegTime=DateTime.Now };
+                    this.userItem = new UserItem { OpenID = openID, LoginType = type, Roles = Role.NormalUser.RoleID.ToString(), RegTime=DateTime.Now, LastLoginTime=DateTime.Now };
                     context.UserItems.Add(this.userItem);
                     context.UserAppendInfoItems.Add(new UserAppendInfoItem { UserID = this.userItem.UserID, BirthDay = new DateTime(1970, 1, 1), Address = "", Phone = "", Sex = SystemUtil.Sex.Unknown });
                     cart = new Cart(this);

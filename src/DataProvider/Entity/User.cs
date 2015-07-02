@@ -165,6 +165,11 @@ namespace Solemart.DataProvider.Entity
         public string Email { get; set; }
 
         /// <summary>
+        /// 最后一次登陆时间
+        /// </summary>
+        public DateTime LastLoginTime { get; set; }
+
+        /// <summary>
         /// 获取或设置用户的附加信息
         /// </summary>
         public UserAppendInfoItem AppendInfo { get; set; }

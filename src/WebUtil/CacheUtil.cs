@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,6 +43,22 @@ namespace Solemart.WebUtil
             return (T)System.Web.HttpRuntime.Cache[key];
         }
 
+        public static void Clear()
+        {
+            List<string> keys = new List<string>();
+            // retrieve application Cache enumerator
+            IDictionaryEnumerator enumerator = System.Web.HttpRuntime.Cache.GetEnumerator();
+            // copy all keys that currently exist in Cache
+            while (enumerator.MoveNext())
+            {
+                keys.Add(enumerator.Key.ToString());
+            }
+            // delete every key from cache
+            for (int i = 0; i < keys.Count; i++)
+            {
+                System.Web.HttpRuntime.Cache.Remove(keys[i]);
+            }
+        }
     }
 
     /// <summary>
@@ -78,6 +95,23 @@ namespace Solemart.WebUtil
         public static T Get<T>(string key)
         {
             return (T)System.Web.HttpRuntime.Cache[key];
+        }
+
+        public static void Clear()
+        {
+            List<string> keys = new List<string>();
+            // retrieve application Cache enumerator
+            IDictionaryEnumerator enumerator = System.Web.HttpRuntime.Cache.GetEnumerator();
+            // copy all keys that currently exist in Cache
+            while (enumerator.MoveNext())
+            {
+                keys.Add(enumerator.Key.ToString());
+            }
+            // delete every key from cache
+            for (int i = 0; i < keys.Count; i++)
+            {
+                System.Web.HttpRuntime.Cache.Remove(keys[i]);
+            }
         }
     }
 }

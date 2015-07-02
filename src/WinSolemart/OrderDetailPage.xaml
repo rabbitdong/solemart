@@ -87,7 +87,7 @@
                     </ItemsControl>
                     <DockPanel>
                         <TextBlock DockPanel.Dock="Left" FontSize="12" Name="txtRemark">备注：</TextBlock>
-                        <TextBlock TextAlignment="Right" FontSize="16" FontWeight="Bold" Name="txtTotalPrice" Margin="5"></TextBlock>
+                        <TextBlock TextAlignment="Right" FontSize="15" FontWeight="Bold" Name="txtTotalPrice" Margin="5"></TextBlock>
                     </DockPanel>
                 </StackPanel>
             </DockPanel>
