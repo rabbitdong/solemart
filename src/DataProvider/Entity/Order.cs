@@ -44,22 +44,22 @@ namespace Solemart.DataProvider.Entity
         /// <summary>
         /// 订单的发货时间
         /// </summary>
-        public DateTime SendTime { get; set; }
+        public DateTime? SendTime { get; set; }
 
         /// <summary>
         /// 订单的收货时间
         /// </summary>
-        public DateTime ReceiveTime { get; set; }
+        public DateTime? ReceiveTime { get; set; }
 
         /// <summary>
         /// 订单的取消时间
         /// </summary>
-        public DateTime CancelTime { get; set; }
+        public DateTime? CancelTime { get; set; }
 
         /// <summary>
         /// 订单的退货时间
         /// </summary>
-        public DateTime RejectTime { get; set; }
+        public DateTime? RejectTime { get; set; }
 
         /// <summary>
         /// 订单的总价
