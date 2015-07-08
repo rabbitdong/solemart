@@ -2,7 +2,7 @@
 * { padding: 0px; margin: 0px; vertical-align: baseline; font-size: 14px; box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; }
 body { background: #f5f5f5; font-family: "Microsoft YaHei",Arial,Helvetica,sans-serif; }
 footer { text-align: center; margin-bottom: 100px; margin-top: 5px; padding-top: 5px; border-top: 1px solid #1abc9c; color: #8f8f8f; }
-.viewport { min-width: 330px; max-width: 640px; padding: 0px; margin: 0px auto; display: block; text-align: center; }
+.viewport { min-width: 800px; max-width: 920px; padding: 0px; margin: 0px auto; display: block; text-align: center; }
 a, a:link, a:visited, a:active { outline: none; text-decoration: none; }
 
 header { width: 100%; height: 120px; margin: 0px; padding: 0px; background: url(/Images/bg-01_small.jpg); background-size: cover; }
@@ -56,8 +56,9 @@ input#txtSearch { margin-left: 0px; border: 1px solid #ddd; width: 12em; backgro
 /* 首页产品列表区*/
 .productListWrapper { margin-bottom: 12px; box-shadow: 0 1px 1px #dcdcdc; width: 100%; padding: 1px; }
     .productListWrapper .productList { }
+    .productListWrapper .productList .hscroller{width:2000px; height:100%;}
 
-.productItem { border: 1px solid #ccc; border-radius: 8px; background-color: #fff; padding: 2px; margin: 2px 0px; }
+.productItem { border: 1px solid #ccc; border-radius: 8px; background-color: #fff; padding: 2px; margin: 2px 0px; width:49%; }
     .productItem .addToCart { float: right; display: inline-block; width: 54px; height: 20px; background: url(/Images/common/addToCart.png); }
 .topProductList .product2Item img.productImage { width: 96%; min-width: 330px; }
 .topProductList .product2Item .productInfo { font-size: 12px; font-size: 0.9em; margin-bottom: 0.5em; }
@@ -70,7 +71,7 @@ input#txtSearch { margin-left: 0px; border: 1px solid #ddd; width: 12em; backgro
 .productItem .productSpec { color: #95a5a6; font-size: 12px; }
 /* 首页产品列表区（2列）*/
 .product2List { }
-    .product2List .product2Item { width: 49%; display: inline-block; }
+    .product2List .product2Item { width: 33%; display: inline-block; }
         .product2List .product2Item img.product2Image { width: 90%; }
 
 /*

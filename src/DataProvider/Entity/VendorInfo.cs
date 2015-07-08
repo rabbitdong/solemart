@@ -11,9 +11,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 供应商信息的对象
     /// </summary>
-#if TEST 
-    [Table("TestVendorItems")]
-#endif
+    [Table("vendoritems")]
     public class VendorItem
     {
         /// <summary>

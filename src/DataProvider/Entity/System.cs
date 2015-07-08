@@ -11,9 +11,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 用户建议项的实体
     /// </summary>
-#if TEST 
-    [Table("TestAdviserItems")]
-#endif
+    [Table("adviseritems")]
     public class AdviserItem
     {
         /// <summary>
@@ -50,9 +48,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 系统的公告项的实体
     /// </summary>
-#if TEST 
-    [Table("TestBulletinItems")] 
-#endif
+    [Table("bulletinitems")] 
     public class BulletinItem
     {
         /// <summary>

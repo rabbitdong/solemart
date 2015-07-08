@@ -129,9 +129,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 系统中的用户信息对象，它表示基本信息
     /// </summary>
-#if TEST 
-    [Table("TestUserItems")]
-#endif
+    [Table("useritems")]
     public class UserItem
     {
         /// <summary>获取或设置用户的ID
@@ -185,9 +183,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 用户的附加信息，通常系统在运行是不获取，除非用户修改或获取这些信息时才获取
     /// </summary>
-#if TEST 
-    [Table("TestUserAppendInfoItems")]
-#endif
+    [Table("userappendinfoitems")]
     public class UserAppendInfoItem
     {
         /// <summary>
@@ -284,9 +280,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// The user point transaction logging table
     /// </summary>
-#if TEST
-    [Table("TestUserPointItems")]
-#endif
+    [Table("userpointitems")]
     public class UserPointItem
     {
         [Key]
@@ -311,9 +305,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// User favorite item
     /// </summary>
-#if TEST 
-    [Table("TestFavoriteItems")]
-#endif
+    [Table("favoriteitems")]
     public class FavoriteItem
     {
         /// <summary>

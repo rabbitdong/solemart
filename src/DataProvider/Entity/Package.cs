@@ -10,9 +10,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 套餐项
     /// </summary>    
-#if TEST 
-    [Table("TestPackageItems")]
-#endif
+    [Table("packageitems")]
     public class PackageItem
     {
         [Key]
@@ -32,9 +30,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// Package item detail.
     /// </summary>
-#if TEST 
-    [Table("TestPackageItemDetails")]
-#endif
+    [Table("packageitemdetails")]
     public class PackageItemDetail
     {
         [Key, Column(Order = 0)]

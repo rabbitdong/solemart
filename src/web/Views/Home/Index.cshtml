@@ -13,24 +13,26 @@
 <div class="good" id="good"></div>
 <div class="productListWrapper">
     <div class="topProductList">
-        @foreach (ProductForListViewModel product in Model.TopSaledProductList)
-        {
-            <div class="productItem" data-pid="@product.ProductID">
-                <div class="productImage">
-                    <a href="/Product/Detail/@product.ProductID" title="查看水果详情"><img class="productImg" style="width:90%" src="~/Images/product/normal/@product.ProductImageUrl" /></a>
+        <div class="hscroller">
+            @foreach (ProductForListViewModel product in Model.TopSaledProductList)
+            {
+                <div class="productItem" data-pid="@product.ProductID">
+                    <div class="productImage">
+                        <a href="/Product/Detail/@product.ProductID" title="查看水果详情"><img class="productImg" style="width:90%" src="~/Images/product/normal/@product.ProductImageUrl" /></a>
+                    </div>
+                    <div class="productInfo" data-pid="@product.ProductID">
+                        <p class="productTitle">
+                            <span class="titleSpan ellipsis" title="@product.ProductName">@product.ProductName</span>
+                            <a class="addToCart" data-pid="@product.ProductID" href="javascript:void;"></a>
+                        </p>
+                        <p class="productPrice">
+                            <span>@product.Price.ToString("C2")</span>/@product.Unit
+                        </p>
+                        <p class="productSpec">@product.Specification</p>
+                    </div>
                 </div>
-                <div class="productInfo" data-pid="@product.ProductID">
-                    <p class="productTitle">
-                        <span class="titleSpan ellipsis" title="@product.ProductName">@product.ProductName</span>
-                        <a class="addToCart" data-pid="@product.ProductID" href="javascript:void;"></a>
-                    </p>
-                    <p class="productPrice">
-                        <span>@product.Price.ToString("C2")</span>/@product.Unit
-                    </p>
-                    <p class="productSpec">@product.Specification</p>
-                </div>
-            </div>
-        }
+            }
+        </div>
     </div>
     <ul class="product2List">
         @foreach (ProductForListViewModel product in Model.NormalProductList)
@@ -56,6 +58,17 @@
 <div class="successNotify" style="display:none;">操作成功...</div>
 <script type="text/javascript">
     $(function () {
+        var myScroll = new IScroll('.topProductList', {
+            scrollX: true,
+            scrollY: false,
+            mouseWheel: true,
+            scrollbars: false
+        });
+
+        document.addEventListener('touchmove', function (e) {
+            e.preventDefault();
+        }, false);
+
         $(".productInfo").bind("click", "a.addToCart", function (e) {
             e.preventDefault();
 

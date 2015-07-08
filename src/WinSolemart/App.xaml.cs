@@ -16,7 +16,7 @@ namespace WinSolemart
     /// </summary>
     public partial class App : Application
     {
-        private DispatcherTimer timer = new DispatcherTimer();
+        //private DispatcherTimer timer = new DispatcherTimer();
         private WebClient client = new WebClient();
         public App()
         {
@@ -24,9 +24,9 @@ namespace WinSolemart
 
             this.DispatcherUnhandledException += MyAppExceptionHandler;
 
-            timer.Interval = new TimeSpan(0, 1, 0);
-            timer.Tick += GetBdgWeb;
-            timer.Start();
+            //timer.Interval = new TimeSpan(0, 1, 0);
+            //timer.Tick += GetBdgWeb;
+            //timer.Start();
         }
 
         /// <summary>

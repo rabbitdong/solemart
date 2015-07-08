@@ -12,9 +12,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 产品的评价项实体
     /// </summary>
-#if TEST 
-    [Table("TestProductCommentItems")]
-#endif
+    [Table("productcommentitems")]
     public class ProductCommentItem
     {
         [Key]
@@ -57,9 +55,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 商品类别项实体
     /// </summary>
-#if TEST 
-    [Table("TestCategoryItems")]
-#endif
+    [Table("categoryitems")]
     public class CategoryItem
     {
         [Key]
@@ -92,9 +88,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 商品的品牌项实体
     /// </summary>
-#if TEST 
-    [Table("TestBrandItems")]
-#endif
+    [Table("branditems")]
     public class BrandItem
     {
         /// <summary>
@@ -139,9 +133,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 商品的图片项实体
     /// </summary>
-#if TEST 
-    [Table("TestProductImageItems")] 
-#endif
+    [Table("productimageitems")] 
     public class ProductImageItem
     {
         public static ProductImageItem NoImgProductImage = new ProductImageItem() { ImageID = -1, MimeType = "image/png", ImageUrl = "no-img.png" };
@@ -185,9 +177,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 商品项对象
     /// </summary>
-#if TEST 
-    [Table("TestProductItems")] 
-#endif
+    [Table("productitems")] 
     public class ProductItem
     {
         /// <summary>
@@ -287,9 +277,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 销售产品项
     /// </summary>
-#if TEST 
-    [Table("TestSaledProductItems")]
-#endif
+    [Table("saledproductitems")]
     public class SaledProductItem
     {
         /// <summary>
@@ -331,9 +319,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// 商品的价格历史项 
     /// </summary>
-#if TEST 
-    [Table("TestPriceHistoryItems")]
-#endif
+    [Table("pricehistoryitems")]
     public class PriceHistoryItem
     {
         [Key]
@@ -356,9 +342,7 @@ namespace Solemart.DataProvider.Entity
     /// <summary>
     /// The product instock item
     /// </summary>
-#if TEST 
-    [Table("TestInStockItems")]
-#endif
+    [Table("instockitems")]
     public class InStockItem
     {
         [Key]
