@@ -12,3 +12,5 @@ UPDATE SaledProductItems SET SaledPrice = Price;
 ALTER TABLE TestSaledProductItems ADD COLUMN SaledPrice DECIMAL(10,2) DEFAULT 0 ;
 ALTER TABLE TestSaledProductItems ADD COLUMN SetTop INTEGER DEFAULT 0;
 UPDATE TestSaledProductItems SET SaledPrice = Price;
+
+ALTER TABLE productimageitems MODIFY COLUMN ImageUrl VARCHAR(500);
